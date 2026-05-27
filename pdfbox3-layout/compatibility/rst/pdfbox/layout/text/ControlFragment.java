@@ -4,24 +4,34 @@ import java.awt.Color;
 import java.io.IOException;
 
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
 /**
  * A control fragment has no drawable representation but is meant to control the
  * text rendering.
  *
+ * <p>pdfbox3 note: {@link #DEFAULT_FONT_DESCRIPTOR} wraps a {@link PDType1Font}
+ * whose {@code COSDictionary} would otherwise be tied to whichever
+ * {@code PDDocument} renders first (every {@code NewLine} and {@link Indent}
+ * uses this descriptor). Across a run with multiple documents in one JVM that
+ * leaks PDF object state. {@link #reset()} replaces the descriptor with a
+ * brand-new instance; ExampleTest.setUp calls it between tests.</p>
  */
 public class ControlFragment implements TextFragment {
 
-    protected final static FontDescriptor DEFAULT_FONT_DESCRIPTOR = new FontDescriptor(
-	    PDType1Font.HELVETICA, 11);
+    protected static FontDescriptor DEFAULT_FONT_DESCRIPTOR = newDefaultFontDescriptor();
+
+    private static FontDescriptor newDefaultFontDescriptor() {
+	return new FontDescriptor(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 11);
+    }
 
     /**
-     * No-op for the shared (pdfbox 1/2) flavour. The pdfbox3 compatibility
-     * overlay replaces this with a method that re-creates
-     * {@link #DEFAULT_FONT_DESCRIPTOR} between tests so the cached PDFont
-     * does not leak across documents.
+     * Replaces {@link #DEFAULT_FONT_DESCRIPTOR} with a fresh instance backed by
+     * a new {@link PDType1Font}. Call between tests that share a JVM to avoid
+     * leaking PDF object state across documents.
      */
     public static void reset() {
+	DEFAULT_FONT_DESCRIPTOR = newDefaultFontDescriptor();
     }
 
     private String name;
@@ -59,7 +69,7 @@ public class ControlFragment implements TextFragment {
     public FontDescriptor getFontDescriptor() {
 	return fontDescriptor;
     }
-    
+
     protected String getName() {
 	return name;
     }

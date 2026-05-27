@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>pdfbox2-layout</name>
+	<name>pdfbox1-layout</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -10,16 +10,37 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.buildship.core.gradleprojectbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.springsource.ide.eclipse.gradle.core.nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
 	</natures>
 	<linkedResources>
 		<link>
-			<name>src</name>
+			<name>examples</name>
 			<type>2</type>
-			<location>C:/Users/Ralf/git/pdfbox-layout/src</location>
+			<location>/Users/philip/dev/git-thirdparty/pdfbox-layout/examples</location>
+		</link>
+		<link>
+			<name>java</name>
+			<type>2</type>
+			<location>/Users/philip/dev/git-thirdparty/pdfbox-layout/src/main/java</location>
+		</link>
+		<link>
+			<name>resources</name>
+			<type>2</type>
+			<location>/Users/philip/dev/git-thirdparty/pdfbox-layout/src/test/resources</location>
+		</link>
+		<link>
+			<name>test-java</name>
+			<type>2</type>
+			<location>/Users/philip/dev/git-thirdparty/pdfbox-layout/src/test/java</location>
 		</link>
 	</linkedResources>
 </projectDescription>

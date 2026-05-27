@@ -34,6 +34,15 @@ public enum BaseFont {
 	this.boldItalicFont = boldItalicFont;
     }
 
+    /**
+     * No-op for the shared (pdfbox 1/2) flavour, where the standard 14 fonts
+     * are JVM-wide singletons. Overridden by the pdfbox3 compatibility shim,
+     * which needs to re-create the per-{@link PDFont} {@code COSDictionary}s
+     * between tests that share a JVM.
+     */
+    public static void reset() {
+    }
+
     public PDFont getPlainFont() {
 	return plainFont;
     }

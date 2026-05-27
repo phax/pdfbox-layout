@@ -20,13 +20,25 @@ public class AnnotationProcessorFactory {
 
     /**
      * Use this method to register your (custom) annotation processors.
-     * 
+     *
      * @param annotationProcessor
      *            the processor to register.
      */
     public static void register(
 	    final Class<? extends AnnotationProcessor> annotationProcessor) {
 	ANNOTATION_PROCESSORS.add(annotationProcessor);
+    }
+
+    /**
+     * Drops every registered processor and re-registers only the built-in pair
+     * ({@link HyperlinkAnnotationProcessor}, {@link UnderlineAnnotationProcessor}).
+     * Intended for tests that run several example main() methods in a single
+     * JVM and need to undo registrations made by previous tests.
+     */
+    public static void reset() {
+	ANNOTATION_PROCESSORS.clear();
+	register(HyperlinkAnnotationProcessor.class);
+	register(UnderlineAnnotationProcessor.class);
     }
 
     /**

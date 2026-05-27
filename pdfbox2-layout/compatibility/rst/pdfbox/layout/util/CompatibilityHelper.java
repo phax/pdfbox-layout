@@ -42,7 +42,6 @@ public class CompatibilityHelper {
 
     private static final String IMAGE_CACHE = "IMAGE_CACHE";
     private static Map<PDDocument, Map<String, Map<?, ?>>> documentCaches = new WeakHashMap<PDDocument, Map<String, Map<?, ?>>>();
-    private static PDBorderStyleDictionary noBorder;
 
     /**
      * Returns the bullet character for the given level. Actually only two
@@ -286,10 +285,10 @@ public class CompatibilityHelper {
     }
 
     private static PDBorderStyleDictionary getNoBorder() {
-	if (noBorder == null) {
-	    noBorder = new PDBorderStyleDictionary();
-	    noBorder.setWidth(0);
-	}
+	// Fresh instance per call: shared dictionaries leak COSDictionary state
+	// across PDDocuments.
+	PDBorderStyleDictionary noBorder = new PDBorderStyleDictionary();
+	noBorder.setWidth(0);
 	return noBorder;
     }
 

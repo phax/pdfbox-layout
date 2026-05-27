@@ -38,6 +38,19 @@ public class AnnotationCharacters {
     }
 
     /**
+     * Drops every registered factory and re-registers only the built-in trio
+     * (hyperlink, anchor, underline). Intended for tests that run several
+     * example main() methods in a single JVM and need to undo registrations
+     * made by previous tests.
+     */
+    public static void reset() {
+	FACTORIES.clear();
+	register(new HyperlinkControlCharacterFactory());
+	register(new AnchorControlCharacterFactory());
+	register(new UnderlineControlCharacterFactory());
+    }
+
+    /**
      * @return all the default and custom annotation control character
      *         factories.
      */
