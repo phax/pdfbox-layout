@@ -353,27 +353,4 @@ public class IndentCharacters
     }
 
   }
-
-  public static void main (String [] args)
-  {
-    Pattern PATTERN = Pattern//
-                             .compile ("^-(!)|^([ ]*)-(-)(\\{(\\d*)(em|pt)?\\})?|^([ ]*)-(\\+)(\\{(.)?:(\\d*)(em|pt)?\\})?|^([ ]*)-(#)(\\{((?!:).)?(.+)?:((\\d*))((em|pt))?\\})?");
-    Matcher matcher = PATTERN.matcher ("  -#{d:3em}");
-    System.out.println ("matches: " + matcher.find ());
-    if (!matcher.matches ())
-    {
-      System.err.println ("exit");
-      return;
-    }
-    System.out.println ("start: " + matcher.start ());
-    System.out.println ("end: " + matcher.end ());
-    System.out.println ("groups: " + matcher.groupCount ());
-    for (int i = 0; i < matcher.groupCount (); i++)
-    {
-      System.out.println ("group " + i + ": '" + matcher.group (i) + "'");
-    }
-    // 2 - -> 1: blanks, 4: size, 5: unit
-    // 7 + -> 6: blanks, 9: sign, 10: size, 11: unit
-    // 11 # -> 12: blanks, 15: number-sign, 16: size, 18: unit
-  }
 }

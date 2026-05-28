@@ -8,10 +8,13 @@ import rst.pdfbox.layout.elements.Document;
 import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
 import rst.pdfbox.layout.text.EAlignment;
+import examples.AbstractExampleTest;
+import org.junit.Test;
 
-public class Margin {
+public class MarginTest extends AbstractExampleTest {
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void test() throws Exception {
 	String text1 = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, "
 		+ "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna "
 		+ "aliquyam erat, sed diam voluptua. At vero eos et accusam et justo "
@@ -52,6 +55,8 @@ public class Margin {
 
 	final OutputStream outputStream = new FileOutputStream("margin.pdf");
 	document.save(outputStream);
+
+        verifyPdf();
 
     }
 }

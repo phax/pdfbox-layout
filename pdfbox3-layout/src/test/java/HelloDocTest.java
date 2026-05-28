@@ -6,10 +6,13 @@ import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
 import rst.pdfbox.layout.elements.Document;
 import rst.pdfbox.layout.elements.Paragraph;
+import examples.AbstractExampleTest;
+import org.junit.Test;
 
-public class HelloDoc {
+public class HelloDocTest extends AbstractExampleTest {
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void test() throws Exception {
 	Document document = new Document(40, 60, 40, 60);
 
 	Paragraph paragraph = new Paragraph();
@@ -19,6 +22,8 @@ public class HelloDoc {
 
 	final OutputStream outputStream = new FileOutputStream("hellodoc.pdf");
 	document.save(outputStream);
+
+        verifyPdf();
 
     }
 }

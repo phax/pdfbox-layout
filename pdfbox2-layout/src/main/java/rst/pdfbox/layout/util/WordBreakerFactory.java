@@ -60,8 +60,7 @@ public class WordBreakerFactory {
 	try {
 	    return (WordBreaker) Class.forName(className).newInstance();
 	} catch (Exception e) {
-	    throw new RuntimeException(String.format(
-		    "failed to create word breaker '%s'", className), e);
+	    throw new RuntimeException("failed to create word breaker '" + className + "'", e);
 	}
 
     }

@@ -135,7 +135,7 @@ public class HyperlinkAnnotationProcessor implements AnnotationProcessor
     PageAnchor pageAnchor = anchorMap.get (anchor);
     if (pageAnchor == null)
     {
-      throw new IllegalArgumentException (String.format ("anchor named '%s' not found", anchor));
+      throw new IllegalArgumentException ("anchor named '" + anchor + "' not found");
     }
     PDPageXYZDestination xyzDestination = new PDPageXYZDestination ();
     xyzDestination.setPage (pageAnchor.getPage ());

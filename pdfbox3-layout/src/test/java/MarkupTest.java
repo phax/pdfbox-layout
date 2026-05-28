@@ -6,10 +6,13 @@ import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
 import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.EBaseFont;
+import examples.AbstractExampleTest;
+import org.junit.Test;
 
-public class Markup {
+public class MarkupTest extends AbstractExampleTest {
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void test() throws Exception {
 	String text1 = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, "
 		+ "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna "
 		+ "aliquyam erat, _sed diam_ voluptua. At vero eos et *accusam et justo* "
@@ -73,6 +76,8 @@ public class Markup {
 
 	final OutputStream outputStream = new FileOutputStream("markup.pdf");
 	document.save(outputStream);
+
+        verifyPdf();
 
     }
 }

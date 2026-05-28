@@ -66,7 +66,7 @@ public class WordBreakerFactory
     }
     catch (Exception e)
     {
-      throw new RuntimeException (String.format ("failed to create word breaker '%s'", className), e);
+      throw new RuntimeException ("failed to create word breaker '" + className + "'", e);
     }
   }
 

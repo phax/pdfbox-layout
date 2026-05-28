@@ -31,8 +31,10 @@ import rst.pdfbox.layout.text.annotations.AnnotationCharacters.IAnnotationContro
 import rst.pdfbox.layout.text.annotations.AnnotationProcessor;
 import rst.pdfbox.layout.text.annotations.AnnotationProcessorFactory;
 import rst.pdfbox.layout.util.CompatibilityHelper;
+import examples.AbstractExampleTest;
+import org.junit.Test;
 
-public class CustomAnnotation {
+public class CustomAnnotationTest extends AbstractExampleTest {
 
     /**
      * Represents a highlight annotation that might be added to a
@@ -184,7 +186,8 @@ public class CustomAnnotation {
 
     }
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void test() throws Exception {
 
 	// register our custom highlight annotation processor
 	AnnotationProcessorFactory.register(HighlightAnnotationProcessor.class);
@@ -228,5 +231,7 @@ public class CustomAnnotation {
 	final OutputStream outputStream = new FileOutputStream(
 		"customannotation.pdf");
 	document.save(outputStream);
+
+        verifyPdf();
     }
 }

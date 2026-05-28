@@ -16,10 +16,13 @@ import rst.pdfbox.layout.util.Enumerators.ArabicEnumerator;
 import rst.pdfbox.layout.util.Enumerators.LowerCaseAlphabeticEnumerator;
 import rst.pdfbox.layout.util.Enumerators.LowerCaseRomanEnumerator;
 import rst.pdfbox.layout.util.Enumerators.RomanEnumerator;
+import examples.AbstractExampleTest;
+import org.junit.Test;
 
-public class Indentation {
+public class IndentationTest extends AbstractExampleTest {
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void test() throws Exception {
 	String bulletOdd = CompatibilityHelper.getBulletCharacter(1) + " ";
 	String bulletEven = CompatibilityHelper.getBulletCharacter(2) + " ";
 	String text1 = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, "
@@ -152,6 +155,8 @@ public class Indentation {
 
 	final OutputStream outputStream = new FileOutputStream("indentation.pdf");
 	document.save(outputStream);
+
+        verifyPdf();
     }
 
 }

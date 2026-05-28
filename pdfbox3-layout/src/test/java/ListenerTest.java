@@ -15,10 +15,13 @@ import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.TextFlow;
 import rst.pdfbox.layout.text.TextFlowUtil;
 import rst.pdfbox.layout.text.TextSequenceUtil;
+import examples.AbstractExampleTest;
+import org.junit.Test;
 
-public class Listener {
+public class ListenerTest extends AbstractExampleTest {
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void test() throws Exception {
 	String text1 = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, "
 		+ "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna "
 		+ "aliquyam erat, _sed diam_ voluptua. At vero eos et *accusam et justo* "
@@ -49,8 +52,7 @@ public class Listener {
 	    @Override
 	    public void afterPage(RenderContext renderContext)
 		    throws IOException {
-		String content = String.format("Page %s",
-			renderContext.getPageIndex() + 1);
+		String content = "Page " + (renderContext.getPageIndex() + 1);
 		TextFlow text = TextFlowUtil.createTextFlow(content, 11,
 			new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN));
 		float offset = renderContext.getPageFormat().getMarginLeft()
@@ -77,6 +79,8 @@ public class Listener {
 
 	final OutputStream outputStream = new FileOutputStream("listener.pdf");
 	document.save(outputStream);
+
+        verifyPdf();
 
     }
 }

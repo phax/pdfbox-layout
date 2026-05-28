@@ -23,10 +23,13 @@ import rst.pdfbox.layout.text.TextFlow;
 import rst.pdfbox.layout.text.TextFlowUtil;
 import rst.pdfbox.layout.text.TextSequenceUtil;
 import rst.pdfbox.layout.text.annotations.AnnotationDrawListener;
+import examples.AbstractExampleTest;
+import org.junit.Test;
 
-public class LowLevelText {
+public class LowLevelTextTest extends AbstractExampleTest {
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void test() throws Exception {
 
 	final PDDocument test = new PDDocument();
 	final PDPage page = new PDPage(Constants.A4);
@@ -117,6 +120,8 @@ public class LowLevelText {
 	final OutputStream outputStream = new FileOutputStream(
 		"lowleveltext.pdf");
 	test.save(outputStream);
+
+        verifyPdf();
 	test.close();
 
     }

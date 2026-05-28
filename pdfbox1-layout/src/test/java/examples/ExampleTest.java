@@ -178,9 +178,8 @@ public class ExampleTest
 
       if (currentDoc.getNumberOfPages () != oldDoc.getNumberOfPages ())
       {
-        throw new AssertionError (String.format ("expected %d pages, but is %d",
-                                                 oldDoc.getNumberOfPages (),
-                                                 currentDoc.getNumberOfPages ()));
+        throw new AssertionError ("expected " + oldDoc.getNumberOfPages () +
+                                  " pages, but is " + currentDoc.getNumberOfPages ());
       }
 
       for (int i = 0; i < oldDoc.getNumberOfPages (); i++)
@@ -193,7 +192,7 @@ public class ExampleTest
           final File diffFile = new File (newPdf.getAbsoluteFile () + ".diff.png");
           ImageIO.write (diff, "png", diffFile);
           System.out.println ("Write diff to " + diffFile.getAbsolutePath ());
-          throw new AssertionError (String.format ("page %d different, wrote diff image %s", i + 1, diffFile));
+          throw new AssertionError ("page " + (i + 1) + " different, wrote diff image " + diffFile);
         }
 
       }

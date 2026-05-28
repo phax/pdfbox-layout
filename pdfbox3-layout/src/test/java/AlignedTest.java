@@ -9,10 +9,13 @@ import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
 import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.util.WordBreakerFactory;
+import examples.AbstractExampleTest;
+import org.junit.Test;
 
-public class Aligned {
+public class AlignedTest extends AbstractExampleTest {
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void test() throws Exception {
 	System.setProperty(WordBreakerFactory.WORD_BREAKER_CLASS_PROPERTY, 
 		WordBreakerFactory.LEGACY_WORD_BREAKER_CLASS_NAME);
 	
@@ -47,6 +50,8 @@ public class Aligned {
 
 	final OutputStream outputStream = new FileOutputStream("aligned.pdf");
 	document.save(outputStream);
+
+        verifyPdf();
 
     }
 }

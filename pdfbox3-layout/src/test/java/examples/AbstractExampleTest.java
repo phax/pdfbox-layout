@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -19,9 +18,6 @@ import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
 
 import rst.pdfbox.layout.text.EBaseFont;
 import rst.pdfbox.layout.text.ControlFragment;
@@ -30,11 +26,16 @@ import rst.pdfbox.layout.text.annotations.AnnotationProcessorFactory;
 import rst.pdfbox.layout.util.CompatibilityHelper;
 import rst.pdfbox.layout.util.WordBreakerFactory;
 
-@FixMethodOrder (MethodSorters.NAME_ASCENDING)
-public class ExampleTest
+/**
+ * Shared infrastructure for the example test classes. Each example creates a
+ * PDF in the working directory and then calls {@link #verifyPdf()} which
+ * compares it page-by-page against the reference under
+ * {@code /examples/pdf/<lowercaseclassname>.pdf}.
+ */
+public abstract class AbstractExampleTest
 {
 
-  private File newPdf;
+  protected File newPdf;
 
   @Before
   public void setUp () throws Exception
@@ -71,109 +72,16 @@ public class ExampleTest
     }
   }
 
-  @Test
-  public void testAligned () throws Exception
+  /**
+   * Compares the generated {@code <lowercase-classname>.pdf} against the
+   * checked-in reference.
+   */
+  protected void verifyPdf () throws Exception
   {
-    _checkExample ("Aligned");
-  }
-
-  @Test
-  public void testColumns () throws Exception
-  {
-    _checkExample ("Columns");
-  }
-
-  @Test
-  public void testCustomAnnotation () throws Exception
-  {
-    _checkExample ("CustomAnnotation");
-  }
-
-  @Test
-  public void testFrames () throws Exception
-  {
-    _checkExample ("Frames");
-  }
-
-  @Test
-  public void testHelloDoc () throws Exception
-  {
-    _checkExample ("HelloDoc");
-  }
-
-  @Test
-  public void testIndentation () throws Exception
-  {
-    _checkExample ("Indentation");
-  }
-
-  @Test
-  public void testLandscape () throws Exception
-  {
-    _checkExample ("Landscape");
-  }
-
-  @Test
-  public void testLetter () throws Exception
-  {
-    _checkExample ("Letter");
-  }
-
-  @Test
-  public void testLineSpacing () throws Exception
-  {
-    _checkExample ("LineSpacing");
-  }
-
-  @Test
-  public void testLinks () throws Exception
-  {
-    _checkExample ("Links");
-  }
-
-  @Test
-  public void testListener () throws Exception
-  {
-    _checkExample ("Listener");
-  }
-
-  @Test
-  public void testLowLevelText () throws Exception
-  {
-    _checkExample ("LowLevelText");
-  }
-
-  @Test
-  public void testMargin () throws Exception
-  {
-    _checkExample ("Margin");
-  }
-
-  @Test
-  public void testMarkup () throws Exception
-  {
-    _checkExample ("Markup");
-  }
-
-  @Test
-  public void testMultiplePages () throws Exception
-  {
-    _checkExample ("MultiplePages");
-  }
-
-  @Test
-  public void testRotation () throws Exception
-  {
-    _checkExample ("Rotation");
-  }
-
-  private void _checkExample (final String example) throws Exception
-  {
-    final Class <?> exampleClass = Class.forName (example);
-    final Method mainMethod = exampleClass.getDeclaredMethod ("main", String [].class);
-    mainMethod.invoke (null, new Object [] { new String [0] });
-
-    final String pdfName = example.toLowerCase () + ".pdf";
+    String simpleName = getClass ().getSimpleName ();
+    if (simpleName.endsWith ("Test"))
+      simpleName = simpleName.substring (0, simpleName.length () - "Test".length ());
+    final String pdfName = simpleName.toLowerCase () + ".pdf";
     newPdf = new File ("./" + pdfName);
 
     final InputStream oldPdf = this.getClass ().getResourceAsStream ("/examples/pdf/" + pdfName);
@@ -195,9 +103,8 @@ public class ExampleTest
 
       if (currentDoc.getNumberOfPages () != oldDoc.getNumberOfPages ())
       {
-        throw new AssertionError (String.format ("expected %d pages, but is %d",
-                                                 oldDoc.getNumberOfPages (),
-                                                 currentDoc.getNumberOfPages ()));
+        throw new AssertionError ("expected " + oldDoc.getNumberOfPages () +
+                                  " pages, but is " + currentDoc.getNumberOfPages ());
       }
 
       for (int i = 0; i < oldDoc.getNumberOfPages (); i++)
@@ -213,7 +120,7 @@ public class ExampleTest
         {
           ImageIO.write (diff, "png", diffFile);
           System.out.println ("Write diff to " + diffFile.getAbsolutePath ());
-          throw new AssertionError (String.format ("page %d different, wrote diff image %s", i + 1, diffFile));
+          throw new AssertionError ("page " + (i + 1) + " different, wrote diff image " + diffFile);
         }
 
       }

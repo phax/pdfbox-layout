@@ -339,26 +339,4 @@ public class AnnotationCharacters
 
   }
 
-  public static void main (final String [] args)
-  {
-    final Pattern PATTERN = Pattern.compile ("(?<!\\\\)(\\\\\\\\)*(__(\\{(-?\\d+(\\.\\d*)?)?\\:(-?\\d+(\\.\\d*)?)?\\})?)");
-    final Matcher matcher = PATTERN.matcher ("__");
-    System.out.println ("matches: " + matcher.find ());
-    if (!matcher.matches ())
-    {
-      System.err.println ("exit");
-      return;
-    }
-    System.out.println ("start: " + matcher.start ());
-    System.out.println ("end: " + matcher.end ());
-    System.out.println ("groups: " + matcher.groupCount ());
-    for (int i = 0; i < matcher.groupCount (); i++)
-    {
-      System.out.println ("group " + i + ": '" + matcher.group (i) + "'");
-    }
-    // 2 - -> 1: blanks, 4: size, 5: unit
-    // 7 + -> 6: blanks, 9: sign, 10: size, 11: unit
-    // 11 # -> 12: blanks, 15: number-sign, 16: size, 18: unit
-  }
-
 }

@@ -48,8 +48,7 @@ public class Listener {
 	    @Override
 	    public void afterPage(RenderContext renderContext)
 		    throws IOException {
-		String content = String.format("Page %s",
-			renderContext.getPageIndex() + 1);
+		String content = "Page " + (renderContext.getPageIndex() + 1);
 		TextFlow text = TextFlowUtil.createTextFlow(content, 11,
 			PDType1Font.TIMES_ROMAN);
 		float offset = renderContext.getPageFormat().getMarginLeft()

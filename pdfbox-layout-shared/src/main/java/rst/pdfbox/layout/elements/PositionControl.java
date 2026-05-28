@@ -69,7 +69,7 @@ public class PositionControl extends ControlElement
 
     private SetPosition (final Float newX, final Float newY)
     {
-      super (String.format ("SET_POSITION x:%f, y%f", newX, newY));
+      super ("SET_POSITION x:" + newX + ", y" + newY);
       this.newX = newX;
       this.newY = newY;
     }
@@ -93,7 +93,7 @@ public class PositionControl extends ControlElement
 
     private MovePosition (final float relativeX, final float relativeY)
     {
-      super (String.format ("SET_POSITION x:%f, y%f", relativeX, relativeY));
+      super ("SET_POSITION x:" + relativeX + ", y" + relativeY);
       this.relativeX = relativeX;
       this.relativeY = relativeY;
     }

@@ -5,10 +5,13 @@ import rst.pdfbox.layout.elements.Document;
 import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.elements.render.ColumnLayout;
 import rst.pdfbox.layout.text.EBaseFont;
+import examples.AbstractExampleTest;
+import org.junit.Test;
 
-public class LineSpacing {
+public class LineSpacingTest extends AbstractExampleTest {
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void test() throws Exception {
 	String text = "*Lorem ipsum* dolor sit amet, consetetur sadipscing elitr, "
 		+ "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna "
 		+ "aliquyam erat, _sed diam_ voluptua. At vero eos et _accusam et justo_ "
@@ -47,6 +50,8 @@ public class LineSpacing {
 	final OutputStream outputStream = new FileOutputStream(
 		"linespacing.pdf");
 	document.save(outputStream);
+
+        verifyPdf();
 
     }
 }

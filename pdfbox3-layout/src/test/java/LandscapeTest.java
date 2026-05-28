@@ -10,10 +10,13 @@ import rst.pdfbox.layout.elements.render.ColumnLayout;
 import rst.pdfbox.layout.elements.render.VerticalLayout;
 import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
 import rst.pdfbox.layout.text.EBaseFont;
+import examples.AbstractExampleTest;
+import org.junit.Test;
 
-public class Landscape {
+public class LandscapeTest extends AbstractExampleTest {
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void test() throws Exception {
 	String text1 = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, "
 		+ "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna "
 		+ "aliquyam erat, _sed diam_ voluptua. At vero eos et *accusam et justo* "
@@ -104,6 +107,8 @@ public class Landscape {
 	final OutputStream outputStream = new FileOutputStream(
 		"landscape.pdf");
 	document.save(outputStream);
+
+        verifyPdf();
 
     }
 }

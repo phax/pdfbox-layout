@@ -320,9 +320,10 @@ public class Document implements RenderListener
 
       if (!success)
       {
-        throw new IllegalArgumentException (String.format ("neither layout %s nor the render context knows what to do with %s",
-                                                           renderContext.getLayout (),
-                                                           element));
+        throw new IllegalArgumentException ("neither layout " +
+                                            renderContext.getLayout () +
+                                            " nor the render context knows what to do with " +
+                                            element);
 
       }
     }

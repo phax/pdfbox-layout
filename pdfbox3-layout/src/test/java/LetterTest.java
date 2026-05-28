@@ -13,10 +13,13 @@ import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
 import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.EBaseFont;
 import rst.pdfbox.layout.text.Position;
+import examples.AbstractExampleTest;
+import org.junit.Test;
 
-public class Letter {
+public class LetterTest extends AbstractExampleTest {
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void test() throws Exception {
 	float hMargin = 40;
 	float vMargin = 50;
 	Document document = new Document(hMargin, hMargin, vMargin, vMargin);
@@ -25,7 +28,7 @@ public class Letter {
 	if (new File("arrow.png").exists()) {
 	    image = new ImageElement("arrow.png");
 	} else {
-	    image = new ImageElement(Letter.class.getResourceAsStream("/arrow.png"));
+	    image = new ImageElement(LetterTest.class.getResourceAsStream("/arrow.png"));
 	}
 	image.setWidth(image.getWidth()/7);
 	image.setHeight(image.getHeight()/7);
@@ -81,6 +84,8 @@ public class Letter {
 
 	final OutputStream outputStream = new FileOutputStream("letter.pdf");
 	document.save(outputStream);
+
+        verifyPdf();
 
     }
 }

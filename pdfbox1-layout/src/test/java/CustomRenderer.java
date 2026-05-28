@@ -104,8 +104,7 @@ public class CustomRenderer {
 
 	@Override
 	public void afterPage(RenderContext renderContext) throws IOException {
-	    String content = String.format("Section %s, Page %s",
-		    sectionNumber, renderContext.getPageIndex() + 1);
+	    String content = "Section " + sectionNumber + ", Page " + (renderContext.getPageIndex() + 1);
 	    TextFlow text = TextFlowUtil.createTextFlow(content, 11,
 		    PDType1Font.TIMES_ROMAN);
 	    float offset = renderContext.getPageFormat().getMarginLeft()
@@ -123,7 +122,7 @@ public class CustomRenderer {
 	public Section(int number) throws IOException {
 	    super();
 	    this.number = number;
-	    addMarkup(String.format("*Section %d",  number), 16, BaseFont.Times);
+	    addMarkup("*Section " + number, 16, BaseFont.Times);
 	}
 
 	public int getNumber() {

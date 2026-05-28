@@ -14,10 +14,13 @@ import rst.pdfbox.layout.shape.Stroke;
 import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.EBaseFont;
 import rst.pdfbox.layout.text.Constants;
+import examples.AbstractExampleTest;
+import org.junit.Test;
 
-public class Frames {
+public class FramesTest extends AbstractExampleTest {
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void test() throws Exception {
 	String text1 = "{color:#ffffff}Lorem ipsum dolor sit amet, consetetur sadipscing elitr, "
 		+ "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna "
 		+ "aliquyam erat, _sed diam_ voluptua. At vero eos et *accusam et justo* "
@@ -87,6 +90,8 @@ public class Frames {
 
 	final OutputStream outputStream = new FileOutputStream("frames.pdf");
 	document.save(outputStream);
+
+        verifyPdf();
 
     }
     

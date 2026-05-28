@@ -1,19 +1,16 @@
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
-import rst.pdfbox.layout.elements.ControlElement;
 import rst.pdfbox.layout.elements.Document;
-import rst.pdfbox.layout.elements.PageFormat;
 import rst.pdfbox.layout.elements.Paragraph;
-import rst.pdfbox.layout.elements.VerticalSpacer;
-import rst.pdfbox.layout.elements.render.ColumnLayout;
-import rst.pdfbox.layout.elements.render.VerticalLayout;
-import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
 import rst.pdfbox.layout.text.EBaseFont;
+import examples.AbstractExampleTest;
+import org.junit.Test;
 
-public class Rotation {
+public class MultiplePagesTest extends AbstractExampleTest {
 
-    public static void main(String[] args) throws Exception {
+    @Test
+    public void test() throws Exception {
 	String text1 = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, "
 		+ "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna "
 		+ "aliquyam erat, _sed diam_ voluptua. At vero eos et *accusam et justo* "
@@ -24,7 +21,7 @@ public class Rotation {
 		+ "At vero eos et accusam* et justo duo dolores et ea rebum. Stet clita kasd "
 		+ "gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\n\n";
 
-	String text2 = "At *vero eos et accusam* et justo duo dolores et ea rebum. "
+	String text2 = "At *vero eos et accusam* et justo duo dolores et ea rebum."
 		+ "Stet clita kasd gubergren, no sea takimata\n\n"
 		+ "sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, "
 		+ "_consetetur sadipscing elitr_, sed diam nonumy eirmod tempor invidunt "
@@ -32,27 +29,26 @@ public class Rotation {
 		+ "eos et _accusam et *justo* duo dolores_ et ea rebum. Stet clita kasd "
 		+ "gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\n";
 
+	Document document = new Document(40, 60, 40, 60);
+
 	Paragraph paragraph1 = new Paragraph();
 	paragraph1.addMarkup(text1, 11, EBaseFont.Times);
+	document.add(paragraph1);
+
 	Paragraph paragraph2 = new Paragraph();
 	paragraph2.addMarkup(text2, 12, EBaseFont.Helvetica);
+	document.add(paragraph2);
+
 	Paragraph paragraph3 = new Paragraph();
 	paragraph3.addMarkup(text1, 8, EBaseFont.Courier);
+	document.add(paragraph3);
 
-	Paragraph titleA4 = new Paragraph();
-	titleA4.addMarkup("*Format A4 Landscape*", 20, EBaseFont.Times);
-	Paragraph titleA5 = new Paragraph();
-	titleA5.addMarkup("*Format A4 Landscape rotated by -90 degrees*", 20, EBaseFont.Times);
-	
-	PageFormat a4_landscape = PageFormat.with().margins(40, 50, 40, 60).landscape().build();
-	PageFormat a4_landscape_rotated = PageFormat.with().margins(40, 50, 40, 60).landscape().rotation(-90).build();
-
-	Document document = new Document(a4_landscape);
-	
-	document.add(titleA4, VerticalLayoutHint.CENTER);
-	document.add(new VerticalSpacer(5));
-	document.add(new ColumnLayout(2, 10));
-
+	document.add(paragraph1);
+	document.add(paragraph3);
+	document.add(paragraph1);
+	document.add(paragraph2);
+	document.add(paragraph1);
+	document.add(paragraph3);
 	document.add(paragraph2);
 	document.add(paragraph1);
 	document.add(paragraph1);
@@ -60,55 +56,24 @@ public class Rotation {
 	document.add(paragraph2);
 	document.add(paragraph2);
 	document.add(paragraph3);
-
-	document.add(a4_landscape_rotated);
-	document.add(ControlElement.NEWPAGE);
-	document.add(new VerticalLayout());
-	document.add(titleA5, VerticalLayoutHint.CENTER);
-	document.add(new VerticalSpacer(5));
-	document.add(new ColumnLayout(2, 10));
-
+	document.add(paragraph1);
+	document.add(paragraph1);
 	document.add(paragraph2);
+	document.add(paragraph1);
+	document.add(paragraph3);
+	document.add(paragraph2);
+	document.add(paragraph3);
 	document.add(paragraph1);
 	document.add(paragraph1);
 	document.add(paragraph3);
 	document.add(paragraph2);
 	document.add(paragraph2);
-	document.add(paragraph3);
-
-	document.add(a4_landscape);
-	document.add(ControlElement.NEWPAGE);
-	document.add(new VerticalLayout());
-	document.add(titleA4, VerticalLayoutHint.CENTER);
-	document.add(new VerticalSpacer(5));
-	document.add(new ColumnLayout(2, 10));
-
-	document.add(paragraph2);
-	document.add(paragraph1);
-	document.add(paragraph1);
-	document.add(paragraph3);
-	document.add(paragraph2);
-	document.add(paragraph2);
-	document.add(paragraph3);
-
-	document.add(a4_landscape_rotated);
-	document.add(ControlElement.NEWPAGE);
-	document.add(new VerticalLayout());
-	document.add(titleA5, VerticalLayoutHint.CENTER);
-	document.add(new VerticalSpacer(5));
-	document.add(new ColumnLayout(2, 10));
-
-	document.add(paragraph2);
-	document.add(paragraph1);
-	document.add(paragraph1);
-	document.add(paragraph3);
-	document.add(paragraph2);
-	document.add(paragraph2);
-	document.add(paragraph3);
 
 	final OutputStream outputStream = new FileOutputStream(
-		"rotation.pdf");
+		"multiplepages.pdf");
 	document.save(outputStream);
+
+        verifyPdf();
 
     }
 }
