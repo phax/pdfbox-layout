@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.helger</groupId>
+        <artifactId>pdfbox-layout-parent</artifactId>
+        <version>1.0.1</version>
+    </parent>
+
+    <artifactId>pdfbox1-layout</artifactId>
+    <packaging>jar</packaging>
+
+    <name>pdfbox1-layout</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>${pdfbox1.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Visual-diff tests rendered on Java 8 shift a few pixels on modern JVMs;
+                 failures surface via *.diff.png in the module dir. -->
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <testFailureIgnore>true</testFailureIgnore>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

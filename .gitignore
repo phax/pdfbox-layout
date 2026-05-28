@@ -1,15 +1,9 @@
+.claude/
 .gradle/
 .settings/
 build/
 target/
 bin/
-
-# Per-module Gradle build state and generated/copied sources
-pdfbox1-layout/examples/
-pdfbox2-layout/src/
-pdfbox2-layout/examples/
-pdfbox3-layout/src/
-pdfbox3-layout/examples/
 
 # Per-test visual-diff artifacts
 *.diff.png

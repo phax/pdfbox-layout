@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.helger</groupId>
+        <artifactId>parent-pom</artifactId>
+        <version>3.0.3</version>
+    </parent>
+
+    <artifactId>pdfbox-layout-parent</artifactId>
+    <version>1.0.1</version>
+    <packaging>pom</packaging>
+
+    <name>pdfbox-layout (parent)</name>
+    <description>Parent POM for the three pdfbox-layout flavours (pdfbox 1.x / 2.x / 3.x).</description>
+
+    <modules>
+        <module>pdfbox1-layout</module>
+        <module>pdfbox2-layout</module>
+        <module>pdfbox3-layout</module>
+    </modules>
+
+    <properties>
+        <pdfbox1.version>1.8.8</pdfbox1.version>
+        <pdfbox2.version>2.0.36</pdfbox2.version>
+        <pdfbox3.version>3.0.7</pdfbox3.version>
+        <junit4.version>4.13.2</junit4.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit4.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/ralfstuckert/pdfbox-layout</url>
+        </repository>
+    </distributionManagement>
+
+</project>
