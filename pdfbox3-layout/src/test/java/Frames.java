@@ -12,7 +12,7 @@ import rst.pdfbox.layout.shape.Rect;
 import rst.pdfbox.layout.shape.RoundRect;
 import rst.pdfbox.layout.shape.Stroke;
 import rst.pdfbox.layout.text.EAlignment;
-import rst.pdfbox.layout.text.BaseFont;
+import rst.pdfbox.layout.text.EBaseFont;
 import rst.pdfbox.layout.text.Constants;
 
 public class Frames {
@@ -39,7 +39,7 @@ public class Frames {
 	Document document = new Document(new PageFormat(Constants.A5));
 
 	Paragraph paragraph = new Paragraph();
-	paragraph.addMarkup("Am I living in a box?", 11, BaseFont.Times);
+	paragraph.addMarkup("Am I living in a box?", 11, EBaseFont.Times);
 	Frame frame = new Frame(paragraph);
 	frame.setShape(new Rect());
 	frame.setBorder(Color.black, new Stroke());
@@ -48,7 +48,7 @@ public class Frames {
 	document.add(frame, VerticalLayoutHint.CENTER);
 
 	paragraph = new Paragraph();
-	paragraph.addMarkup(text1, 11, BaseFont.Times);
+	paragraph.addMarkup(text1, 11, EBaseFont.Times);
 	frame = new Frame(paragraph, 200f, null);
 	frame.setShape(new Rect());
 	frame.setBackgroundColor(Color.black);
@@ -57,7 +57,7 @@ public class Frames {
 	document.add(frame);
 
 	paragraph = new Paragraph();
-	paragraph.addMarkup("{color:#aa00aa}*Ain't no rectangle*", 22, BaseFont.Helvetica);
+	paragraph.addMarkup("{color:#aa00aa}*Ain't no rectangle*", 22, EBaseFont.Helvetica);
 	paragraph.setAlignment(EAlignment.Center);
 	frame = new Frame(paragraph, 300f, 100f);
 	frame.setShape(new Ellipse());
@@ -68,9 +68,9 @@ public class Frames {
 	document.add(frame);
 
 	paragraph = new Paragraph();
-	paragraph.addMarkup("Frames also paginate, see here:\n\n", 13, BaseFont.Times);
-	paragraph.addMarkup(text2, 11, BaseFont.Times);
-	paragraph.addMarkup(text2, 11, BaseFont.Times);
+	paragraph.addMarkup("Frames also paginate, see here:\n\n", 13, EBaseFont.Times);
+	paragraph.addMarkup(text2, 11, EBaseFont.Times);
+	paragraph.addMarkup(text2, 11, EBaseFont.Times);
 	frame = new Frame(paragraph, null, null);
 	frame.setShape(new RoundRect(10));
 	frame.setBorder(Color.magenta, new Stroke(3));
@@ -79,8 +79,8 @@ public class Frames {
 	frame.setMargin(50, 50, 20, 10);
 	
 	paragraph = new Paragraph();
-	paragraph.addMarkup(text2, 11, BaseFont.Times);
-	paragraph.addMarkup(text2, 11, BaseFont.Times);
+	paragraph.addMarkup(text2, 11, EBaseFont.Times);
+	paragraph.addMarkup(text2, 11, EBaseFont.Times);
 	frame.add(paragraph);
 
 	document.add(frame);

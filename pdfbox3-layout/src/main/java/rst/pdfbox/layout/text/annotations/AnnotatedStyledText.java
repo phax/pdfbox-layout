@@ -15,14 +15,13 @@ import rst.pdfbox.layout.text.StyledText;
 /**
  * Extension of styled text that supports annotations.
  */
-public class AnnotatedStyledText extends StyledText implements Annotated
+public class AnnotatedStyledText extends StyledText implements IAnnotated
 {
-
-  private List <Annotation> annotations = new ArrayList <Annotation> ();
+  private final List <IAnnotation> annotations = new ArrayList <> ();
 
   /**
    * Creates a styled text.
-   * 
+   *
    * @param text
    *        the text to draw. Must not contain line feeds ('\n').
    * @param fontDescriptor
@@ -44,7 +43,7 @@ public class AnnotatedStyledText extends StyledText implements Annotated
                               final float leftMargin,
                               final float rightMargin,
                               final float baselineOffset,
-                              Collection <? extends Annotation> annotations)
+                              final Collection <? extends IAnnotation> annotations)
   {
     super (text, fontDescriptor, color, baselineOffset, leftMargin, rightMargin);
     if (annotations != null)
@@ -55,7 +54,7 @@ public class AnnotatedStyledText extends StyledText implements Annotated
 
   /**
    * Creates a styled text.
-   * 
+   *
    * @param text
    *        the text to draw. Must not contain line feeds ('\n').
    * @param size
@@ -69,34 +68,34 @@ public class AnnotatedStyledText extends StyledText implements Annotated
    * @param annotations
    *        the annotations associated with the text.
    */
-  public AnnotatedStyledText (String text,
-                              float size,
-                              PDFont font,
-                              Color color,
+  public AnnotatedStyledText (final String text,
+                              final float size,
+                              final PDFont font,
+                              final Color color,
                               final float baselineOffset,
-                              Collection <? extends Annotation> annotations)
+                              final Collection <? extends IAnnotation> annotations)
   {
     this (text, new FontDescriptor (font, size), color, baselineOffset, 0, 0, annotations);
   }
 
   @Override
-  public Iterator <Annotation> iterator ()
+  public Iterator <IAnnotation> iterator ()
   {
     return annotations.iterator ();
   }
 
   @SuppressWarnings ("unchecked")
   @Override
-  public <T extends Annotation> Iterable <T> getAnnotationsOfType (Class <T> type)
+  public <T extends IAnnotation> Iterable <T> getAnnotationsOfType (final Class <T> type)
   {
     List <T> result = null;
-    for (Annotation annotation : annotations)
+    for (final IAnnotation annotation : annotations)
     {
       if (type.isAssignableFrom (annotation.getClass ()))
       {
         if (result == null)
         {
-          result = new ArrayList <T> ();
+          result = new ArrayList <> ();
         }
         result.add ((T) annotation);
       }
@@ -111,28 +110,28 @@ public class AnnotatedStyledText extends StyledText implements Annotated
 
   /**
    * Adds an annotation.
-   * 
+   *
    * @param annotation
    *        the annotation to add.
    */
-  public void addAnnotation (final Annotation annotation)
+  public void addAnnotation (final IAnnotation annotation)
   {
     annotations.add (annotation);
   }
 
   /**
    * Adds all annotations.
-   * 
+   *
    * @param annos
    *        the annotations to add.
    */
-  public void addAllAnnotation (final Collection <Annotation> annos)
+  public void addAllAnnotation (final Collection <IAnnotation> annos)
   {
     annotations.addAll (annos);
   }
 
   @Override
-  public AnnotatedStyledText inheritAttributes (String text, float leftMargin, float rightMargin)
+  public AnnotatedStyledText inheritAttributes (final String text, final float leftMargin, final float rightMargin)
   {
     return new AnnotatedStyledText (text,
                                     getFontDescriptor (),

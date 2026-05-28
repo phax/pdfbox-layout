@@ -14,40 +14,39 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
  * A text flow is a text sequence that {@link IWidthRespecting respects a given width} by word
  * wrapping the text. The text may contain line breaks ('\n').<br>
  * In order to ease creation of styled text, this class supports a kind of
- * {@link #addMarkup(String, float, BaseFont) markup}. The following raw text
- * 
+ * {@link #addMarkup(String, float, EBaseFont) markup}. The following raw text
+ *
  * <pre>
  * Markup supports *bold*, _italic_, and *even _mixed* markup_.
  * </pre>
- * 
+ *
  * is rendered like this:
- * 
+ *
  * <pre>
  * Markup supports <b>bold</b>, <em>italic</em>, and <b>even <em>mixed</em></b><em> markup</em>.
  * </pre>
- * 
+ *
  * Use backslash to escape special characters '*', '_' and '\' itself:
- * 
+ *
  * <pre>
  * Escape \* with \\\* and \_ with \\\_ in markup.
  * </pre>
- * 
+ *
  * is rendered like this:
- * 
+ *
  * <pre>
  * Escape * with \* and _ with \_ in markup.
  * </pre>
  */
-public class TextFlow implements TextSequence, IWidthRespecting
+public class TextFlow implements ITextSequence, IWidthRespecting
 {
-
   public static final float DEFAULT_LINE_SPACING = 1.2f;
   private static final String HEIGHT = "height";
   private static final String WIDTH = "width";
 
-  private Map <String, Object> cache = new HashMap <String, Object> ();
+  private final Map <String, Object> cache = new HashMap <> ();
 
-  private final List <TextFragment> text = new ArrayList <TextFragment> ();
+  private final List <ITextFragment> text = new ArrayList <> ();
   private float lineSpacing = DEFAULT_LINE_SPACING;
   private float maxWidth = -1;
   private boolean applyLineSpacingToFirstLine = true;
@@ -57,20 +56,20 @@ public class TextFlow implements TextSequence, IWidthRespecting
     cache.clear ();
   }
 
-  private void setCachedValue (final String key, Object value)
+  private void setCachedValue (final String key, final Object value)
   {
     cache.put (key, value);
   }
 
   @SuppressWarnings ("unchecked")
-  private <T> T getCachedValue (final String key, Class <T> type)
+  private <T> T getCachedValue (final String key, final Class <T> type)
   {
     return (T) cache.get (key);
   }
 
   /**
    * Adds some text associated with the font to draw. The text may contain line breaks ('\n').
-   * 
+   *
    * @param text
    *        the text to add.
    * @param fontSize
@@ -87,7 +86,7 @@ public class TextFlow implements TextSequence, IWidthRespecting
 
   /**
    * Adds some markup to the text flow.
-   * 
+   *
    * @param markup
    *        the markup to add.
    * @param fontSize
@@ -97,14 +96,14 @@ public class TextFlow implements TextSequence, IWidthRespecting
    * @throws IOException
    *         by PDFBox
    */
-  public void addMarkup (final String markup, final float fontSize, final BaseFont baseFont) throws IOException
+  public void addMarkup (final String markup, final float fontSize, final EBaseFont baseFont) throws IOException
   {
     add (TextFlowUtil.createTextFlowFromMarkup (markup, fontSize, baseFont));
   }
 
   /**
    * Adds some markup to the text flow.
-   * 
+   *
    * @param markup
    *        the markup to add.
    * @param fontSize
@@ -132,13 +131,13 @@ public class TextFlow implements TextSequence, IWidthRespecting
 
   /**
    * Adds a text sequence to this flow.
-   * 
+   *
    * @param sequence
    *        the sequence to add.
    */
-  public void add (final TextSequence sequence)
+  public void add (final ITextSequence sequence)
   {
-    for (TextFragment fragment : sequence)
+    for (final ITextFragment fragment : sequence)
     {
       add (fragment);
     }
@@ -146,11 +145,11 @@ public class TextFlow implements TextSequence, IWidthRespecting
 
   /**
    * Adds a text fragment to this flow.
-   * 
+   *
    * @param fragment
    *        the fragment to add.
    */
-  public void add (final TextFragment fragment)
+  public void add (final ITextFragment fragment)
   {
     text.add (fragment);
     clearCache ();
@@ -158,10 +157,10 @@ public class TextFlow implements TextSequence, IWidthRespecting
 
   /**
    * Removes the last added fragment.
-   * 
+   *
    * @return the removed fragment (if any).
    */
-  public TextFragment removeLast ()
+  public ITextFragment removeLast ()
   {
     if (text.size () > 0)
     {
@@ -174,7 +173,7 @@ public class TextFlow implements TextSequence, IWidthRespecting
   /**
    * @return the last added fragment (if any).
    */
-  public TextFragment getLast ()
+  public ITextFragment getLast ()
   {
     if (text.size () > 0)
     {
@@ -193,7 +192,7 @@ public class TextFlow implements TextSequence, IWidthRespecting
   }
 
   @Override
-  public Iterator <TextFragment> iterator ()
+  public Iterator <ITextFragment> iterator ()
   {
     return text.iterator ();
   }
@@ -205,7 +204,7 @@ public class TextFlow implements TextSequence, IWidthRespecting
   }
 
   @Override
-  public void setMaxWidth (float maxWidth)
+  public void setMaxWidth (final float maxWidth)
   {
     this.maxWidth = maxWidth;
     clearCache ();
@@ -221,11 +220,11 @@ public class TextFlow implements TextSequence, IWidthRespecting
 
   /**
    * Sets the factor multiplied with the height to calculate the line spacing.
-   * 
+   *
    * @param lineSpacing
    *        the line spacing factor.
    */
-  public void setLineSpacing (float lineSpacing)
+  public void setLineSpacing (final float lineSpacing)
   {
     this.lineSpacing = lineSpacing;
     clearCache ();
@@ -235,7 +234,7 @@ public class TextFlow implements TextSequence, IWidthRespecting
    * Indicates if the line spacing should be applied to the first line. Makes sense if there is text
    * above to achieve an equal spacing. In case you want to position the text precisely on top, you
    * may set this value to <code>false</code>. Default is <code>true</code>.
-   * 
+   *
    * @return <code>true</code> if the line spacing should be applied to the first line.
    */
   public boolean isApplyLineSpacingToFirstLine ()
@@ -245,12 +244,12 @@ public class TextFlow implements TextSequence, IWidthRespecting
 
   /**
    * Sets the indicator whether to apply line spacing to the first line.
-   * 
+   *
    * @param applyLineSpacingToFirstLine
    *        <code>true</code> if the line spacing should be applied to the first line.
    * @see TextFlow#isApplyLineSpacingToFirstLine()
    */
-  public void setApplyLineSpacingToFirstLine (boolean applyLineSpacingToFirstLine)
+  public void setApplyLineSpacingToFirstLine (final boolean applyLineSpacingToFirstLine)
   {
     this.applyLineSpacingToFirstLine = applyLineSpacingToFirstLine;
   }
@@ -280,10 +279,10 @@ public class TextFlow implements TextSequence, IWidthRespecting
   }
 
   @Override
-  public void drawText (PDPageContentStream contentStream,
-                        Position upperLeft,
-                        EAlignment alignment,
-                        IDrawListener drawListener) throws IOException
+  public void drawText (final PDPageContentStream contentStream,
+                        final Position upperLeft,
+                        final EAlignment alignment,
+                        final IDrawListener drawListener) throws IOException
   {
     TextSequenceUtil.drawText (this,
                                contentStream,
@@ -295,9 +294,9 @@ public class TextFlow implements TextSequence, IWidthRespecting
                                isApplyLineSpacingToFirstLine ());
   }
 
-  public void drawTextRightAligned (PDPageContentStream contentStream,
-                                    Position endOfFirstLine,
-                                    IDrawListener drawListener) throws IOException
+  public void drawTextRightAligned (final PDPageContentStream contentStream,
+                                    final Position endOfFirstLine,
+                                    final IDrawListener drawListener) throws IOException
   {
     drawText (contentStream, endOfFirstLine.add (-getWidth (), 0), EAlignment.Right, drawListener);
   }
@@ -313,11 +312,11 @@ public class TextFlow implements TextSequence, IWidthRespecting
     {
       return this;
     }
-    TextFlow result = createInstance ();
+    final TextFlow result = createInstance ();
     result.setApplyLineSpacingToFirstLine (this.isApplyLineSpacingToFirstLine ());
     result.setLineSpacing (this.getLineSpacing ());
     result.setMaxWidth (this.getMaxWidth ());
-    for (TextFragment fragment : this)
+    for (final ITextFragment fragment : this)
     {
       if (!result.isEmpty () || !(fragment instanceof NewLine))
       {

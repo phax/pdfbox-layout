@@ -17,7 +17,7 @@ import rst.pdfbox.layout.util.CompatibilityHelper;
  * A text of line containing only {@link StyledText}s. It may be terminated by a
  * {@link #getNewLine() new line}.
  */
-public class TextLine implements TextSequence
+public class TextLine implements ITextSequence
 {
 
   /**
@@ -108,7 +108,7 @@ public class TextLine implements TextSequence
   }
 
   @Override
-  public Iterator <TextFragment> iterator ()
+  public Iterator <ITextFragment> iterator ()
   {
     return new TextLineIterator (styledTextList.iterator (), newLine);
   }
@@ -128,7 +128,7 @@ public class TextLine implements TextSequence
     if (width == null)
     {
       width = 0f;
-      for (TextFragment fragment : this)
+      for (ITextFragment fragment : this)
       {
         width += fragment.getWidth ();
       }
@@ -144,7 +144,7 @@ public class TextLine implements TextSequence
     if (height == null)
     {
       height = 0f;
-      for (TextFragment fragment : this)
+      for (ITextFragment fragment : this)
       {
         height = Math.max (height, fragment.getHeight ());
       }
@@ -164,7 +164,7 @@ public class TextLine implements TextSequence
     if (ascent == null)
     {
       ascent = 0f;
-      for (TextFragment fragment : this)
+      for (ITextFragment fragment : this)
       {
         float currentAscent = fragment.getFontDescriptor ().getSize () *
                               fragment.getFontDescriptor ().getFont ().getFontDescriptor ().getAscent () /
@@ -268,7 +268,7 @@ public class TextLine implements TextSequence
   /**
    * An iterator for the text line. See {@link TextLine#iterator()}.
    */
-  private static class TextLineIterator implements Iterator <TextFragment>
+  private static class TextLineIterator implements Iterator <ITextFragment>
   {
 
     private Iterator <StyledText> styledText;
@@ -296,9 +296,9 @@ public class TextLine implements TextSequence
     }
 
     @Override
-    public TextFragment next ()
+    public ITextFragment next ()
     {
-      TextFragment next = null;
+      ITextFragment next = null;
       if (styledText.hasNext ())
       {
         next = styledText.next ();

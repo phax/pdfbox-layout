@@ -23,7 +23,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import rst.pdfbox.layout.text.BaseFont;
+import rst.pdfbox.layout.text.EBaseFont;
 import rst.pdfbox.layout.text.ControlFragment;
 import rst.pdfbox.layout.text.annotations.AnnotationCharacters;
 import rst.pdfbox.layout.text.annotations.AnnotationProcessorFactory;
@@ -46,7 +46,7 @@ public class ExampleTest
     System.clearProperty (WordBreakerFactory.WORD_BREAKER_CLASS_PROPERTY);
     AnnotationProcessorFactory.reset ();
     AnnotationCharacters.reset ();
-    BaseFont.reset ();
+    EBaseFont.reset ();
     ControlFragment.reset ();
   }
 

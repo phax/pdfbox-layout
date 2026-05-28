@@ -20,10 +20,10 @@ import rst.pdfbox.layout.text.ControlCharacters.MetricsControlCharacter;
 import rst.pdfbox.layout.text.ControlCharacters.NewLineControlCharacter;
 import rst.pdfbox.layout.text.IndentCharacters.IndentCharacter;
 import rst.pdfbox.layout.text.annotations.AnnotatedStyledText;
-import rst.pdfbox.layout.text.annotations.Annotation;
+import rst.pdfbox.layout.text.annotations.IAnnotation;
 import rst.pdfbox.layout.text.annotations.AnnotationCharacters;
-import rst.pdfbox.layout.text.annotations.AnnotationCharacters.AnnotationControlCharacter;
-import rst.pdfbox.layout.text.annotations.AnnotationCharacters.AnnotationControlCharacterFactory;
+import rst.pdfbox.layout.text.annotations.AnnotationCharacters.AbstractAnnotationControlCharacter;
+import rst.pdfbox.layout.text.annotations.AnnotationCharacters.IAnnotationControlCharacterFactory;
 
 public class TextFlowUtil
 {
@@ -50,7 +50,7 @@ public class TextFlowUtil
   /**
    * Convenience alternative to
    * {@link #createTextFlowFromMarkup(String, float, PDFont, PDFont, PDFont, PDFont)} which allows
-   * to specifies the fonts to use by using the {@link BaseFont} enum.
+   * to specifies the fonts to use by using the {@link EBaseFont} enum.
    * 
    * @param markup
    *        the markup text.
@@ -62,7 +62,7 @@ public class TextFlowUtil
    * @throws IOException
    *         by pdfbox
    */
-  public static TextFlow createTextFlowFromMarkup (final String markup, final float fontSize, final BaseFont baseFont)
+  public static TextFlow createTextFlowFromMarkup (final String markup, final float fontSize, final EBaseFont baseFont)
                                                                                                                        throws IOException
   {
     return createTextFlowFromMarkup (markup,
@@ -157,7 +157,7 @@ public class TextFlowUtil
     boolean italic = false;
     Color color = Color.black;
     MetricsControlCharacter metricsControl = null;
-    Map <Class <? extends Annotation>, Annotation> annotationMap = new HashMap <Class <? extends Annotation>, Annotation> ();
+    Map <Class <? extends IAnnotation>, IAnnotation> annotationMap = new HashMap <Class <? extends IAnnotation>, IAnnotation> ();
     Stack <IndentCharacter> indentStack = new Stack <IndentCharacter> ();
     for (final CharSequence fragment : parts)
     {
@@ -180,9 +180,9 @@ public class TextFlowUtil
         {
           color = ((ColorControlCharacter) fragment).getColor ();
         }
-        if (fragment instanceof AnnotationControlCharacter)
+        if (fragment instanceof AbstractAnnotationControlCharacter)
         {
-          AnnotationControlCharacter <?> annotationControlCharacter = (AnnotationControlCharacter <?>) fragment;
+          AbstractAnnotationControlCharacter <?> annotationControlCharacter = (AbstractAnnotationControlCharacter <?>) fragment;
           if (annotationMap.containsKey (annotationControlCharacter.getAnnotationType ()))
           {
             annotationMap.remove (annotationControlCharacter.getAnnotationType ());
@@ -346,7 +346,7 @@ public class TextFlowUtil
     text = splitByControlCharacter (ControlCharacters.ITALIC_FACTORY, text);
     text = splitByControlCharacter (ControlCharacters.COLOR_FACTORY, text);
 
-    for (AnnotationControlCharacterFactory <?> annotationControlCharacterFactory : AnnotationCharacters.getFactories ())
+    for (IAnnotationControlCharacterFactory <?> annotationControlCharacterFactory : AnnotationCharacters.getFactories ())
     {
       text = splitByControlCharacter (annotationControlCharacterFactory, text);
     }

@@ -18,7 +18,7 @@ import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
 import rst.pdfbox.layout.shape.Stroke;
 import rst.pdfbox.layout.shape.Stroke.CapStyle;
 import rst.pdfbox.layout.text.EAlignment;
-import rst.pdfbox.layout.text.BaseFont;
+import rst.pdfbox.layout.text.EBaseFont;
 import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.TextFlow;
 import rst.pdfbox.layout.text.TextFlowUtil;
@@ -51,9 +51,9 @@ public class CustomRenderer {
 	document.addRenderListener(sectionRenderer);
 
 	Paragraph paragraph = new Paragraph();
-	paragraph.addMarkup(text1, 11, BaseFont.Times);
-	paragraph.addMarkup(text2, 12, BaseFont.Helvetica);
-	paragraph.addMarkup(text1, 8, BaseFont.Courier);
+	paragraph.addMarkup(text1, 11, EBaseFont.Times);
+	paragraph.addMarkup(text2, 12, EBaseFont.Helvetica);
+	paragraph.addMarkup(text1, 8, EBaseFont.Courier);
 
 	document.add(new Section(1));
 	document.add(paragraph);
@@ -124,7 +124,7 @@ public class CustomRenderer {
 	public Section(int number) throws IOException {
 	    super();
 	    this.number = number;
-	    addMarkup(String.format("*Section %d",  number), 16, BaseFont.Times);
+	    addMarkup(String.format("*Section %d",  number), 16, EBaseFont.Times);
 	}
 
 	public int getNumber() {

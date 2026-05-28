@@ -28,7 +28,7 @@ public interface AnnotationProcessor {
      * @throws IOException
      *             by pdfbox.
      */
-    void annotatedObjectDrawn(final Annotated drawnObject,
+    void annotatedObjectDrawn(final IAnnotated drawnObject,
 	    final DrawContext drawContext, Position upperLeft, float width,
 	    float height) throws IOException;
 

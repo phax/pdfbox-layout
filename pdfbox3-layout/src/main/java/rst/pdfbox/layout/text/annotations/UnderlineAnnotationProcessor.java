@@ -11,7 +11,7 @@ import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 import rst.pdfbox.layout.shape.Stroke;
-import rst.pdfbox.layout.text.DrawContext;
+import rst.pdfbox.layout.text.IDrawContext;
 import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.StyledText;
 import rst.pdfbox.layout.text.annotations.Annotations.UnderlineAnnotation;
@@ -26,8 +26,8 @@ public class UnderlineAnnotationProcessor implements AnnotationProcessor
   private List <Line> linesOnPage = new ArrayList <Line> ();
 
   @Override
-  public void annotatedObjectDrawn (Annotated drawnObject,
-                                    DrawContext drawContext,
+  public void annotatedObjectDrawn (IAnnotated drawnObject,
+                                    IDrawContext drawContext,
                                     Position upperLeft,
                                     float width,
                                     float height) throws IOException
@@ -55,13 +55,13 @@ public class UnderlineAnnotationProcessor implements AnnotationProcessor
   }
 
   @Override
-  public void beforePage (DrawContext drawContext) throws IOException
+  public void beforePage (IDrawContext drawContext) throws IOException
   {
     linesOnPage.clear ();
   }
 
   @Override
-  public void afterPage (DrawContext drawContext) throws IOException
+  public void afterPage (IDrawContext drawContext) throws IOException
   {
     for (Line line : linesOnPage)
     {

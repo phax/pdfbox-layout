@@ -43,13 +43,13 @@ public class AnnotationDrawListener implements IDrawListener, RenderListener {
     @Override
     public void drawn(Object drawnObject, Position upperLeft, float width,
 	    float height) {
-	if (!(drawnObject instanceof Annotated)) {
+	if (!(drawnObject instanceof IAnnotated)) {
 	    return;
 	}
 	for (AnnotationProcessor annotationProcessor : annotationProcessors) {
 	    try {
 		annotationProcessor.annotatedObjectDrawn(
-			(Annotated) drawnObject, drawContext, upperLeft, width,
+			(IAnnotated) drawnObject, drawContext, upperLeft, width,
 			height);
 	    } catch (IOException e) {
 		throw new RuntimeException(

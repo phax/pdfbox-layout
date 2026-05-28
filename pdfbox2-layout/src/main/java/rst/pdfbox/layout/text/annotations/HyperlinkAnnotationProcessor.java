@@ -18,7 +18,7 @@ import rst.pdfbox.layout.text.DrawContext;
 import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.annotations.Annotations.AnchorAnnotation;
 import rst.pdfbox.layout.text.annotations.Annotations.HyperlinkAnnotation;
-import rst.pdfbox.layout.text.annotations.Annotations.HyperlinkAnnotation.LinkStyle;
+import rst.pdfbox.layout.text.annotations.Annotations.HyperlinkAnnotation.ELinkStyle;
 import rst.pdfbox.layout.util.CompatibilityHelper;
 
 /**
@@ -32,7 +32,7 @@ public class HyperlinkAnnotationProcessor implements AnnotationProcessor {
     private Map<PDPage, List<Hyperlink>> linkMap = new HashMap<PDPage, List<Hyperlink>>();
 
     @Override
-    public void annotatedObjectDrawn(Annotated drawnObject,
+    public void annotatedObjectDrawn(IAnnotated drawnObject,
 	    DrawContext drawContext, Position upperLeft, float width,
 	    float height) throws IOException {
 
@@ -160,9 +160,9 @@ public class HyperlinkAnnotationProcessor implements AnnotationProcessor {
 	private final PDRectangle rect;
 	private final Color color;
 	private final String hyperlinkUri;
-	private final LinkStyle linkStyle;
+	private final ELinkStyle linkStyle;
 
-	public Hyperlink(PDRectangle rect, Color color, LinkStyle linkStyle,
+	public Hyperlink(PDRectangle rect, Color color, ELinkStyle linkStyle,
 		String hyperlinkUri) {
 	    this.rect = rect;
 	    this.color = color;
@@ -182,7 +182,7 @@ public class HyperlinkAnnotationProcessor implements AnnotationProcessor {
 	    return hyperlinkUri;
 	}
 
-	public LinkStyle getLinkStyle() {
+	public ELinkStyle getLinkStyle() {
 	    return linkStyle;
 	}
 

@@ -17,7 +17,7 @@ public class Indent extends ControlFragment
   public final static Indent UNINDENT = new Indent (0);
 
   protected float indentWidth = 4;
-  protected SpaceUnit indentUnit = SpaceUnit.em;
+  protected ESpaceUnit indentUnit = ESpaceUnit.em;
   protected EAlignment alignment = EAlignment.Left;
   protected StyledText styledText;
 
@@ -31,7 +31,7 @@ public class Indent extends ControlFragment
    * @throws IOException
    *         by pdfbox
    */
-  public Indent (final float indentWidth, final SpaceUnit indentUnit) throws IOException
+  public Indent (final float indentWidth, final ESpaceUnit indentUnit) throws IOException
   {
     this ("", indentWidth, indentUnit, DEFAULT_FONT_DESCRIPTOR, EAlignment.Left, Color.black);
   }
@@ -55,7 +55,7 @@ public class Indent extends ControlFragment
    */
   public Indent (final String label,
                  final float indentWidth,
-                 final SpaceUnit indentUnit,
+                 final ESpaceUnit indentUnit,
                  final float fontSize,
                  final PDFont font) throws IOException
   {
@@ -83,7 +83,7 @@ public class Indent extends ControlFragment
    */
   public Indent (final String label,
                  final float indentWidth,
-                 final SpaceUnit indentUnit,
+                 final ESpaceUnit indentUnit,
                  final float fontSize,
                  final PDFont font,
                  final EAlignment alignment) throws IOException
@@ -114,7 +114,7 @@ public class Indent extends ControlFragment
    */
   public Indent (final String label,
                  final float indentWidth,
-                 final SpaceUnit indentUnit,
+                 final ESpaceUnit indentUnit,
                  final float fontSize,
                  final PDFont font,
                  final EAlignment alignment,
@@ -143,7 +143,7 @@ public class Indent extends ControlFragment
    */
   public Indent (final String label,
                  final float indentWidth,
-                 final SpaceUnit indentUnit,
+                 final ESpaceUnit indentUnit,
                  final FontDescriptor fontDescriptor,
                  final EAlignment alignment,
                  final Color color) throws IOException
@@ -190,7 +190,7 @@ public class Indent extends ControlFragment
   }
 
   private float calculateIndent (final float indentWidth,
-                                 final SpaceUnit indentUnit,
+                                 final ESpaceUnit indentUnit,
                                  final FontDescriptor fontDescriptor) throws IOException
   {
     if (indentWidth < 0)

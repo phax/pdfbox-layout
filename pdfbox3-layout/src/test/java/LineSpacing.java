@@ -4,7 +4,7 @@ import java.io.OutputStream;
 import rst.pdfbox.layout.elements.Document;
 import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.elements.render.ColumnLayout;
-import rst.pdfbox.layout.text.BaseFont;
+import rst.pdfbox.layout.text.EBaseFont;
 
 public class LineSpacing {
 
@@ -27,7 +27,7 @@ public class LineSpacing {
 	// use a bigger line spacing to visualize the effects of line spacing more drastically
 	left.setLineSpacing(1.5f);
 	left.setMaxWidth(document.getPageWidth()/2);
-	left.addMarkup(text, 11, BaseFont.Times);
+	left.addMarkup(text, 11, EBaseFont.Times);
 	document.add(left);
 
 	document.add(left);
@@ -38,7 +38,7 @@ public class LineSpacing {
 	Paragraph right = new Paragraph();
 	right.setLineSpacing(1.5f);
 	right.setMaxWidth(document.getPageWidth()/2);
-	right.addMarkup(text, 11, BaseFont.Times);
+	right.addMarkup(text, 11, EBaseFont.Times);
 	document.add(right);
 
 	document.add(right);

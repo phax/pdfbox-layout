@@ -19,7 +19,7 @@ import rst.pdfbox.layout.elements.PositionControl;
 import rst.pdfbox.layout.elements.PositionControl.MarkPosition;
 import rst.pdfbox.layout.elements.PositionControl.MovePosition;
 import rst.pdfbox.layout.elements.PositionControl.SetPosition;
-import rst.pdfbox.layout.text.DrawContext;
+import rst.pdfbox.layout.text.IDrawContext;
 import rst.pdfbox.layout.text.IDrawListener;
 import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.annotations.AnnotationDrawListener;
@@ -28,7 +28,7 @@ import rst.pdfbox.layout.util.CompatibilityHelper;
 /**
  * The render context is a container providing all state of the current rendering process.
  */
-public class RenderContext implements Renderer, Closeable, DrawContext, IDrawListener
+public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawListener
 {
 
   private final Document document;

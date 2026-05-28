@@ -39,7 +39,7 @@ public class IndentCharacters
 
     protected int level = 1;
     protected float indentWidth = 4;
-    protected SpaceUnit indentUnit = SpaceUnit.em;
+    protected ESpaceUnit indentUnit = ESpaceUnit.em;
 
     public IndentCharacter (final String level, final String indentWidth, final String indentUnit)
     {
@@ -52,11 +52,11 @@ public class IndentCharacters
       {}
       try
       {
-        this.indentUnit = indentUnit == null ? SpaceUnit.em : SpaceUnit.valueOf (indentUnit);
+        this.indentUnit = indentUnit == null ? ESpaceUnit.em : ESpaceUnit.valueOf (indentUnit);
       }
       catch (NumberFormatException e)
       {}
-      float defaultIndent = this.indentUnit == SpaceUnit.em ? 4 : 10;
+      float defaultIndent = this.indentUnit == ESpaceUnit.em ? 4 : 10;
       try
       {
         this.indentWidth = indentWidth == null ? defaultIndent : Integer.parseInt (indentWidth);

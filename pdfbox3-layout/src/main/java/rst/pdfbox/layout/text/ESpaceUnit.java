@@ -5,9 +5,8 @@ import java.io.IOException;
 /**
  * Unit to specify space, currently only em and pt.
  */
-public enum SpaceUnit
+public enum ESpaceUnit
 {
-
   /**
    * The average character width of the associated font.
    */
@@ -19,7 +18,7 @@ public enum SpaceUnit
 
   /**
    * Converts the given unit to pt.
-   * 
+   *
    * @param size
    *        the size with respect to the unit.
    * @param fontDescriptor
@@ -31,9 +30,8 @@ public enum SpaceUnit
   public float toPt (final float size, final FontDescriptor fontDescriptor) throws IOException
   {
     if (this == em)
-    {
       return fontDescriptor.getSize () * fontDescriptor.getFont ().getAverageFontWidth () / 1000 * size;
-    }
+
     return size;
   }
 }

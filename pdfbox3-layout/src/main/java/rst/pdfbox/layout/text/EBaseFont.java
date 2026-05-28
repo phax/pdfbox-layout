@@ -20,7 +20,7 @@ import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
  * instance every time, so layout measurements are consistent.
  * </p>
  */
-public enum BaseFont
+public enum EBaseFont
 {
 
   Times (Standard14Fonts.FontName.TIMES_ROMAN,
@@ -46,7 +46,7 @@ public enum BaseFont
   private PDFont italicFont;
   private PDFont boldItalicFont;
 
-  private BaseFont (Standard14Fonts.FontName plain,
+  private EBaseFont (Standard14Fonts.FontName plain,
                     Standard14Fonts.FontName bold,
                     Standard14Fonts.FontName italic,
                     Standard14Fonts.FontName boldItalic)
@@ -73,7 +73,7 @@ public enum BaseFont
    */
   public static void reset ()
   {
-    for (BaseFont bf : values ())
+    for (EBaseFont bf : values ())
     {
       bf.resetThis ();
     }

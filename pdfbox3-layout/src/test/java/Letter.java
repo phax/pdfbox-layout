@@ -11,7 +11,7 @@ import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.elements.VerticalSpacer;
 import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
 import rst.pdfbox.layout.text.EAlignment;
-import rst.pdfbox.layout.text.BaseFont;
+import rst.pdfbox.layout.text.EBaseFont;
 import rst.pdfbox.layout.text.Position;
 
 public class Letter {
@@ -47,7 +47,7 @@ public class Letter {
 
 	paragraph = new Paragraph();
 	paragraph.addMarkup("*Labore et dolore magna aliquyam erat*", 11,
-		BaseFont.Helvetica);
+		EBaseFont.Helvetica);
 	document.add(paragraph, new VerticalLayoutHint(EAlignment.Left, 0, 0,
 		40, 20));
 
@@ -61,21 +61,21 @@ public class Letter {
 		+ "At vero eos et accusam* et justo duo dolores et ea rebum. Stet clita kasd "
 		+ "gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\n\n";
 	paragraph = new Paragraph();
-	paragraph.addMarkup(text, 11, BaseFont.Helvetica);
+	paragraph.addMarkup(text, 11, EBaseFont.Helvetica);
 	document.add(paragraph);
 
 	document.add(paragraph);
 
 	paragraph = new Paragraph();
 	paragraph.addMarkup("Dolore magna aliquyam erat\nRalf Stuckert", 11,
-		BaseFont.Helvetica);
+		EBaseFont.Helvetica);
 	document.add(paragraph, new VerticalLayoutHint(EAlignment.Left, 60, 0,
 		40, 0));
 
 	paragraph = new Paragraph();
 	paragraph.addMarkup("*Sanctus est:* Lorem ipsum dolor consetetur "
 		+ "sadipscing sed diam nonumy eirmod tempor invidunt", 6,
-		BaseFont.Times);
+		EBaseFont.Times);
 	paragraph.setAbsolutePosition(new Position(hMargin, vMargin));
 	document.add(paragraph);
 

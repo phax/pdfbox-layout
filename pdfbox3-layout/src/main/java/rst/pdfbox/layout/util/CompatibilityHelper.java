@@ -27,7 +27,7 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import org.apache.pdfbox.util.Matrix;
 
 import rst.pdfbox.layout.text.Position;
-import rst.pdfbox.layout.text.annotations.Annotations.HyperlinkAnnotation.LinkStyle;
+import rst.pdfbox.layout.text.annotations.Annotations.HyperlinkAnnotation.ELinkStyle;
 
 /**
  * Provide compatible methods for API changes from pdfbox 1x to 3x.
@@ -165,7 +165,7 @@ public class CompatibilityHelper
   public static PDAnnotationLink createLink (PDPage page,
                                              PDRectangle rect,
                                              Color color,
-                                             LinkStyle linkStyle,
+                                             ELinkStyle linkStyle,
                                              final String uri)
   {
     PDAnnotationLink pdLink = createLink (page, rect, color, linkStyle);
@@ -179,7 +179,7 @@ public class CompatibilityHelper
   public static PDAnnotationLink createLink (PDPage page,
                                              PDRectangle rect,
                                              Color color,
-                                             LinkStyle linkStyle,
+                                             ELinkStyle linkStyle,
                                              final PDDestination destination)
   {
     PDAnnotationLink pdLink = createLink (page, rect, color, linkStyle);
@@ -203,7 +203,7 @@ public class CompatibilityHelper
     annotation.setColor (toPDColor (color));
   }
 
-  private static PDAnnotationLink createLink (PDPage page, PDRectangle rect, Color color, LinkStyle linkStyle)
+  private static PDAnnotationLink createLink (PDPage page, PDRectangle rect, Color color, ELinkStyle linkStyle)
   {
     PDAnnotationLink pdLink = new PDAnnotationLink ();
     pdLink.setBorderStyle (toBorderStyle (linkStyle));
@@ -213,9 +213,9 @@ public class CompatibilityHelper
     return pdLink;
   }
 
-  private static PDBorderStyleDictionary toBorderStyle (final LinkStyle linkStyle)
+  private static PDBorderStyleDictionary toBorderStyle (final ELinkStyle linkStyle)
   {
-    if (linkStyle == LinkStyle.none)
+    if (linkStyle == ELinkStyle.none)
     {
       return getNoBorder ();
     }

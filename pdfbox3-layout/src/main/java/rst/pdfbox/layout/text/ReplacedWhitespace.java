@@ -26,7 +26,7 @@ public class ReplacedWhitespace extends ControlFragment
   /**
    * @return the replaced fragment.
    */
-  public TextFragment toReplacedFragment ()
+  public ITextFragment toReplacedFragment ()
   {
     return new StyledText (getReplacedSpace (), getFontDescriptor ());
   }

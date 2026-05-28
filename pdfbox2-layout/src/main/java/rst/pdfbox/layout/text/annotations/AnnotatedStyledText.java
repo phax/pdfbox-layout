@@ -15,9 +15,9 @@ import rst.pdfbox.layout.text.StyledText;
 /**
  * Extension of styled text that supports annotations.
  */
-public class AnnotatedStyledText extends StyledText implements Annotated {
+public class AnnotatedStyledText extends StyledText implements IAnnotated {
 
-    private List<Annotation> annotations = new ArrayList<Annotation>();
+    private List<IAnnotation> annotations = new ArrayList<IAnnotation>();
 
     /**
      * Creates a styled text.
@@ -41,7 +41,7 @@ public class AnnotatedStyledText extends StyledText implements Annotated {
 	    final FontDescriptor fontDescriptor, final Color color,
 	    final float leftMargin, final float rightMargin,
 	    final float baselineOffset,
-	    Collection<? extends Annotation> annotations) {
+	    Collection<? extends IAnnotation> annotations) {
 	super(text, fontDescriptor, color, baselineOffset, leftMargin,
 		rightMargin);
 	if (annotations != null) {
@@ -67,21 +67,21 @@ public class AnnotatedStyledText extends StyledText implements Annotated {
      */
     public AnnotatedStyledText(String text, float size, PDFont font,
 	    Color color, final float baselineOffset,
-	    Collection<? extends Annotation> annotations) {
+	    Collection<? extends IAnnotation> annotations) {
 	this(text, new FontDescriptor(font, size), color, baselineOffset, 0, 0,
 		annotations);
     }
 
     @Override
-    public Iterator<Annotation> iterator() {
+    public Iterator<IAnnotation> iterator() {
 	return annotations.iterator();
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends Annotation> Iterable<T> getAnnotationsOfType(Class<T> type) {
+    public <T extends IAnnotation> Iterable<T> getAnnotationsOfType(Class<T> type) {
 	List<T> result = null;
-	for (Annotation annotation : annotations) {
+	for (IAnnotation annotation : annotations) {
 	    if (type.isAssignableFrom(annotation.getClass())) {
 		if (result == null) {
 		    result = new ArrayList<T>();
@@ -102,7 +102,7 @@ public class AnnotatedStyledText extends StyledText implements Annotated {
      * @param annotation
      *            the annotation to add.
      */
-    public void addAnnotation(final Annotation annotation) {
+    public void addAnnotation(final IAnnotation annotation) {
 	annotations.add(annotation);
     }
 
@@ -112,7 +112,7 @@ public class AnnotatedStyledText extends StyledText implements Annotated {
      * @param annos
      *            the annotations to add.
      */
-    public void addAllAnnotation(final Collection<Annotation> annos) {
+    public void addAllAnnotation(final Collection<IAnnotation> annos) {
 	annotations.addAll(annos);
     }
 

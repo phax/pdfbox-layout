@@ -7,7 +7,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 /**
  * Represents a drawable text.
  */
-public interface DrawableText extends IArea
+public interface IDrawableText extends IArea
 {
   /**
    * Draws the text of the (PdfBox-) cursor position.

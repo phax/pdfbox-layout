@@ -10,7 +10,7 @@ import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.elements.render.RenderContext;
 import rst.pdfbox.layout.elements.render.RenderListener;
 import rst.pdfbox.layout.text.EAlignment;
-import rst.pdfbox.layout.text.BaseFont;
+import rst.pdfbox.layout.text.EBaseFont;
 import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.TextFlow;
 import rst.pdfbox.layout.text.TextFlowUtil;
@@ -62,9 +62,9 @@ public class Listener {
 	});
 
 	Paragraph paragraph = new Paragraph();
-	paragraph.addMarkup(text1, 11, BaseFont.Times);
-	paragraph.addMarkup(text2, 12, BaseFont.Helvetica);
-	paragraph.addMarkup(text1, 8, BaseFont.Courier);
+	paragraph.addMarkup(text1, 11, EBaseFont.Times);
+	paragraph.addMarkup(text2, 12, EBaseFont.Helvetica);
+	paragraph.addMarkup(text1, 8, EBaseFont.Courier);
 
 	document.add(paragraph);
 	document.add(paragraph);

@@ -26,7 +26,7 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDBorderStyleDictionary;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDDestination;
 
 import rst.pdfbox.layout.text.Position;
-import rst.pdfbox.layout.text.annotations.Annotations.HyperlinkAnnotation.LinkStyle;
+import rst.pdfbox.layout.text.annotations.Annotations.HyperlinkAnnotation.ELinkStyle;
 
 /**
  * Provide compatible methods for API changes from pdfbox 1x to 2x.
@@ -142,7 +142,7 @@ public class CompatibilityHelper {
     }
 
     public static PDAnnotationLink createLink(PDPage page, PDRectangle rect, Color color,
-	    LinkStyle linkStyle, final String uri) {
+	    ELinkStyle linkStyle, final String uri) {
 	PDAnnotationLink pdLink = createLink(page, rect, color, linkStyle);
 
 	PDActionURI actionUri = new PDActionURI();
@@ -152,7 +152,7 @@ public class CompatibilityHelper {
     }
 
     public static PDAnnotationLink createLink(PDPage page, PDRectangle rect, Color color,
-	    LinkStyle linkStyle, final PDDestination destination) {
+	    ELinkStyle linkStyle, final PDDestination destination) {
 	PDAnnotationLink pdLink = createLink(page, rect, color, linkStyle);
 
 	PDActionGoTo gotoAction = new PDActionGoTo();
@@ -162,7 +162,7 @@ public class CompatibilityHelper {
     }
 
     private static PDAnnotationLink createLink(PDPage page, PDRectangle rect, Color color,
-	    LinkStyle linkStyle) {
+	    ELinkStyle linkStyle) {
 	PDAnnotationLink pdLink = new PDAnnotationLink();
 	pdLink.setBorderStyle(toBorderStyle(linkStyle));
 	PDRectangle rotatedRect = transformToPageRotation(rect, page);
@@ -172,8 +172,8 @@ public class CompatibilityHelper {
     }
 
     private static PDBorderStyleDictionary toBorderStyle(
-	    final LinkStyle linkStyle) {
-	if (linkStyle == LinkStyle.none) {
+	    final ELinkStyle linkStyle) {
+	if (linkStyle == ELinkStyle.none) {
 	    return getNoBorder();
 	}
 	PDBorderStyleDictionary borderStyle = new PDBorderStyleDictionary();

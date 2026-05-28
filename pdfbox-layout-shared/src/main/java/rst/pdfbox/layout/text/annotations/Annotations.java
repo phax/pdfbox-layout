@@ -9,13 +9,12 @@ public class Annotations
   /**
    * Represents a underline annotation
    */
-  public static class UnderlineAnnotation implements Annotation
+  public static class UnderlineAnnotation implements IAnnotation
   {
-
     private float baselineOffsetScale = 0f;
     private float lineWeight = 1f;
 
-    public UnderlineAnnotation (float baselineOffsetScale, float lineWeight)
+    public UnderlineAnnotation (final float baselineOffsetScale, final float lineWeight)
     {
       this.baselineOffsetScale = baselineOffsetScale;
       this.lineWeight = lineWeight;
@@ -42,10 +41,10 @@ public class Annotations
   /**
    * Represents a hyperlink annotation
    */
-  public static class HyperlinkAnnotation implements Annotation
+  public static class HyperlinkAnnotation implements IAnnotation
   {
 
-    public static enum LinkStyle
+    public enum ELinkStyle
     {
       /**
        * Underline.
@@ -58,17 +57,17 @@ public class Annotations
     }
 
     private final String hyperlinkUri;
-    private final LinkStyle linkStyle;
+    private final ELinkStyle linkStyle;
 
     /**
      * Creates a hyperlink annotation.
-     * 
+     *
      * @param hyperlinkUri
      *        the hyperlinkUri.
      * @param linkStyle
      *        the link style.
      */
-    public HyperlinkAnnotation (String hyperlinkUri, LinkStyle linkStyle)
+    public HyperlinkAnnotation (final String hyperlinkUri, final ELinkStyle linkStyle)
     {
       this.hyperlinkUri = hyperlinkUri;
       this.linkStyle = linkStyle;
@@ -82,7 +81,7 @@ public class Annotations
       return hyperlinkUri;
     }
 
-    public LinkStyle getLinkStyle ()
+    public ELinkStyle getLinkStyle ()
     {
       return linkStyle;
     }
@@ -98,17 +97,17 @@ public class Annotations
   /**
    * Represents a anchor annotation
    */
-  public static class AnchorAnnotation implements Annotation
+  public static class AnchorAnnotation implements IAnnotation
   {
     private final String anchor;
 
     /**
      * Creates a anchor annotation.
-     * 
+     *
      * @param anchor
      *        the anchor name.
      */
-    public AnchorAnnotation (String anchor)
+    public AnchorAnnotation (final String anchor)
     {
       this.anchor = anchor;
     }

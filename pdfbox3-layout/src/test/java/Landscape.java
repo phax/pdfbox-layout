@@ -9,7 +9,7 @@ import rst.pdfbox.layout.elements.VerticalSpacer;
 import rst.pdfbox.layout.elements.render.ColumnLayout;
 import rst.pdfbox.layout.elements.render.VerticalLayout;
 import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
-import rst.pdfbox.layout.text.BaseFont;
+import rst.pdfbox.layout.text.EBaseFont;
 
 public class Landscape {
 
@@ -33,16 +33,16 @@ public class Landscape {
 		+ "gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\n";
 
 	Paragraph paragraph1 = new Paragraph();
-	paragraph1.addMarkup(text1, 11, BaseFont.Times);
+	paragraph1.addMarkup(text1, 11, EBaseFont.Times);
 	Paragraph paragraph2 = new Paragraph();
-	paragraph2.addMarkup(text2, 12, BaseFont.Helvetica);
+	paragraph2.addMarkup(text2, 12, EBaseFont.Helvetica);
 	Paragraph paragraph3 = new Paragraph();
-	paragraph3.addMarkup(text1, 8, BaseFont.Courier);
+	paragraph3.addMarkup(text1, 8, EBaseFont.Courier);
 
 	Paragraph titleA4 = new Paragraph();
-	titleA4.addMarkup("*Format A4 in Portrait*", 20, BaseFont.Times);
+	titleA4.addMarkup("*Format A4 in Portrait*", 20, EBaseFont.Times);
 	Paragraph titleA5 = new Paragraph();
-	titleA5.addMarkup("*Format A5 in Landscape*", 20, BaseFont.Times);
+	titleA5.addMarkup("*Format A5 in Landscape*", 20, EBaseFont.Times);
 	
 	PageFormat a5_landscape = PageFormat.with().A5().landscape().margins(10, 50, 0, 30).build();
 	PageFormat a4_portrait = PageFormat.with().margins(40, 50, 40, 60).build();

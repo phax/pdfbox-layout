@@ -20,10 +20,10 @@ import rst.pdfbox.layout.text.ControlCharacters.MetricsControlCharacter;
 import rst.pdfbox.layout.text.ControlCharacters.NewLineControlCharacter;
 import rst.pdfbox.layout.text.IndentCharacters.IndentCharacter;
 import rst.pdfbox.layout.text.annotations.AnnotatedStyledText;
-import rst.pdfbox.layout.text.annotations.Annotation;
+import rst.pdfbox.layout.text.annotations.IAnnotation;
 import rst.pdfbox.layout.text.annotations.AnnotationCharacters;
-import rst.pdfbox.layout.text.annotations.AnnotationCharacters.AnnotationControlCharacter;
-import rst.pdfbox.layout.text.annotations.AnnotationCharacters.AnnotationControlCharacterFactory;
+import rst.pdfbox.layout.text.annotations.AnnotationCharacters.AbstractAnnotationControlCharacter;
+import rst.pdfbox.layout.text.annotations.AnnotationCharacters.IAnnotationControlCharacterFactory;
 
 public class TextFlowUtil {
 
@@ -152,7 +152,7 @@ public class TextFlowUtil {
 	boolean italic = false;
 	Color color = Color.black;
 	MetricsControlCharacter metricsControl = null;
-	Map<Class<? extends Annotation>, Annotation> annotationMap = new HashMap<Class<? extends Annotation>, Annotation>();
+	Map<Class<? extends IAnnotation>, IAnnotation> annotationMap = new HashMap<Class<? extends IAnnotation>, IAnnotation>();
 	Stack<IndentCharacter> indentStack = new Stack<IndentCharacter>();
 	for (final CharSequence fragment : parts) {
 
@@ -169,8 +169,8 @@ public class TextFlowUtil {
 		if (fragment instanceof ColorControlCharacter) {
 		    color = ((ColorControlCharacter) fragment).getColor();
 		}
-		if (fragment instanceof AnnotationControlCharacter) {
-		    AnnotationControlCharacter<?> annotationControlCharacter = (AnnotationControlCharacter<?>) fragment;
+		if (fragment instanceof AbstractAnnotationControlCharacter) {
+		    AbstractAnnotationControlCharacter<?> annotationControlCharacter = (AbstractAnnotationControlCharacter<?>) fragment;
 		    if (annotationMap.containsKey(annotationControlCharacter.getAnnotationType())) {
 			annotationMap.remove(annotationControlCharacter
 				.getAnnotationType());
@@ -306,7 +306,7 @@ public class TextFlowUtil {
 	text = splitByControlCharacter(ControlCharacters.ITALIC_FACTORY, text);
 	text = splitByControlCharacter(ControlCharacters.COLOR_FACTORY, text);
 	
-	for (AnnotationControlCharacterFactory<?> annotationControlCharacterFactory : AnnotationCharacters
+	for (IAnnotationControlCharacterFactory<?> annotationControlCharacterFactory : AnnotationCharacters
 		.getFactories()) {
 	    text = splitByControlCharacter(annotationControlCharacterFactory,
 		    text);

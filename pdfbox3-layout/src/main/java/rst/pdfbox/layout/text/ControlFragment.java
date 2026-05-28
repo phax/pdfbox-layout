@@ -16,9 +16,8 @@ import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
  * brand-new instance; ExampleTest.setUp calls it between tests.
  * </p>
  */
-public class ControlFragment implements TextFragment
+public class ControlFragment implements ITextFragment
 {
-
   protected static FontDescriptor DEFAULT_FONT_DESCRIPTOR = newDefaultFontDescriptor ();
 
   private static FontDescriptor newDefaultFontDescriptor ()
@@ -37,9 +36,9 @@ public class ControlFragment implements TextFragment
   }
 
   private String name;
-  private String text;
-  private FontDescriptor fontDescriptor;
-  private Color color;
+  private final String text;
+  private final FontDescriptor fontDescriptor;
+  private final Color color;
 
   protected ControlFragment (final String text, final FontDescriptor fontDescriptor)
   {

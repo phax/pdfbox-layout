@@ -16,11 +16,11 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageXYZDestination;
 
-import rst.pdfbox.layout.text.DrawContext;
+import rst.pdfbox.layout.text.IDrawContext;
 import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.annotations.Annotations.AnchorAnnotation;
 import rst.pdfbox.layout.text.annotations.Annotations.HyperlinkAnnotation;
-import rst.pdfbox.layout.text.annotations.Annotations.HyperlinkAnnotation.LinkStyle;
+import rst.pdfbox.layout.text.annotations.Annotations.HyperlinkAnnotation.ELinkStyle;
 import rst.pdfbox.layout.util.CompatibilityHelper;
 
 /**
@@ -34,8 +34,8 @@ public class HyperlinkAnnotationProcessor implements AnnotationProcessor
   private Map <PDPage, List <Hyperlink>> linkMap = new HashMap <PDPage, List <Hyperlink>> ();
 
   @Override
-  public void annotatedObjectDrawn (Annotated drawnObject,
-                                    DrawContext drawContext,
+  public void annotatedObjectDrawn (IAnnotated drawnObject,
+                                    IDrawContext drawContext,
                                     Position upperLeft,
                                     float width,
                                     float height) throws IOException
@@ -50,7 +50,7 @@ public class HyperlinkAnnotationProcessor implements AnnotationProcessor
   }
 
   protected void handleAnchorAnnotations (AnnotatedStyledText annotatedText,
-                                          DrawContext drawContext,
+                                          IDrawContext drawContext,
                                           Position upperLeft)
   {
     Iterable <AnchorAnnotation> anchorAnnotations = annotatedText.getAnnotationsOfType (AnchorAnnotation.class);
@@ -62,7 +62,7 @@ public class HyperlinkAnnotationProcessor implements AnnotationProcessor
   }
 
   protected void handleHyperlinkAnnotations (AnnotatedStyledText annotatedText,
-                                             DrawContext drawContext,
+                                             IDrawContext drawContext,
                                              Position upperLeft,
                                              float width,
                                              float height)
@@ -90,13 +90,13 @@ public class HyperlinkAnnotationProcessor implements AnnotationProcessor
   }
 
   @Override
-  public void beforePage (DrawContext drawContext)
+  public void beforePage (IDrawContext drawContext)
   {
     // nothing to do here
   }
 
   @Override
-  public void afterPage (DrawContext drawContext)
+  public void afterPage (IDrawContext drawContext)
   {
     // nothing to do here
   }
@@ -189,9 +189,9 @@ public class HyperlinkAnnotationProcessor implements AnnotationProcessor
     private final PDRectangle rect;
     private final Color color;
     private final String hyperlinkUri;
-    private final LinkStyle linkStyle;
+    private final ELinkStyle linkStyle;
 
-    public Hyperlink (PDRectangle rect, Color color, LinkStyle linkStyle, String hyperlinkUri)
+    public Hyperlink (PDRectangle rect, Color color, ELinkStyle linkStyle, String hyperlinkUri)
     {
       this.rect = rect;
       this.color = color;
@@ -214,7 +214,7 @@ public class HyperlinkAnnotationProcessor implements AnnotationProcessor
       return hyperlinkUri;
     }
 
-    public LinkStyle getLinkStyle ()
+    public ELinkStyle getLinkStyle ()
     {
       return linkStyle;
     }

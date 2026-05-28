@@ -6,7 +6,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.io.RandomAccessReadBuffer;
 
-import rst.pdfbox.layout.text.DrawContext;
+import rst.pdfbox.layout.text.IDrawContext;
 import rst.pdfbox.layout.text.Position;
 
 /**
@@ -31,8 +31,8 @@ public interface AnnotationProcessor
    * @throws IOException
    *         by pdfbox.
    */
-  void annotatedObjectDrawn (final Annotated drawnObject,
-                             final DrawContext drawContext,
+  void annotatedObjectDrawn (final IAnnotated drawnObject,
+                             final IDrawContext drawContext,
                              Position upperLeft,
                              float width,
                              float height) throws IOException;
@@ -45,7 +45,7 @@ public interface AnnotationProcessor
    * @throws IOException
    *         by pdfbox.
    */
-  void beforePage (final DrawContext drawContext) throws IOException;
+  void beforePage (final IDrawContext drawContext) throws IOException;
 
   /**
    * Called after a page is drawn.
@@ -55,7 +55,7 @@ public interface AnnotationProcessor
    * @throws IOException
    *         by pdfbox.
    */
-  void afterPage (final DrawContext drawContext) throws IOException;
+  void afterPage (final IDrawContext drawContext) throws IOException;
 
   /**
    * Called after all rendering has been performed.

@@ -15,9 +15,9 @@ import rst.pdfbox.layout.shape.RoundRect;
 import rst.pdfbox.layout.shape.Shape;
 import rst.pdfbox.layout.shape.Stroke;
 import rst.pdfbox.layout.text.EAlignment;
-import rst.pdfbox.layout.text.BaseFont;
+import rst.pdfbox.layout.text.EBaseFont;
 import rst.pdfbox.layout.text.Constants;
-import rst.pdfbox.layout.text.DrawContext;
+import rst.pdfbox.layout.text.IDrawContext;
 import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.TextFlow;
 import rst.pdfbox.layout.text.TextFlowUtil;
@@ -38,7 +38,7 @@ public class LowLevelText {
 		PDPageContentStream.AppendMode.APPEND, true);
 
 	// AnnotationDrawListener is only needed if you use annoation based stuff, e.g. hyperlinks
-	AnnotationDrawListener annotationDrawListener = new AnnotationDrawListener(new DrawContext() {
+	AnnotationDrawListener annotationDrawListener = new AnnotationDrawListener(new IDrawContext() {
 
 	    @Override
 	    public PDDocument getPdDocument() {
@@ -61,7 +61,7 @@ public class LowLevelText {
 	TextFlow text = TextFlowUtil
 		.createTextFlowFromMarkup(
 			"Hello *bold _italic bold-end* italic-end_. Eirmod\ntempor invidunt ut \\*labore",
-			11, BaseFont.Times);
+			11, EBaseFont.Times);
 
 	text.addText("Spongebob", 11, new PDType1Font(Standard14Fonts.FontName.COURIER));
 	text.addText(" is ", 20, new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD_OBLIQUE));
@@ -85,7 +85,7 @@ public class LowLevelText {
 		+ "gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\n";
 
 	text = new TextFlow();
-	text.addMarkup(textBlock, 8, BaseFont.Courier);
+	text.addMarkup(textBlock, 8, EBaseFont.Courier);
 	text.setMaxWidth(200);
 	xOffset = TextSequenceUtil.getOffset(text, pageWidth, EAlignment.Center);
 	text.drawText(contentStream, new Position(xOffset, pageHeight - 100),

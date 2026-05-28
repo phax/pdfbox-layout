@@ -26,12 +26,12 @@ public class TextSequenceUtil
    * @throws IOException
    *         by pdfbox
    */
-  public static List <TextLine> getLines (final TextSequence text) throws IOException
+  public static List <TextLine> getLines (final ITextSequence text) throws IOException
   {
     final List <TextLine> result = new ArrayList <TextLine> ();
 
     TextLine line = new TextLine ();
-    for (TextFragment fragment : text)
+    for (ITextFragment fragment : text)
     {
       if (fragment instanceof NewLine)
       {
@@ -69,7 +69,7 @@ public class TextSequenceUtil
    * @throws IOException
    *         by pdfbox
    */
-  public static Divided divide (final TextSequence text, final float maxWidth, final float maxHeight) throws IOException
+  public static Divided divide (final ITextSequence text, final float maxWidth, final float maxHeight) throws IOException
   {
     TextFlow wrapped = wordWrap (text, maxWidth);
     List <TextLine> lines = getLines (wrapped);
@@ -107,7 +107,7 @@ public class TextSequenceUtil
       --index;
       TextLine line = lines.get (index);
       for (@SuppressWarnings ("unused")
-      TextFragment textFragment : line)
+      ITextFragment textFragment : line)
       {
         first.removeLast ();
       }
@@ -131,13 +131,13 @@ public class TextSequenceUtil
    * @throws IOException
    *         by pdfbox
    */
-  public static TextFlow wordWrap (final TextSequence text, final float maxWidth) throws IOException
+  public static TextFlow wordWrap (final ITextSequence text, final float maxWidth) throws IOException
   {
     float indentation = 0;
     TextFlow result = new TextFlow ();
     float lineLength = indentation;
     boolean isWrappedLine = false;
-    for (TextFragment fragment : text)
+    for (ITextFragment fragment : text)
     {
       if (fragment instanceof NewLine)
       {
@@ -165,7 +165,7 @@ public class TextSequenceUtil
         else
         {
           TextFlow words = splitWords (fragment);
-          for (TextFragment word : words)
+          for (ITextFragment word : words)
           {
             WordWrapContext context = new WordWrapContext (word, lineLength, indentation, isWrappedLine);
             do
@@ -185,8 +185,8 @@ public class TextSequenceUtil
   private static WordWrapContext wordWrap (final WordWrapContext context, final float maxWidth, final TextFlow result)
                                                                                                                        throws IOException
   {
-    TextFragment word = context.getWord ();
-    TextFragment moreToWrap = null;
+    ITextFragment word = context.getWord ();
+    ITextFragment moreToWrap = null;
     float indentation = context.getIndentation ();
     float lineLength = context.getLineLength ();
     boolean isWrappedLine = context.isWrappedLine ();
@@ -194,7 +194,7 @@ public class TextSequenceUtil
     if (isWrappedLine && lineLength == indentation)
     {
       // start of line, replace leading blanks if
-      TextFragment [] replaceLeadingBlanks = replaceLeadingBlanks (word);
+      ITextFragment [] replaceLeadingBlanks = replaceLeadingBlanks (word);
       word = replaceLeadingBlanks[0];
       if (replaceLeadingBlanks.length > 1)
       {
@@ -212,7 +212,7 @@ public class TextSequenceUtil
       // break hard, if the text does not fit in a full (next) line
       boolean breakHard = indentation + length > maxWidth;
 
-      Pair <TextFragment> brokenWord = breakWord (word,
+      Pair <ITextFragment> brokenWord = breakWord (word,
                                                   length,
                                                   maxWidth - lineLength,
                                                   maxWidth - indentation,
@@ -294,7 +294,7 @@ public class TextSequenceUtil
    *        the fragment to replace
    * @return
    */
-  private static TextFragment [] replaceLeadingBlanks (final TextFragment word)
+  private static ITextFragment [] replaceLeadingBlanks (final ITextFragment word)
   {
     String text = word.getText ();
     int splitIndex = 0;
@@ -305,7 +305,7 @@ public class TextSequenceUtil
 
     if (splitIndex == 0)
     {
-      return new TextFragment [] { word };
+      return new ITextFragment [] { word };
     }
     else
     {
@@ -320,7 +320,7 @@ public class TextSequenceUtil
       {
         newWord = new StyledText (text.substring (splitIndex), word.getFontDescriptor (), word.getColor ());
       }
-      return new TextFragment [] { newWord, whitespace };
+      return new ITextFragment [] { newWord, whitespace };
     }
   }
 
@@ -334,10 +334,10 @@ public class TextSequenceUtil
    * @throws IOException
    *         by PDFBox
    */
-  public static TextFlow deWrap (final TextSequence text) throws IOException
+  public static TextFlow deWrap (final ITextSequence text) throws IOException
   {
     TextFlow result = new TextFlow ();
-    for (TextFragment fragment : text)
+    for (ITextFragment fragment : text)
     {
       if (fragment instanceof WrappingNewLine)
       {
@@ -362,8 +362,8 @@ public class TextSequenceUtil
   }
 
   /**
-   * Convencience function that {@link #wordWrap(TextSequence, float) word-wraps} into
-   * {@link #getLines(TextSequence)}.
+   * Convencience function that {@link #wordWrap(ITextSequence, float) word-wraps} into
+   * {@link #getLines(ITextSequence)}.
    * 
    * @param text
    *        the text to word-wrap.
@@ -373,7 +373,7 @@ public class TextSequenceUtil
    * @throws IOException
    *         by pdfbox
    */
-  public static List <TextLine> wordWrapToLines (final TextSequence text, final float maxWidth) throws IOException
+  public static List <TextLine> wordWrapToLines (final ITextSequence text, final float maxWidth) throws IOException
   {
     TextFlow wrapped = wordWrap (text, maxWidth);
     List <TextLine> lines = getLines (wrapped);
@@ -387,7 +387,7 @@ public class TextSequenceUtil
    *        the text to split.
    * @return the words as a text flow.
    */
-  public static TextFlow splitWords (final TextFragment text)
+  public static TextFlow splitWords (final ITextFragment text)
   {
     TextFlow result = new TextFlow ();
     if (text instanceof NewLine)
@@ -419,7 +419,7 @@ public class TextSequenceUtil
         {
           currentRightMargin = rightMargin;
         }
-        TextFragment derived = deriveFromExisting (text, newWord, currentLeftMargin, currentRightMargin);
+        ITextFragment derived = deriveFromExisting (text, newWord, currentLeftMargin, currentRightMargin);
         result.add (derived);
       }
     }
@@ -439,7 +439,7 @@ public class TextSequenceUtil
    *        the new right margin.
    * @return the derived text fragment.
    */
-  protected static TextFragment deriveFromExisting (final TextFragment toDeriveFrom,
+  protected static ITextFragment deriveFromExisting (final ITextFragment toDeriveFrom,
                                                     final String text,
                                                     final float leftMargin,
                                                     final float rightMargin)
@@ -456,7 +456,7 @@ public class TextSequenceUtil
                            rightMargin);
   }
 
-  private static Pair <TextFragment> breakWord (TextFragment word,
+  private static Pair <ITextFragment> breakWord (ITextFragment word,
                                                 float wordWidth,
                                                 final float remainingLineWidth,
                                                 float maxWidth,
@@ -482,10 +482,10 @@ public class TextSequenceUtil
     }
 
     // break at calculated index
-    TextFragment head = deriveFromExisting (word, brokenWord.getFirst (), leftMargin, 0);
-    TextFragment tail = deriveFromExisting (word, brokenWord.getSecond (), 0, rightMargin);
+    ITextFragment head = deriveFromExisting (word, brokenWord.getFirst (), leftMargin, 0);
+    ITextFragment tail = deriveFromExisting (word, brokenWord.getSecond (), 0, rightMargin);
 
-    return new Pair <TextFragment> (head, tail);
+    return new Pair <ITextFragment> (head, tail);
   }
 
   /**
@@ -542,7 +542,7 @@ public class TextSequenceUtil
    * @throws IOException
    *         by pdfbox
    */
-  public static void drawText (TextSequence text,
+  public static void drawText (ITextSequence text,
                                PDPageContentStream contentStream,
                                Position upperLeft,
                                IDrawListener drawListener,
@@ -584,7 +584,7 @@ public class TextSequenceUtil
    * @throws IOException
    *         by pdfbox
    */
-  public static float getOffset (final TextSequence textLine, final float targetWidth, final EAlignment alignment)
+  public static float getOffset (final ITextSequence textLine, final float targetWidth, final EAlignment alignment)
                                                                                                                   throws IOException
   {
     switch (alignment)
@@ -628,7 +628,7 @@ public class TextSequenceUtil
    * @throws IOException
    *         by pdfbox.
    */
-  public static float getWidth (final TextSequence textSequence, final float maxWidth) throws IOException
+  public static float getWidth (final ITextSequence textSequence, final float maxWidth) throws IOException
   {
     List <TextLine> lines = wordWrapToLines (textSequence, maxWidth);
     float max = 0;
@@ -655,7 +655,7 @@ public class TextSequenceUtil
    * @throws IOException
    *         by pdfbox
    */
-  public static float getHeight (final TextSequence textSequence,
+  public static float getHeight (final ITextSequence textSequence,
                                  final float maxWidth,
                                  final float lineSpacing,
                                  final boolean applyLineSpacingToFirstLine) throws IOException
@@ -678,12 +678,12 @@ public class TextSequenceUtil
 
   private static class WordWrapContext
   {
-    private TextFragment word;
+    private ITextFragment word;
     private float lineLength;
     private float indentation;
     boolean isWrappedLine;
 
-    public WordWrapContext (TextFragment word, float lineLength, float indentation, boolean isWrappedLine)
+    public WordWrapContext (ITextFragment word, float lineLength, float indentation, boolean isWrappedLine)
     {
       this.word = word;
       this.lineLength = lineLength;
@@ -691,7 +691,7 @@ public class TextSequenceUtil
       this.isWrappedLine = isWrappedLine;
     }
 
-    public TextFragment getWord ()
+    public ITextFragment getWord ()
     {
       return word;
     }

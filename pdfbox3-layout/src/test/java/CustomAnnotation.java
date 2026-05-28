@@ -19,15 +19,15 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationHighlight;
 import rst.pdfbox.layout.elements.Document;
 import rst.pdfbox.layout.elements.PageFormat;
 import rst.pdfbox.layout.elements.Paragraph;
-import rst.pdfbox.layout.text.BaseFont;
-import rst.pdfbox.layout.text.DrawContext;
+import rst.pdfbox.layout.text.EBaseFont;
+import rst.pdfbox.layout.text.IDrawContext;
 import rst.pdfbox.layout.text.Position;
-import rst.pdfbox.layout.text.annotations.Annotated;
+import rst.pdfbox.layout.text.annotations.IAnnotated;
 import rst.pdfbox.layout.text.annotations.AnnotatedStyledText;
-import rst.pdfbox.layout.text.annotations.Annotation;
+import rst.pdfbox.layout.text.annotations.IAnnotation;
 import rst.pdfbox.layout.text.annotations.AnnotationCharacters;
-import rst.pdfbox.layout.text.annotations.AnnotationCharacters.AnnotationControlCharacter;
-import rst.pdfbox.layout.text.annotations.AnnotationCharacters.AnnotationControlCharacterFactory;
+import rst.pdfbox.layout.text.annotations.AnnotationCharacters.AbstractAnnotationControlCharacter;
+import rst.pdfbox.layout.text.annotations.AnnotationCharacters.IAnnotationControlCharacterFactory;
 import rst.pdfbox.layout.text.annotations.AnnotationProcessor;
 import rst.pdfbox.layout.text.annotations.AnnotationProcessorFactory;
 import rst.pdfbox.layout.util.CompatibilityHelper;
@@ -38,7 +38,7 @@ public class CustomAnnotation {
      * Represents a highlight annotation that might be added to a
      * {@link AnnotatedStyledText}.
      */
-    public static class HighlightAnnotation implements Annotation {
+    public static class HighlightAnnotation implements IAnnotation {
 
 	private Color color;
 
@@ -59,8 +59,8 @@ public class CustomAnnotation {
 	    AnnotationProcessor {
 
 	@Override
-	public void annotatedObjectDrawn(Annotated drawnObject,
-		DrawContext drawContext, Position upperLeft, float width,
+	public void annotatedObjectDrawn(IAnnotated drawnObject,
+		IDrawContext drawContext, Position upperLeft, float width,
 		float height) throws IOException {
 
 	    Iterable<HighlightAnnotation> HighlightAnnotations = drawnObject
@@ -95,12 +95,12 @@ public class CustomAnnotation {
 	}
 
 	@Override
-	public void beforePage(DrawContext drawContext) throws IOException {
+	public void beforePage(IDrawContext drawContext) throws IOException {
 	    // nothing to do here for us
 	}
 
 	@Override
-	public void afterPage(DrawContext drawContext) throws IOException {
+	public void afterPage(IDrawContext drawContext) throws IOException {
 	    // nothing to do here for us
 	}
 
@@ -117,7 +117,7 @@ public class CustomAnnotation {
      * our case here it is just the color for the highlight.
      */
     public static class HighlightControlCharacter extends
-	    AnnotationControlCharacter<HighlightAnnotation> {
+	    AbstractAnnotationControlCharacter<HighlightAnnotation> {
 
 	private HighlightAnnotation annotation;
 
@@ -145,7 +145,7 @@ public class CustomAnnotation {
      * (ee22aa in this case). It can be escaped with a backslash ('\').
      */
     private static class HighlightControlCharacterFactory implements
-	    AnnotationControlCharacterFactory<HighlightControlCharacter> {
+	    IAnnotationControlCharacterFactory<HighlightControlCharacter> {
 
 	private final static Pattern PATTERN = Pattern
 		.compile("(?<!\\\\)(\\\\\\\\)*\\{hl(:#(\\p{XDigit}{6}))?\\}");
@@ -221,7 +221,7 @@ public class CustomAnnotation {
 		.addMarkup(
 			"Hello there, here is {hl:#ffff00}highlighted text{hl}. "
 				+ "Do whatever you want here...strike, squiggle, whatsoever\n\n",
-			10, BaseFont.Helvetica);
+			10, EBaseFont.Helvetica);
 	paragraph.setMaxWidth(150);
 	document.add(paragraph);
 

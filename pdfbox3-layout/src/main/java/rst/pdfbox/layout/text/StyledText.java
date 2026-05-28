@@ -8,7 +8,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 /**
  * Base class representing drawable text styled with font, size, color etc.
  */
-public class StyledText implements TextFragment
+public class StyledText implements ITextFragment
 {
 
   private final String text;
@@ -236,7 +236,7 @@ public class StyledText implements TextFragment
   /**
    * @return converts this text to a sequence.
    */
-  public TextSequence asSequence ()
+  public ITextSequence asSequence ()
   {
     TextLine line = new TextLine ();
     line.add (this);

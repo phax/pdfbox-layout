@@ -9,7 +9,7 @@ import rst.pdfbox.layout.text.ControlCharacter;
 import rst.pdfbox.layout.text.ControlCharacters.IControlCharacterFactory;
 import rst.pdfbox.layout.text.annotations.Annotations.AnchorAnnotation;
 import rst.pdfbox.layout.text.annotations.Annotations.HyperlinkAnnotation;
-import rst.pdfbox.layout.text.annotations.Annotations.HyperlinkAnnotation.LinkStyle;
+import rst.pdfbox.layout.text.annotations.Annotations.HyperlinkAnnotation.ELinkStyle;
 import rst.pdfbox.layout.text.annotations.Annotations.UnderlineAnnotation;
 
 /**
@@ -17,8 +17,7 @@ import rst.pdfbox.layout.text.annotations.Annotations.UnderlineAnnotation;
  */
 public class AnnotationCharacters
 {
-
-  private final static List <AnnotationControlCharacterFactory <?>> FACTORIES = new CopyOnWriteArrayList <AnnotationControlCharacterFactory <?>> ();
+  private final static List <IAnnotationControlCharacterFactory <?>> FACTORIES = new CopyOnWriteArrayList <> ();
 
   static
   {
@@ -29,11 +28,11 @@ public class AnnotationCharacters
 
   /**
    * Use this method to register your (custom) annotation control character factory.
-   * 
+   *
    * @param factory
    *        the factory to register.
    */
-  public static void register (final AnnotationControlCharacterFactory <?> factory)
+  public static void register (final IAnnotationControlCharacterFactory <?> factory)
   {
     FACTORIES.add (factory);
   }
@@ -54,13 +53,13 @@ public class AnnotationCharacters
   /**
    * @return all the default and custom annotation control character factories.
    */
-  public static Iterable <AnnotationControlCharacterFactory <?>> getFactories ()
+  public static Iterable <IAnnotationControlCharacterFactory <?>> getFactories ()
   {
     return FACTORIES;
   }
 
   private static class HyperlinkControlCharacterFactory implements
-                                                        AnnotationControlCharacterFactory <HyperlinkControlCharacter>
+                                                        IAnnotationControlCharacterFactory <HyperlinkControlCharacter>
   {
 
     private final static Pattern PATTERN = Pattern.compile ("(?<!\\\\)(\\\\\\\\)*\\{link(:(ul|none))?(\\[(([^}]+))\\])?\\}");
@@ -68,8 +67,8 @@ public class AnnotationCharacters
     private final static String TO_ESCAPE = "{";
 
     @Override
-    public HyperlinkControlCharacter createControlCharacter (String text,
-                                                             Matcher matcher,
+    public HyperlinkControlCharacter createControlCharacter (final String text,
+                                                             final Matcher matcher,
                                                              final List <CharSequence> charactersSoFar)
     {
       return new HyperlinkControlCharacter (matcher.group (5), matcher.group (3));
@@ -82,7 +81,7 @@ public class AnnotationCharacters
     }
 
     @Override
-    public String unescape (String text)
+    public String unescape (final String text)
     {
       return text.replaceAll ("\\\\" + Pattern.quote (TO_ESCAPE), TO_ESCAPE);
     }
@@ -96,7 +95,7 @@ public class AnnotationCharacters
   }
 
   private static class AnchorControlCharacterFactory implements
-                                                     AnnotationControlCharacterFactory <AnchorControlCharacter>
+                                                     IAnnotationControlCharacterFactory <AnchorControlCharacter>
   {
 
     private final static Pattern PATTERN = Pattern.compile ("(?<!\\\\)(\\\\\\\\)*\\{anchor(:((\\w+)))?\\}");
@@ -104,8 +103,8 @@ public class AnnotationCharacters
     private final static String TO_ESCAPE = "{";
 
     @Override
-    public AnchorControlCharacter createControlCharacter (String text,
-                                                          Matcher matcher,
+    public AnchorControlCharacter createControlCharacter (final String text,
+                                                          final Matcher matcher,
                                                           final List <CharSequence> charactersSoFar)
     {
       return new AnchorControlCharacter (matcher.group (3));
@@ -118,7 +117,7 @@ public class AnnotationCharacters
     }
 
     @Override
-    public String unescape (String text)
+    public String unescape (final String text)
     {
       return text.replaceAll ("\\\\" + Pattern.quote (TO_ESCAPE), TO_ESCAPE);
     }
@@ -132,7 +131,7 @@ public class AnnotationCharacters
   }
 
   private static class UnderlineControlCharacterFactory implements
-                                                        AnnotationControlCharacterFactory <UnderlineControlCharacter>
+                                                        IAnnotationControlCharacterFactory <UnderlineControlCharacter>
   {
 
     private static Pattern PATTERN = Pattern.compile ("(?<!\\\\)(\\\\\\\\)*(__(\\{(-?\\d+(\\.\\d*)?)?\\:(-?\\d+(\\.\\d*)?)?\\})?)");
@@ -140,8 +139,8 @@ public class AnnotationCharacters
     private final static String TO_ESCAPE = "__";
 
     @Override
-    public UnderlineControlCharacter createControlCharacter (String text,
-                                                             Matcher matcher,
+    public UnderlineControlCharacter createControlCharacter (final String text,
+                                                             final Matcher matcher,
                                                              final List <CharSequence> charactersSoFar)
     {
       return new UnderlineControlCharacter (matcher.group (4), matcher.group (6));
@@ -154,7 +153,7 @@ public class AnnotationCharacters
     }
 
     @Override
-    public String unescape (String text)
+    public String unescape (final String text)
     {
       return text.replaceAll ("\\\\" + Pattern.quote (TO_ESCAPE), TO_ESCAPE);
     }
@@ -172,7 +171,7 @@ public class AnnotationCharacters
    * anchor} <code>title1</code>. Any other link (not starting with <code>#</code> will be treated
    * as an external link. It can be escaped with a backslash ('\').
    */
-  public static class HyperlinkControlCharacter extends AnnotationControlCharacter <HyperlinkAnnotation>
+  public static class HyperlinkControlCharacter extends AbstractAnnotationControlCharacter <HyperlinkAnnotation>
   {
     private HyperlinkAnnotation hyperlink;
 
@@ -181,10 +180,10 @@ public class AnnotationCharacters
       super ("HYPERLINK", HyperlinkControlCharacterFactory.TO_ESCAPE);
       if (hyperlink != null)
       {
-        LinkStyle style = LinkStyle.ul;
+        ELinkStyle style = ELinkStyle.ul;
         if (linkStyle != null)
         {
-          style = LinkStyle.valueOf (linkStyle);
+          style = ELinkStyle.valueOf (linkStyle);
         }
         this.hyperlink = new HyperlinkAnnotation (hyperlink, style);
       }
@@ -207,7 +206,7 @@ public class AnnotationCharacters
    * An <code>{color:#ee22aa}</code> indicates switching the color in markup, where the color is
    * given as hex RGB code (ee22aa in this case). It can be escaped with a backslash ('\').
    */
-  public static class AnchorControlCharacter extends AnnotationControlCharacter <AnchorAnnotation>
+  public static class AnchorControlCharacter extends AbstractAnnotationControlCharacter <AnchorAnnotation>
   {
     private AnchorAnnotation anchor;
 
@@ -237,7 +236,7 @@ public class AnnotationCharacters
   /**
    * Control character for underline. It can be escaped with a backslash ('\').
    */
-  public static class UnderlineControlCharacter extends AnnotationControlCharacter <UnderlineAnnotation>
+  public static class UnderlineControlCharacter extends AbstractAnnotationControlCharacter <UnderlineAnnotation>
   {
 
     /**
@@ -247,19 +246,19 @@ public class AnnotationCharacters
     public final static String UNDERLINE_DEFAULT_BASELINE_OFFSET_SCALE_PROPERTY = "pdfbox.layout.underline.baseline.offset.scale.default";
 
     private static Float defaultBaselineOffsetScale;
-    private UnderlineAnnotation line;
+    private final UnderlineAnnotation line;
 
     protected UnderlineControlCharacter ()
     {
       this (null, null);
     }
 
-    protected UnderlineControlCharacter (String baselineOffsetScaleValue, String lineWeightValue)
+    protected UnderlineControlCharacter (final String baselineOffsetScaleValue, final String lineWeightValue)
     {
       super ("UNDERLINE", UnderlineControlCharacterFactory.TO_ESCAPE);
 
-      float baselineOffsetScale = parseFloat (baselineOffsetScaleValue, getdefaultBaselineOffsetScale ());
-      float lineWeight = parseFloat (lineWeightValue, 1f);
+      final float baselineOffsetScale = parseFloat (baselineOffsetScaleValue, getdefaultBaselineOffsetScale ());
+      final float lineWeight = parseFloat (lineWeightValue, 1f);
       line = new UnderlineAnnotation (baselineOffsetScale, lineWeight);
     }
 
@@ -275,7 +274,7 @@ public class AnnotationCharacters
       return UnderlineAnnotation.class;
     }
 
-    private static float parseFloat (String text, float defaultValue)
+    private static float parseFloat (final String text, final float defaultValue)
     {
       if (text == null)
       {
@@ -285,7 +284,7 @@ public class AnnotationCharacters
       {
         return Float.parseFloat (text);
       }
-      catch (NumberFormatException e)
+      catch (final NumberFormatException e)
       {
         return defaultValue;
       }
@@ -305,25 +304,25 @@ public class AnnotationCharacters
 
   /**
    * Specialized interface for control character factories for annotations.
-   * 
+   *
    * @param <T>
    *        the type of the annotation control character.
    */
-  public static interface AnnotationControlCharacterFactory <T extends AnnotationControlCharacter <? extends Annotation>>
-                                                            extends
-                                                            IControlCharacterFactory
+  public interface IAnnotationControlCharacterFactory <T extends AbstractAnnotationControlCharacter <? extends IAnnotation>>
+                                                      extends
+                                                      IControlCharacterFactory
   {
-    public T createControlCharacter (String text, Matcher matcher, final List <CharSequence> charactersSoFar);
+    T createControlCharacter (String text, Matcher matcher, final List <CharSequence> charactersSoFar);
 
-  };
+  }
 
   /**
    * Common base class for annotation control characters.
    */
-  public static abstract class AnnotationControlCharacter <T extends Annotation> extends ControlCharacter
+  public static abstract class AbstractAnnotationControlCharacter <T extends IAnnotation> extends ControlCharacter
   {
 
-    protected AnnotationControlCharacter (final String description, final String charaterToEscape)
+    protected AbstractAnnotationControlCharacter (final String description, final String charaterToEscape)
     {
       super (description, charaterToEscape);
     }
@@ -340,10 +339,10 @@ public class AnnotationCharacters
 
   }
 
-  public static void main (String [] args)
+  public static void main (final String [] args)
   {
-    Pattern PATTERN = Pattern.compile ("(?<!\\\\)(\\\\\\\\)*(__(\\{(-?\\d+(\\.\\d*)?)?\\:(-?\\d+(\\.\\d*)?)?\\})?)");
-    Matcher matcher = PATTERN.matcher ("__");
+    final Pattern PATTERN = Pattern.compile ("(?<!\\\\)(\\\\\\\\)*(__(\\{(-?\\d+(\\.\\d*)?)?\\:(-?\\d+(\\.\\d*)?)?\\})?)");
+    final Matcher matcher = PATTERN.matcher ("__");
     System.out.println ("matches: " + matcher.find ());
     if (!matcher.matches ())
     {

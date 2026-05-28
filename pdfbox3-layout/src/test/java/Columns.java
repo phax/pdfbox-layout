@@ -6,7 +6,7 @@ import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.elements.VerticalSpacer;
 import rst.pdfbox.layout.elements.render.ColumnLayout;
 import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
-import rst.pdfbox.layout.text.BaseFont;
+import rst.pdfbox.layout.text.EBaseFont;
 
 public class Columns {
 
@@ -32,7 +32,7 @@ public class Columns {
 	Document document = new Document(40, 50, 40, 60);
 	
 	Paragraph title = new Paragraph();
-	title.addMarkup("*This Text is organized in Colums*", 20, BaseFont.Times);
+	title.addMarkup("*This Text is organized in Colums*", 20, EBaseFont.Times);
 	document.add(title, VerticalLayoutHint.CENTER);
 	document.add(new VerticalSpacer(5));
 
@@ -40,15 +40,15 @@ public class Columns {
 	document.add(new ColumnLayout(2, 10));
 
 	Paragraph paragraph1 = new Paragraph();
-	paragraph1.addMarkup(text1, 11, BaseFont.Times);
+	paragraph1.addMarkup(text1, 11, EBaseFont.Times);
 	document.add(paragraph1);
 
 	Paragraph paragraph2 = new Paragraph();
-	paragraph2.addMarkup(text2, 12, BaseFont.Helvetica);
+	paragraph2.addMarkup(text2, 12, EBaseFont.Helvetica);
 	document.add(paragraph2);
 
 	Paragraph paragraph3 = new Paragraph();
-	paragraph3.addMarkup(text1, 8, BaseFont.Courier);
+	paragraph3.addMarkup(text1, 8, EBaseFont.Courier);
 	document.add(paragraph3);
 
 	document.add(paragraph1);

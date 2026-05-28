@@ -23,7 +23,7 @@ public class UnderlineAnnotationProcessor implements AnnotationProcessor {
     private List<Line> linesOnPage = new ArrayList<Line>();
 
     @Override
-    public void annotatedObjectDrawn(Annotated drawnObject,
+    public void annotatedObjectDrawn(IAnnotated drawnObject,
 	    DrawContext drawContext, Position upperLeft, float width,
 	    float height) throws IOException {
 
