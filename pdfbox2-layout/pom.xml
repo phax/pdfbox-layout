@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.helger</groupId>
         <artifactId>pdfbox-layout-parent</artifactId>
-        <version>1.0.1</version>
+        <version>1.1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>pdfbox2-layout</artifactId>
@@ -14,6 +14,11 @@
     <name>pdfbox2-layout</name>
 
     <dependencies>
+        <dependency>
+            <groupId>com.helger</groupId>
+            <artifactId>pdfbox-layout-shared</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>

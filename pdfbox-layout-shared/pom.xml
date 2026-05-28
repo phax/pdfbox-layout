@@ -8,29 +8,17 @@
         <version>1.1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>pdfbox3-layout</artifactId>
+    <artifactId>pdfbox-layout-shared</artifactId>
     <packaging>jar</packaging>
 
-    <name>pdfbox3-layout</name>
+    <name>pdfbox-layout-shared</name>
+    <description>PDFBox-version-independent shared types used by pdfbox1/2/3-layout. Contains no PDFBox dependency.</description>
 
     <dependencies>
-        <dependency>
-            <groupId>com.helger</groupId>
-            <artifactId>pdfbox-layout-shared</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.pdfbox</groupId>
-            <artifactId>pdfbox</artifactId>
-            <version>${pdfbox3.version}</version>
-        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-    </build>
 
 </project>

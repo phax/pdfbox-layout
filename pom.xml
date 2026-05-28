@@ -9,13 +9,14 @@
     </parent>
 
     <artifactId>pdfbox-layout-parent</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>pdfbox-layout (parent)</name>
     <description>Parent POM for the three pdfbox-layout flavours (pdfbox 1.x / 2.x / 3.x).</description>
 
     <modules>
+        <module>pdfbox-layout-shared</module>
         <module>pdfbox1-layout</module>
         <module>pdfbox2-layout</module>
         <module>pdfbox3-layout</module>
