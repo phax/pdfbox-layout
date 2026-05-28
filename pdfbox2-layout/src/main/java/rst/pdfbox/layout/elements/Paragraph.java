@@ -5,24 +5,24 @@ import java.io.IOException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
-import rst.pdfbox.layout.text.Alignment;
-import rst.pdfbox.layout.text.DrawListener;
+import rst.pdfbox.layout.text.EAlignment;
+import rst.pdfbox.layout.text.IDrawListener;
 import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.TextFlow;
 import rst.pdfbox.layout.text.TextSequenceUtil;
-import rst.pdfbox.layout.text.WidthRespecting;
+import rst.pdfbox.layout.text.IWidthRespecting;
 
 /**
  * A paragraph is used as a container for {@link TextFlow text} that is drawn as
- * one element. A paragraph has a {@link #setAlignment(Alignment) (text-)
- * alignment}, and {@link WidthRespecting respects a given width} by applying
+ * one element. A paragraph has a {@link #setAlignment(EAlignment) (text-)
+ * alignment}, and {@link IWidthRespecting respects a given width} by applying
  * word-wrap.
  */
-public class Paragraph extends TextFlow implements Drawable, Element,
-	WidthRespecting, Dividable {
+public class Paragraph extends TextFlow implements Drawable, IElement,
+	IWidthRespecting, IDividable {
 
     private Position absolutePosition;
-    private Alignment alignment = Alignment.Left;
+    private EAlignment alignment = EAlignment.Left;
 
     @Override
     public Position getAbsolutePosition() {
@@ -42,7 +42,7 @@ public class Paragraph extends TextFlow implements Drawable, Element,
     /**
      * @return the text alignment to apply. Default is left.
      */
-    public Alignment getAlignment() {
+    public EAlignment getAlignment() {
 	return alignment;
     }
 
@@ -52,13 +52,13 @@ public class Paragraph extends TextFlow implements Drawable, Element,
      * @param alignment
      *            the text alignment.
      */
-    public void setAlignment(Alignment alignment) {
+    public void setAlignment(EAlignment alignment) {
 	this.alignment = alignment;
     }
 
     @Override
     public void draw(PDDocument pdDocument, PDPageContentStream contentStream,
-	    Position upperLeft, DrawListener drawListener) throws IOException {
+	    Position upperLeft, IDrawListener drawListener) throws IOException {
 	drawText(contentStream, upperLeft, getAlignment(), drawListener	);
     }
 

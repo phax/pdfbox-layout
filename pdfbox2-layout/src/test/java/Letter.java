@@ -9,7 +9,7 @@ import rst.pdfbox.layout.elements.ImageElement;
 import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.elements.VerticalSpacer;
 import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
-import rst.pdfbox.layout.text.Alignment;
+import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.BaseFont;
 import rst.pdfbox.layout.text.Position;
 
@@ -28,7 +28,7 @@ public class Letter {
 	}
 	image.setWidth(image.getWidth()/7);
 	image.setHeight(image.getHeight()/7);
-	document.add(image, new VerticalLayoutHint(Alignment.Right, 0, 0,
+	document.add(image, new VerticalLayoutHint(EAlignment.Right, 0, 0,
 		0, 0, true));
 	
 	document.add(new VerticalSpacer(100));
@@ -36,7 +36,7 @@ public class Letter {
 	Paragraph paragraph = new Paragraph();
 	paragraph.addText("Blubberhausen, 01.04.2016", 11,
 		PDType1Font.HELVETICA);
-	document.add(paragraph, new VerticalLayoutHint(Alignment.Right, 0, 0,
+	document.add(paragraph, new VerticalLayoutHint(EAlignment.Right, 0, 0,
 		0, 0, true));
 
 	paragraph = new Paragraph();
@@ -47,7 +47,7 @@ public class Letter {
 	paragraph = new Paragraph();
 	paragraph.addMarkup("*Labore et dolore magna aliquyam erat*", 11,
 		BaseFont.Helvetica);
-	document.add(paragraph, new VerticalLayoutHint(Alignment.Left, 0, 0,
+	document.add(paragraph, new VerticalLayoutHint(EAlignment.Left, 0, 0,
 		40, 20));
 
 	String text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, "
@@ -68,7 +68,7 @@ public class Letter {
 	paragraph = new Paragraph();
 	paragraph.addMarkup("Dolore magna aliquyam erat\nRalf Stuckert", 11,
 		BaseFont.Helvetica);
-	document.add(paragraph, new VerticalLayoutHint(Alignment.Left, 60, 0,
+	document.add(paragraph, new VerticalLayoutHint(EAlignment.Left, 60, 0,
 		40, 0));
 
 	paragraph = new Paragraph();

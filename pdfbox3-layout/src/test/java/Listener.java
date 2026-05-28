@@ -9,7 +9,7 @@ import rst.pdfbox.layout.elements.Document;
 import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.elements.render.RenderContext;
 import rst.pdfbox.layout.elements.render.RenderListener;
-import rst.pdfbox.layout.text.Alignment;
+import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.BaseFont;
 import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.TextFlow;
@@ -55,9 +55,9 @@ public class Listener {
 			new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN));
 		float offset = renderContext.getPageFormat().getMarginLeft()
 			+ TextSequenceUtil.getOffset(text,
-				renderContext.getWidth(), Alignment.Right);
+				renderContext.getWidth(), EAlignment.Right);
 		text.drawText(renderContext.getContentStream(), new Position(
-			offset, 30), Alignment.Right, null);
+			offset, 30), EAlignment.Right, null);
 	    }
 	});
 

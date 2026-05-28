@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import rst.pdfbox.layout.elements.ControlElement;
 import rst.pdfbox.layout.elements.Drawable;
-import rst.pdfbox.layout.elements.Element;
+import rst.pdfbox.layout.elements.IElement;
 
 /**
  * The column layout divides the page vertically into columns. You can specify
@@ -60,8 +60,8 @@ public class ColumnLayout extends VerticalLayout {
     }
 
     @Override
-    public boolean render(RenderContext renderContext, Element element,
-            LayoutHint layoutHint) throws IOException {
+    public boolean render(RenderContext renderContext, IElement element,
+            ILayoutHint layoutHint) throws IOException {
 	if (element == ControlElement.NEWPAGE) {
 	    renderContext.newPage();
 	    return true;
@@ -75,7 +75,7 @@ public class ColumnLayout extends VerticalLayout {
     
     @Override
     public void render(RenderContext renderContext, Drawable drawable,
-            LayoutHint layoutHint) throws IOException {
+            ILayoutHint layoutHint) throws IOException {
 	if (offsetY == null) {
 	    offsetY = renderContext.getUpperLeft().getY() - renderContext.getCurrentPosition().getY();
 	}

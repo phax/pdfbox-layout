@@ -5,14 +5,14 @@ import java.io.IOException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
-import rst.pdfbox.layout.text.DrawListener;
+import rst.pdfbox.layout.text.IDrawListener;
 import rst.pdfbox.layout.text.Position;
 
 /**
  * A drawable element that occupies some vertical space without any graphical
  * representation.
  */
-public class VerticalSpacer implements Drawable, Element, Dividable {
+public class VerticalSpacer implements Drawable, IElement, IDividable {
 
     private float height;
 
@@ -43,7 +43,7 @@ public class VerticalSpacer implements Drawable, Element, Dividable {
 
     @Override
     public void draw(PDDocument pdDocument, PDPageContentStream contentStream,
-	    Position upperLeft, DrawListener drawListener) throws IOException {
+	    Position upperLeft, IDrawListener drawListener) throws IOException {
 	if (drawListener != null) {
 	    drawListener.drawn(this, upperLeft, getWidth(), getHeight());
 	}

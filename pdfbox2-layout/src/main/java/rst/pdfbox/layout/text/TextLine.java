@@ -158,13 +158,13 @@ public class TextLine implements TextSequence {
 
     @Override
     public void drawText(PDPageContentStream contentStream, Position upperLeft,
-	    Alignment alignment, DrawListener drawListener) throws IOException {
+	    EAlignment alignment, IDrawListener drawListener) throws IOException {
 	drawAligned(contentStream, upperLeft, alignment, getWidth(), drawListener);
     }
 
     public void drawAligned(PDPageContentStream contentStream, Position upperLeft,
-	    Alignment alignment, float availableLineWidth,
-	    DrawListener drawListener) throws IOException {
+	    EAlignment alignment, float availableLineWidth,
+	    IDrawListener drawListener) throws IOException {
 	contentStream.saveGraphicsState();
 	contentStream.beginText();
 
@@ -174,7 +174,7 @@ public class TextLine implements TextSequence {
 	x += offset;
 	CompatibilityHelper.setTextTranslation(contentStream, x, y);
 	float extraWordSpacing = 0;
-	if (alignment == Alignment.Justify && (getNewLine() instanceof WrappingNewLine) ){
+	if (alignment == EAlignment.Justify && (getNewLine() instanceof WrappingNewLine) ){
 	    extraWordSpacing = (availableLineWidth - getWidth()) / (styledTextList.size()-1);
 	}
 	

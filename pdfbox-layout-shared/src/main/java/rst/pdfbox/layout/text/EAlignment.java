@@ -3,7 +3,11 @@ package rst.pdfbox.layout.text;
 /**
  * Enumeration for (vertical) alignment.
  */
-public enum Alignment {
+public enum EAlignment
+{
 
-    Left, Center, Right, Justify;
+  Left,
+  Center,
+  Right,
+  Justify;
 }

@@ -9,14 +9,14 @@ import rst.pdfbox.layout.text.Constants;
  * Defines the size and orientation of a page. The default is A4 portrait
  * without margins.
  */
-public class PageFormat implements Element {
+public class PageFormat implements IElement {
 
     private final float marginLeft;
     private final float marginRight;
     private final float marginTop;
     private final float marginBottom;
     private final PDRectangle mediaBox;
-    private final Orientation orientation;
+    private final EOrientation orientation;
     private final int rotation;
 
     /**
@@ -33,7 +33,7 @@ public class PageFormat implements Element {
      *            the size.
      */
     public PageFormat(final PDRectangle mediaBox) {
-	this(mediaBox, Orientation.Portrait);
+	this(mediaBox, EOrientation.Portrait);
     }
 
     /**
@@ -44,7 +44,7 @@ public class PageFormat implements Element {
      * @param orientation
      *            the orientation.
      */
-    public PageFormat(final PDRectangle mediaBox, final Orientation orientation) {
+    public PageFormat(final PDRectangle mediaBox, final EOrientation orientation) {
 	this(mediaBox, orientation, 0, 0, 0, 0);
     }
 
@@ -65,7 +65,7 @@ public class PageFormat implements Element {
      * @param marginBottom
      *            the bottom margin
      */
-    public PageFormat(PDRectangle mediaBox, Orientation orientation,
+    public PageFormat(PDRectangle mediaBox, EOrientation orientation,
 	    float marginLeft, float marginRight, float marginTop,
 	    float marginBottom) {
 	this(mediaBox, orientation, 0, marginLeft, marginRight, marginTop, marginBottom);
@@ -90,7 +90,7 @@ public class PageFormat implements Element {
      * @param marginBottom
      *            the bottom margin
      */
-    public PageFormat(PDRectangle mediaBox, Orientation orientation,
+    public PageFormat(PDRectangle mediaBox, EOrientation orientation,
 	    int rotation, float marginLeft, float marginRight,
 	    float marginTop, float marginBottom) {
 	this.mediaBox = mediaBox;
@@ -105,14 +105,14 @@ public class PageFormat implements Element {
     /**
      * @return the orientation to use.
      */
-    public Orientation getOrientation() {
+    public EOrientation getOrientation() {
 	if (orientation != null) {
 	    return orientation;
 	}
 	if (getMediaBox().getWidth() > getMediaBox().getHeight()) {
-	    return Orientation.Landscape;
+	    return EOrientation.Landscape;
 	}
-	return Orientation.Portrait;
+	return EOrientation.Portrait;
     }
 
     /**
@@ -171,7 +171,7 @@ public class PageFormat implements Element {
 	private float marginTop;
 	private float marginBottom;
 	private PDRectangle mediaBox = Constants.A4;
-	private Orientation orientation;
+	private EOrientation orientation;
 	private int rotation;
 
 	protected PageFormatBuilder() {
@@ -356,28 +356,28 @@ public class PageFormat implements Element {
 	 *            the orientation to use.
 	 * @return the builder.
 	 */
-	public PageFormatBuilder orientation(Orientation orientation) {
+	public PageFormatBuilder orientation(EOrientation orientation) {
 	    this.orientation = orientation;
 	    return this;
 	}
 
 	/**
-	 * Sets the orientation to {@link Orientation#Portrait}.
+	 * Sets the orientation to {@link EOrientation#Portrait}.
 	 * 
 	 * @return the builder.
 	 */
 	public PageFormatBuilder portrait() {
-	    this.orientation = Orientation.Portrait;
+	    this.orientation = EOrientation.Portrait;
 	    return this;
 	}
 
 	/**
-	 * Sets the orientation to {@link Orientation#Landscape}.
+	 * Sets the orientation to {@link EOrientation#Landscape}.
 	 * 
 	 * @return the builder.
 	 */
 	public PageFormatBuilder landscape() {
-	    this.orientation = Orientation.Landscape;
+	    this.orientation = EOrientation.Landscape;
 	    return this;
 	}
 

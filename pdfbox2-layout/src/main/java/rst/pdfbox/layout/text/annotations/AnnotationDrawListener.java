@@ -7,22 +7,22 @@ import org.apache.pdfbox.pdmodel.PDPage;
 
 import rst.pdfbox.layout.elements.render.RenderContext;
 import rst.pdfbox.layout.elements.render.RenderListener;
-import rst.pdfbox.layout.text.Alignment;
+import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.DrawContext;
-import rst.pdfbox.layout.text.DrawListener;
+import rst.pdfbox.layout.text.IDrawListener;
 import rst.pdfbox.layout.text.DrawableText;
 import rst.pdfbox.layout.text.Position;
 
 /**
  * This listener has to be passed to all
- * {@link DrawableText#drawText(org.apache.pdfbox.pdmodel.PDPageContentStream, Position, Alignment, DrawListener)
+ * {@link DrawableText#drawText(org.apache.pdfbox.pdmodel.PDPageContentStream, Position, EAlignment, IDrawListener)
  * draw()} methods, in order collect all annotation metadata. After all drawing
  * is done, you have to call {@link #finalizeAnnotations()} which creates all
  * necessary annotations and sets them to the corresponding pages. This listener
  * is used by the the rendering API, but you may also use it with the low-level
  * text API.
  */
-public class AnnotationDrawListener implements DrawListener, RenderListener {
+public class AnnotationDrawListener implements IDrawListener, RenderListener {
 
     private final DrawContext drawContext;
     private final Iterable<AnnotationProcessor> annotationProcessors;

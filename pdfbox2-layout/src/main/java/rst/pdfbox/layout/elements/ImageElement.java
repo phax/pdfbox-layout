@@ -7,11 +7,11 @@ import java.io.InputStream;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
-import rst.pdfbox.layout.text.DrawListener;
+import rst.pdfbox.layout.text.IDrawListener;
 import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.util.CompatibilityHelper;
 
-public class ImageElement extends AbstractImageElement implements Drawable, Dividable {
+public class ImageElement extends AbstractImageElement implements Drawable, IDividable {
 
     public ImageElement(final BufferedImage image) {
 	super(image);
@@ -36,7 +36,7 @@ public class ImageElement extends AbstractImageElement implements Drawable, Divi
 
     @Override
     public void draw(PDDocument pdDocument, PDPageContentStream contentStream,
-	    Position upperLeft, DrawListener drawListener) throws IOException {
+	    Position upperLeft, IDrawListener drawListener) throws IOException {
 	CompatibilityHelper.drawImage(image, pdDocument, contentStream,
 		upperLeft, getWidth(), getHeight());
 	if (drawListener != null) {

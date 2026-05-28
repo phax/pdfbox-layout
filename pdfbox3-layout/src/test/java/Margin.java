@@ -7,7 +7,7 @@ import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import rst.pdfbox.layout.elements.Document;
 import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
-import rst.pdfbox.layout.text.Alignment;
+import rst.pdfbox.layout.text.EAlignment;
 
 public class Margin {
 
@@ -37,17 +37,17 @@ public class Margin {
 	Document document = new Document(40, 60, 40, 60);
 	Paragraph paragraph = new Paragraph();
 	paragraph.addText(text1, 11, new PDType1Font(Standard14Fonts.FontName.HELVETICA));
-	document.add(paragraph, new VerticalLayoutHint(Alignment.Left, 0, 100,
+	document.add(paragraph, new VerticalLayoutHint(EAlignment.Left, 0, 100,
 		100, 100));
 
 	paragraph = new Paragraph();
 	paragraph.addText(text2, 11, new PDType1Font(Standard14Fonts.FontName.HELVETICA));
-	document.add(paragraph, new VerticalLayoutHint(Alignment.Right, 0, 50,
+	document.add(paragraph, new VerticalLayoutHint(EAlignment.Right, 0, 50,
 		0, 0));
 
 	paragraph = new Paragraph();
 	paragraph.addText(text3, 11, new PDType1Font(Standard14Fonts.FontName.HELVETICA));
-	document.add(paragraph, new VerticalLayoutHint(Alignment.Right, 150,
+	document.add(paragraph, new VerticalLayoutHint(EAlignment.Right, 150,
 		150, 20, 0));
 
 	final OutputStream outputStream = new FileOutputStream("margin.pdf");

@@ -10,15 +10,15 @@ import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 
 import rst.pdfbox.layout.elements.ControlElement;
 import rst.pdfbox.layout.elements.Document;
-import rst.pdfbox.layout.elements.Element;
-import rst.pdfbox.layout.elements.Orientation;
+import rst.pdfbox.layout.elements.IElement;
+import rst.pdfbox.layout.elements.EOrientation;
 import rst.pdfbox.layout.elements.PageFormat;
 import rst.pdfbox.layout.elements.PositionControl;
 import rst.pdfbox.layout.elements.PositionControl.MarkPosition;
 import rst.pdfbox.layout.elements.PositionControl.MovePosition;
 import rst.pdfbox.layout.elements.PositionControl.SetPosition;
 import rst.pdfbox.layout.text.DrawContext;
-import rst.pdfbox.layout.text.DrawListener;
+import rst.pdfbox.layout.text.IDrawListener;
 import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.annotations.AnnotationDrawListener;
 import rst.pdfbox.layout.util.CompatibilityHelper;
@@ -27,7 +27,7 @@ import rst.pdfbox.layout.util.CompatibilityHelper;
  * The render context is a container providing all state of the current
  * rendering process.
  */
-public class RenderContext implements Renderer, Closeable, DrawContext, DrawListener {
+public class RenderContext implements Renderer, Closeable, DrawContext, IDrawListener {
 
     private final Document document;
     private final PDDocument pdDocument;
@@ -88,7 +88,7 @@ public class RenderContext implements Renderer, Closeable, DrawContext, DrawList
      * @deprecated use {@link #getPageFormat()} instead.
      */
     @Deprecated
-    public Orientation getOrientation() {
+    public EOrientation getOrientation() {
 	return getPageFormat().getOrientation();
     }
 
@@ -193,11 +193,11 @@ public class RenderContext implements Renderer, Closeable, DrawContext, DrawList
     /**
      * @return the orientation of the current page
      */
-    protected Orientation getPageOrientation() {
+    protected EOrientation getPageOrientation() {
 	if (getPageWidth() > getPageHeight()) {
-	    return Orientation.Landscape;
+	    return EOrientation.Landscape;
 	}
-	return Orientation.Portrait;
+	return EOrientation.Portrait;
     }
 
     /**
@@ -303,8 +303,8 @@ public class RenderContext implements Renderer, Closeable, DrawContext, DrawList
     }
 
     @Override
-    public boolean render(RenderContext renderContext, Element element,
-	    LayoutHint layoutHint) throws IOException {
+    public boolean render(RenderContext renderContext, IElement element,
+	    ILayoutHint layoutHint) throws IOException {
 	boolean success = getLayout()
 		.render(renderContext, element, layoutHint);
 	if (success) {

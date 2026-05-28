@@ -7,7 +7,7 @@ import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 /**
  * Represents a drawable text.
  */
-public interface DrawableText extends Area {
+public interface DrawableText extends IArea {
 
     /**
      * Draws the text of the (PdfBox-) cursor position.
@@ -20,11 +20,11 @@ public interface DrawableText extends Area {
      *            the text alignment.
      * @param drawListener
      *            the listener to
-     *            {@link DrawListener#drawn(Object, Position, float, float)
+     *            {@link IDrawListener#drawn(Object, Position, float, float)
      *            notify} on drawn objects.
      * @throws IOException
      *             by pdfbox.
      */
     void drawText(PDPageContentStream contentStream, Position upperLeft,
-	    Alignment alignment, DrawListener drawListener) throws IOException;
+	    EAlignment alignment, IDrawListener drawListener) throws IOException;
 }

@@ -6,17 +6,17 @@ import java.io.OutputStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import rst.pdfbox.layout.elements.Document;
-import rst.pdfbox.layout.elements.Element;
+import rst.pdfbox.layout.elements.IElement;
 import rst.pdfbox.layout.elements.HorizontalRuler;
 import rst.pdfbox.layout.elements.Paragraph;
-import rst.pdfbox.layout.elements.render.LayoutHint;
+import rst.pdfbox.layout.elements.render.ILayoutHint;
 import rst.pdfbox.layout.elements.render.RenderContext;
 import rst.pdfbox.layout.elements.render.RenderListener;
 import rst.pdfbox.layout.elements.render.Renderer;
 import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
 import rst.pdfbox.layout.shape.Stroke;
 import rst.pdfbox.layout.shape.Stroke.CapStyle;
-import rst.pdfbox.layout.text.Alignment;
+import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.BaseFont;
 import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.TextFlow;
@@ -76,8 +76,8 @@ public class CustomRenderer {
 	private int sectionNumber;
 	
 	@Override
-	public boolean render(RenderContext renderContext, Element element,
-		LayoutHint layoutHint) throws IOException {
+	public boolean render(RenderContext renderContext, IElement element,
+		ILayoutHint layoutHint) throws IOException {
 	    if (element instanceof Section) {
 
 		if (renderContext.getPageIndex() > 0) {
@@ -88,7 +88,7 @@ public class CustomRenderer {
 		
 		renderContext.render(renderContext, element, layoutHint);
 
-		Element ruler = new HorizontalRuler(Stroke.builder().lineWidth(2)
+		IElement ruler = new HorizontalRuler(Stroke.builder().lineWidth(2)
 			.capStyle(CapStyle.RoundCap).build(), Color.black);
 		renderContext.render(renderContext, ruler, VerticalLayoutHint.builder().marginBottom(10).build());
 		
@@ -110,9 +110,9 @@ public class CustomRenderer {
 		    PDType1Font.TIMES_ROMAN);
 	    float offset = renderContext.getPageFormat().getMarginLeft()
 		    + TextSequenceUtil.getOffset(text,
-			    renderContext.getWidth(), Alignment.Right);
+			    renderContext.getWidth(), EAlignment.Right);
 	    text.drawText(renderContext.getContentStream(), new Position(
-		    offset, 30), Alignment.Right, null);
+		    offset, 30), EAlignment.Right, null);
 	}
 
     }

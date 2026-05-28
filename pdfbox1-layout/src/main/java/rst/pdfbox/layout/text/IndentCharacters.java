@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
-import rst.pdfbox.layout.text.ControlCharacters.ControlCharacterFactory;
+import rst.pdfbox.layout.text.ControlCharacters.IControlCharacterFactory;
 import rst.pdfbox.layout.util.CompatibilityHelper;
 import rst.pdfbox.layout.util.Enumerator;
 import rst.pdfbox.layout.util.EnumeratorFactory;
@@ -21,7 +21,7 @@ public class IndentCharacters {
     /**
      * The factory for indent control characters.
      */
-    public static ControlCharacterFactory INDENT_FACTORY = new IndentCharacterFactory();
+    public static IControlCharacterFactory INDENT_FACTORY = new IndentCharacterFactory();
 
     /**
      * Represent un-indentation, means effectively indent of 0.
@@ -94,7 +94,7 @@ public class IndentCharacters {
 	public Indent createNewIndent(final float fontSize, final PDFont font,
 		final Color color) throws IOException {
 	    return new Indent(nextLabel(), level * indentWidth, indentUnit,
-		    fontSize, font, Alignment.Right, color);
+		    fontSize, font, EAlignment.Right, color);
 	}
 
 	@Override
@@ -265,7 +265,7 @@ public class IndentCharacters {
     }
 
     private static class IndentCharacterFactory implements
-	    ControlCharacterFactory {
+	    IControlCharacterFactory {
 
 	private final static Pattern PATTERN = Pattern
 		.compile("^-(!)|^([ ]*)-(-)(\\{(\\d*)(em|pt)?\\})?|^([ ]*)-(\\+)(\\{(.+)?:(\\d*)(em|pt)?\\})?|^([ ]*)-(#)(\\{((?!:).)?(.+)?:((\\d*))((em|pt))?\\})?");

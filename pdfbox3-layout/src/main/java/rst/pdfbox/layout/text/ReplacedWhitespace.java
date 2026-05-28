@@ -3,27 +3,31 @@ package rst.pdfbox.layout.text;
 /**
  * Acts as a replacement for whitespace that has been removed by word wrapping.
  */
-public class ReplacedWhitespace extends ControlFragment {
+public class ReplacedWhitespace extends ControlFragment
+{
 
-    private String replacedSpace;
-    
-    public ReplacedWhitespace(String replacedSpace, FontDescriptor fontDescriptor) {
-	super("", fontDescriptor);
+  private String replacedSpace;
 
-	this.replacedSpace = replacedSpace;
-    }
+  public ReplacedWhitespace (String replacedSpace, FontDescriptor fontDescriptor)
+  {
+    super ("", fontDescriptor);
 
-    /**
-     * @return the replaced space.
-     */
-    public String getReplacedSpace() {
-	return replacedSpace;
-    }
-    
-    /**
-     * @return the replaced fragment.
-     */
-    public TextFragment toReplacedFragment() {
-	return new StyledText(getReplacedSpace(), getFontDescriptor());
-    }
+    this.replacedSpace = replacedSpace;
+  }
+
+  /**
+   * @return the replaced space.
+   */
+  public String getReplacedSpace ()
+  {
+    return replacedSpace;
+  }
+
+  /**
+   * @return the replaced fragment.
+   */
+  public TextFragment toReplacedFragment ()
+  {
+    return new StyledText (getReplacedSpace (), getFontDescriptor ());
+  }
 }

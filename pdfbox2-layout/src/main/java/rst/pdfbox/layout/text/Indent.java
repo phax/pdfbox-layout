@@ -17,7 +17,7 @@ public class Indent extends ControlFragment {
 
     protected float indentWidth = 4;
     protected SpaceUnit indentUnit = SpaceUnit.em;
-    protected Alignment alignment = Alignment.Left;
+    protected EAlignment alignment = EAlignment.Left;
     protected StyledText styledText;
 
     /**
@@ -33,7 +33,7 @@ public class Indent extends ControlFragment {
     public Indent(final float indentWidth, final SpaceUnit indentUnit)
 	    throws IOException {
 	this("", indentWidth, indentUnit, DEFAULT_FONT_DESCRIPTOR,
-		Alignment.Left, Color.black);
+		EAlignment.Left, Color.black);
     }
 
     /**
@@ -58,7 +58,7 @@ public class Indent extends ControlFragment {
 	    final SpaceUnit indentUnit, final float fontSize, final PDFont font)
 	    throws IOException {
 
-	this(label, indentWidth, indentUnit, fontSize, font, Alignment.Left,
+	this(label, indentWidth, indentUnit, fontSize, font, EAlignment.Left,
 		Color.black);
     }
 
@@ -84,7 +84,7 @@ public class Indent extends ControlFragment {
      */
     public Indent(final String label, final float indentWidth,
 	    final SpaceUnit indentUnit, final float fontSize,
-	    final PDFont font, final Alignment alignment) throws IOException {
+	    final PDFont font, final EAlignment alignment) throws IOException {
 	this(label, indentWidth, indentUnit, fontSize, font, alignment,
 		Color.black);
     }
@@ -113,7 +113,7 @@ public class Indent extends ControlFragment {
      */
     public Indent(final String label, final float indentWidth,
 	    final SpaceUnit indentUnit, final float fontSize,
-	    final PDFont font, final Alignment alignment, final Color color)
+	    final PDFont font, final EAlignment alignment, final Color color)
 	    throws IOException {
 	this(label, indentWidth, indentUnit,
 		new FontDescriptor(font, fontSize), alignment, color);
@@ -139,7 +139,7 @@ public class Indent extends ControlFragment {
      */
     public Indent(final String label, final float indentWidth,
 	    final SpaceUnit indentUnit, final FontDescriptor fontDescriptor,
-	    final Alignment alignment, final Color color) throws IOException {
+	    final EAlignment alignment, final Color color) throws IOException {
 	super("INDENT", label, fontDescriptor, color);
 
 	float indent = calculateIndent(indentWidth, indentUnit, fontDescriptor);

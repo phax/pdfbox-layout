@@ -5,14 +5,14 @@ import java.io.IOException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
-import rst.pdfbox.layout.text.DrawListener;
+import rst.pdfbox.layout.text.IDrawListener;
 import rst.pdfbox.layout.text.Position;
 
 /**
- * A cutter transforms any Drawable element into a {@link Dividable}. It simply
+ * A cutter transforms any Drawable element into a {@link IDividable}. It simply
  * <em>cuts</em> the drawable vertically into pieces matching the target height.
  */
-public class Cutter implements Dividable, Drawable {
+public class Cutter implements IDividable, Drawable {
 
     private final Drawable undividable;
     private final float viewPortY;
@@ -52,7 +52,7 @@ public class Cutter implements Dividable, Drawable {
 
     @Override
     public void draw(PDDocument pdDocument, PDPageContentStream contentStream,
-	    Position upperLeft, DrawListener drawListener) throws IOException {
+	    Position upperLeft, IDrawListener drawListener) throws IOException {
 	Position viewPortOrigin = upperLeft.add(0, -viewPortY);
 	undividable.draw(pdDocument, contentStream, viewPortOrigin, drawListener);
     }

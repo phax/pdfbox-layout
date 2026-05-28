@@ -11,7 +11,7 @@ import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
 /**
- * A text flow is a text sequence that {@link WidthRespecting respects a given
+ * A text flow is a text sequence that {@link IWidthRespecting respects a given
  * width} by word wrapping the text. The text may contain line breaks ('\n').<br>
  * In order to ease creation of styled text, this class supports a kind of
  * {@link #addMarkup(String, float, BaseFont) markup}. The following raw text
@@ -38,7 +38,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
  * Escape * with \* and _ with \_ in markup.
  * </pre>
  */
-public class TextFlow implements TextSequence, WidthRespecting {
+public class TextFlow implements TextSequence, IWidthRespecting {
 
     public static final float DEFAULT_LINE_SPACING = 1.2f;
     private static final String HEIGHT = "height";
@@ -260,16 +260,16 @@ public class TextFlow implements TextSequence, WidthRespecting {
 
     @Override
     public void drawText(PDPageContentStream contentStream, Position upperLeft,
-	    Alignment alignment, DrawListener drawListener) throws IOException {
+	    EAlignment alignment, IDrawListener drawListener) throws IOException {
 	TextSequenceUtil.drawText(this, contentStream, upperLeft, drawListener, alignment,
 		getMaxWidth(), getLineSpacing(),
 		isApplyLineSpacingToFirstLine());
     }
 
     public void drawTextRightAligned(PDPageContentStream contentStream,
-	    Position endOfFirstLine, DrawListener drawListener) throws IOException {
+	    Position endOfFirstLine, IDrawListener drawListener) throws IOException {
 	drawText(contentStream, endOfFirstLine.add(-getWidth(), 0),
-		Alignment.Right, drawListener);
+		EAlignment.Right, drawListener);
     }
 
     /**

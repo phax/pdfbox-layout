@@ -1,25 +1,25 @@
 package rst.pdfbox.layout.elements;
 
 /**
- * ControlElements do not have a drawable representation, but control page flow,
- * rendering etc.
+ * ControlElements do not have a drawable representation, but control page flow, rendering etc.
  */
-public class ControlElement implements Element {
+public class ControlElement implements IElement
+{
+  /**
+   * Triggers a new page in a document.
+   */
+  public final static ControlElement NEWPAGE = new ControlElement ("NEWPAGE");
 
-    /**
-     * Triggers a new page in a document.
-     */
-    public final static ControlElement NEWPAGE = new ControlElement("NEWPAGE");
+  private final String name;
 
-    private String name;
+  public ControlElement (final String name)
+  {
+    this.name = name;
+  }
 
-    public ControlElement(final String name) {
-	this.name = name;
-    }
-
-    @Override
-    public String toString() {
-	return "ControlElement [NEWPAGE=" + NEWPAGE + ", name=" + name + "]";
-    }
-
+  @Override
+  public String toString ()
+  {
+    return "ControlElement [NEWPAGE=" + NEWPAGE + ", name=" + name + "]";
+  }
 }

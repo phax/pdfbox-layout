@@ -6,7 +6,7 @@ import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
 import rst.pdfbox.layout.elements.Document;
 import rst.pdfbox.layout.elements.Paragraph;
-import rst.pdfbox.layout.text.Alignment;
+import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.BaseFont;
 import rst.pdfbox.layout.text.Indent;
 import rst.pdfbox.layout.text.SpaceUnit;
@@ -54,15 +54,15 @@ public class Indentation {
 			"And again, the Indentation holds for the rest of the paragraph, or any new indent comes.\nLabels can be aligned:\n",
 			11, BaseFont.Times);
 	paragraph.add(new Indent("Left", 100, SpaceUnit.pt, 11,
-		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), Alignment.Left));
+		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), EAlignment.Left));
 	paragraph.addMarkup("Indent with label aligned to the left.\n", 11,
 		BaseFont.Times);
 	paragraph.add(new Indent("Center", 100, SpaceUnit.pt, 11,
-		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), Alignment.Center));
+		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), EAlignment.Center));
 	paragraph.addMarkup("Indent with label aligned to the center.\n", 11,
 		BaseFont.Times);
 	paragraph.add(new Indent("Right", 100, SpaceUnit.pt, 11,
-		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), Alignment.Right));
+		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), EAlignment.Right));
 	paragraph.addMarkup("Indent with label aligned to the right.\n", 11,
 		BaseFont.Times);
 	document.add(paragraph);
@@ -72,16 +72,16 @@ public class Indentation {
 		"So, what can you do with that? How about lists:\n", 11,
 		BaseFont.Times);
 	paragraph.add(new Indent(bulletOdd, 4, SpaceUnit.em, 11,
-		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), Alignment.Right));
+		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), EAlignment.Right));
 	paragraph.addMarkup("This is a list item\n", 11, BaseFont.Times);
 	paragraph.add(new Indent(bulletOdd, 4, SpaceUnit.em, 11,
-		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), Alignment.Right));
+		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), EAlignment.Right));
 	paragraph.addMarkup("Another list item\n", 11, BaseFont.Times);
 	paragraph.add(new Indent(bulletEven, 8, SpaceUnit.em, 11,
-		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), Alignment.Right));
+		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), EAlignment.Right));
 	paragraph.addMarkup("Sub list item\n", 11, BaseFont.Times);
 	paragraph.add(new Indent(bulletOdd, 4, SpaceUnit.em, 11,
-		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), Alignment.Right));
+		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), EAlignment.Right));
 	paragraph.addMarkup("And yet another one\n", 11, BaseFont.Times);
 	document.add(paragraph);
 
@@ -91,19 +91,19 @@ public class Indentation {
 	RomanEnumerator e1 = new RomanEnumerator();
 	LowerCaseAlphabeticEnumerator e2 = new LowerCaseAlphabeticEnumerator();
 	paragraph.add(new Indent(e1.next() + ". ", 4, SpaceUnit.em, 11,
-		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), Alignment.Right));
+		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), EAlignment.Right));
 	paragraph.addMarkup("First item\n", 11, BaseFont.Times);
 	paragraph.add(new Indent(e1.next() + ". ", 4, SpaceUnit.em, 11,
-		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), Alignment.Right));
+		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), EAlignment.Right));
 	paragraph.addMarkup("Second item\n", 11, BaseFont.Times);
 	paragraph.add(new Indent(e2.next() + ") ", 8, SpaceUnit.em, 11,
-		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), Alignment.Right));
+		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), EAlignment.Right));
 	paragraph.addMarkup("A sub item\n", 11, BaseFont.Times);
 	paragraph.add(new Indent(e2.next() + ") ", 8, SpaceUnit.em, 11,
-		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), Alignment.Right));
+		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), EAlignment.Right));
 	paragraph.addMarkup("Another sub item\n", 11, BaseFont.Times);
 	paragraph.add(new Indent(e1.next() + ". ", 4, SpaceUnit.em, 11,
-		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), Alignment.Right));
+		new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), EAlignment.Right));
 	paragraph.addMarkup("Third item\n", 11, BaseFont.Times);
 	document.add(paragraph);
 
@@ -111,20 +111,20 @@ public class Indentation {
 	paragraph.addMarkup("The following types are built in:\n", 11,
 		BaseFont.Times);
 	paragraph.add(new Indent(new ArabicEnumerator().next() + " ", 4,
-		SpaceUnit.em, 11, new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), Alignment.Right));
+		SpaceUnit.em, 11, new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), EAlignment.Right));
 	paragraph.addMarkup("ArabicEnumerator\n", 11, BaseFont.Times);
 	paragraph.add(new Indent(new RomanEnumerator().next() + " ", 4,
-		SpaceUnit.em, 11, new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), Alignment.Right));
+		SpaceUnit.em, 11, new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), EAlignment.Right));
 	paragraph.addMarkup("RomanEnumerator\n", 11, BaseFont.Times);
 	paragraph.add(new Indent(new LowerCaseRomanEnumerator().next() + " ",
-		4, SpaceUnit.em, 11, new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), Alignment.Right));
+		4, SpaceUnit.em, 11, new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), EAlignment.Right));
 	paragraph.addMarkup("LowerCaseRomanEnumerator\n", 11, BaseFont.Times);
 	paragraph.add(new Indent(new AlphabeticEnumerator().next() + " ", 4,
-		SpaceUnit.em, 11, new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), Alignment.Right));
+		SpaceUnit.em, 11, new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD), EAlignment.Right));
 	paragraph.addMarkup("AlphabeticEnumerator\n", 11, BaseFont.Times);
 	paragraph.add(new Indent(new LowerCaseAlphabeticEnumerator().next()
 		+ " ", 4, SpaceUnit.em, 11, new PDType1Font(Standard14Fonts.FontName.TIMES_BOLD),
-		Alignment.Right));
+		EAlignment.Right));
 	paragraph.addMarkup("LowerCaseAlphabeticEnumerator\n", 11,
 		BaseFont.Times);
 	document.add(paragraph);

@@ -7,7 +7,7 @@ import java.awt.Color;
  * size and color.
  *
  */
-public interface TextFragment extends Area {
+public interface TextFragment extends IArea {
 
     /**
      * @return the text.

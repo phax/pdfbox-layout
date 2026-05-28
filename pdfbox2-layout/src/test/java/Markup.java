@@ -4,7 +4,7 @@ import java.io.OutputStream;
 import rst.pdfbox.layout.elements.Document;
 import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
-import rst.pdfbox.layout.text.Alignment;
+import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.BaseFont;
 
 public class Markup {
@@ -47,7 +47,7 @@ public class Markup {
 				+ "so you may also use this to __{0.25:}strike through__ or blacken __{0.25:20}things__ out\n\n",
 			11, BaseFont.Times);
 
-	document.add(paragraph, new VerticalLayoutHint(Alignment.Left, 0, 0,
+	document.add(paragraph, new VerticalLayoutHint(EAlignment.Left, 0, 0,
 		30, 0));
 
 	paragraph = new Paragraph();

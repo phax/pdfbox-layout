@@ -14,7 +14,7 @@ import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import rst.pdfbox.layout.shape.RoundRect;
 import rst.pdfbox.layout.shape.Shape;
 import rst.pdfbox.layout.shape.Stroke;
-import rst.pdfbox.layout.text.Alignment;
+import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.BaseFont;
 import rst.pdfbox.layout.text.Constants;
 import rst.pdfbox.layout.text.DrawContext;
@@ -69,9 +69,9 @@ public class LowLevelText {
 
 	text.setMaxWidth(100);
 	float xOffset = TextSequenceUtil.getOffset(text, pageWidth,
-		Alignment.Right);
+		EAlignment.Right);
 	text.drawText(contentStream, new Position(xOffset, pageHeight - 50),
-		Alignment.Right, annotationDrawListener);
+		EAlignment.Right, annotationDrawListener);
 
 	String textBlock = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, "
 		+ "{link[https://github.com/ralfstuckert/pdfbox-layout/]}pdfbox layout{link} "
@@ -87,9 +87,9 @@ public class LowLevelText {
 	text = new TextFlow();
 	text.addMarkup(textBlock, 8, BaseFont.Courier);
 	text.setMaxWidth(200);
-	xOffset = TextSequenceUtil.getOffset(text, pageWidth, Alignment.Center);
+	xOffset = TextSequenceUtil.getOffset(text, pageWidth, EAlignment.Center);
 	text.drawText(contentStream, new Position(xOffset, pageHeight - 100),
-		Alignment.Justify, annotationDrawListener);
+		EAlignment.Justify, annotationDrawListener);
 
 	// draw a round rect box with text
 	text.setMaxWidth(350);
@@ -107,7 +107,7 @@ public class LowLevelText {
 		boxHeight, Color.blue, new Stroke(3), null);
 	// now the text
 	text.drawText(contentStream, new Position(x + paddingX, y - paddingY),
-		Alignment.Center, annotationDrawListener);
+		EAlignment.Center, annotationDrawListener);
 
 	annotationDrawListener.afterPage(null);
 	contentStream.close();

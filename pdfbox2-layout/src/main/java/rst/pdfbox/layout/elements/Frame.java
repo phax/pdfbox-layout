@@ -13,9 +13,9 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import rst.pdfbox.layout.shape.Rect;
 import rst.pdfbox.layout.shape.Shape;
 import rst.pdfbox.layout.shape.Stroke;
-import rst.pdfbox.layout.text.DrawListener;
+import rst.pdfbox.layout.text.IDrawListener;
 import rst.pdfbox.layout.text.Position;
-import rst.pdfbox.layout.text.WidthRespecting;
+import rst.pdfbox.layout.text.IWidthRespecting;
 
 /**
  * The frame is a container for a {@link Drawable}, that allows to add margin,
@@ -231,12 +231,12 @@ public class Frame extends AbstractFrame implements Drawable {
     }
 
     private void setMaxWidth(final Drawable inner, float maxWidth) {
-	if (inner instanceof WidthRespecting) {
+	if (inner instanceof IWidthRespecting) {
 	    if (getGivenWidth() != null) {
-		((WidthRespecting) inner).setMaxWidth(getGivenWidth()
+		((IWidthRespecting) inner).setMaxWidth(getGivenWidth()
 			- getHorizontalShapeSpacing());
 	    } else if (maxWidth >= 0) {
-		((WidthRespecting) inner).setMaxWidth(maxWidth
+		((IWidthRespecting) inner).setMaxWidth(maxWidth
 			- getHorizontalSpacing());
 	    }
 	}
@@ -257,7 +257,7 @@ public class Frame extends AbstractFrame implements Drawable {
 
     @Override
     public void draw(PDDocument pdDocument, PDPageContentStream contentStream,
-	    Position upperLeft, DrawListener drawListener) throws IOException {
+	    Position upperLeft, IDrawListener drawListener) throws IOException {
 
 	setInnerMaxWidthIfNecessary();
 
@@ -324,9 +324,9 @@ public class Frame extends AbstractFrame implements Drawable {
 	Divided divided = null;
 
 	if (dividedList.getDrawableToDivide() != null) {
-	    Dividable innerDividable = null;
-	    if (dividedList.getDrawableToDivide() instanceof Dividable) {
-		innerDividable = (Dividable) dividedList.getDrawableToDivide();
+	    IDividable innerDividable = null;
+	    if (dividedList.getDrawableToDivide() instanceof IDividable) {
+		innerDividable = (IDividable) dividedList.getDrawableToDivide();
 	    } else {
 		innerDividable = new Cutter(dividedList.getDrawableToDivide());
 	    }

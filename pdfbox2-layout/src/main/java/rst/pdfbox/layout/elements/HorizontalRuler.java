@@ -7,15 +7,15 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 import rst.pdfbox.layout.shape.Stroke;
-import rst.pdfbox.layout.text.DrawListener;
+import rst.pdfbox.layout.text.IDrawListener;
 import rst.pdfbox.layout.text.Position;
-import rst.pdfbox.layout.text.WidthRespecting;
+import rst.pdfbox.layout.text.IWidthRespecting;
 
 /**
  * A horizontal ruler that adjust its width to the given
- * {@link WidthRespecting#getMaxWidth() max width}.
+ * {@link IWidthRespecting#getMaxWidth() max width}.
  */
-public class HorizontalRuler implements Drawable, Element, WidthRespecting {
+public class HorizontalRuler implements Drawable, IElement, IWidthRespecting {
 
     private Stroke stroke;
     private Color color;
@@ -71,7 +71,7 @@ public class HorizontalRuler implements Drawable, Element, WidthRespecting {
 
     @Override
     public void draw(PDDocument pdDocument, PDPageContentStream contentStream,
-	    Position upperLeft, DrawListener drawListener) throws IOException {
+	    Position upperLeft, IDrawListener drawListener) throws IOException {
 	if (getColor() != null) {
 	    contentStream.setStrokingColor(getColor());
 	}

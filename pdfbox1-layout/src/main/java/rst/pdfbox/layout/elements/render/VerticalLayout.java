@@ -6,21 +6,21 @@ import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 
 import rst.pdfbox.layout.elements.ControlElement;
 import rst.pdfbox.layout.elements.Cutter;
-import rst.pdfbox.layout.elements.Dividable;
-import rst.pdfbox.layout.elements.Dividable.Divided;
+import rst.pdfbox.layout.elements.IDividable;
+import rst.pdfbox.layout.elements.IDividable.Divided;
 import rst.pdfbox.layout.elements.Drawable;
-import rst.pdfbox.layout.elements.Element;
+import rst.pdfbox.layout.elements.IElement;
 import rst.pdfbox.layout.elements.PageFormat;
 import rst.pdfbox.layout.elements.VerticalSpacer;
-import rst.pdfbox.layout.text.Alignment;
+import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.Position;
-import rst.pdfbox.layout.text.WidthRespecting;
+import rst.pdfbox.layout.text.IWidthRespecting;
 import rst.pdfbox.layout.util.CompatibilityHelper;
 
 /**
  * Layout implementation that stacks drawables vertically onto the page. If the
  * remaining height on the page is not sufficient for the drawable, it will be
- * {@link Dividable divided}. Any given {@link VerticalLayoutHint} will be taken
+ * {@link IDividable divided}. Any given {@link VerticalLayoutHint} will be taken
  * into account to calculate the position, width, alignment etc.
  */
 public class VerticalLayout implements Layout {
@@ -73,8 +73,8 @@ public class VerticalLayout implements Layout {
     }
 
     @Override
-    public boolean render(RenderContext renderContext, Element element,
-	    LayoutHint layoutHint) throws IOException {
+    public boolean render(RenderContext renderContext, IElement element,
+	    ILayoutHint layoutHint) throws IOException {
 	if (element instanceof Drawable) {
 	    render(renderContext, (Drawable) element, layoutHint);
 	    return true;
@@ -88,7 +88,7 @@ public class VerticalLayout implements Layout {
     }
 
     public void render(final RenderContext renderContext, Drawable drawable,
-	    final LayoutHint layoutHint) throws IOException {
+	    final ILayoutHint layoutHint) throws IOException {
 	if (drawable.getAbsolutePosition() != null) {
 	    renderAbsolute(renderContext, drawable, layoutHint,
 		    drawable.getAbsolutePosition());
@@ -112,7 +112,7 @@ public class VerticalLayout implements Layout {
      *             by pdfbox
      */
     protected void renderAbsolute(final RenderContext renderContext,
-	    Drawable drawable, final LayoutHint layoutHint,
+	    Drawable drawable, final ILayoutHint layoutHint,
 	    final Position position) throws IOException {
 	drawable.draw(renderContext.getPdDocument(),
 		renderContext.getContentStream(), position, renderContext);
@@ -123,7 +123,7 @@ public class VerticalLayout implements Layout {
      * current position}. This method is responsible taking any top or bottom
      * margin described by the (Vertical-)LayoutHint into account. The actual
      * rendering of the drawable is performed by
-     * {@link #layoutAndDrawReleative(RenderContext, Drawable, LayoutHint)}.
+     * {@link #layoutAndDrawReleative(RenderContext, Drawable, ILayoutHint)}.
      * 
      * @param renderContext
      *            the context providing all rendering state.
@@ -135,7 +135,7 @@ public class VerticalLayout implements Layout {
      *             by pdfbox
      */
     protected void renderReleative(final RenderContext renderContext,
-	    Drawable drawable, final LayoutHint layoutHint) throws IOException {
+	    Drawable drawable, final ILayoutHint layoutHint) throws IOException {
 	VerticalLayoutHint verticalLayoutHint = null;
 	if (layoutHint instanceof VerticalLayoutHint) {
 	    verticalLayoutHint = (VerticalLayoutHint) layoutHint;
@@ -157,10 +157,10 @@ public class VerticalLayout implements Layout {
     }
 
     /**
-     * Adjusts the width of the drawable (if it is {@link WidthRespecting}), and
+     * Adjusts the width of the drawable (if it is {@link IWidthRespecting}), and
      * divides it onto multiple pages if necessary. Actual drawing is delegated
      * to
-     * {@link #drawReletivePartAndMovePosition(RenderContext, Drawable, LayoutHint, boolean)}
+     * {@link #drawReletivePartAndMovePosition(RenderContext, Drawable, ILayoutHint, boolean)}
      * .
      * 
      * @param renderContext
@@ -173,7 +173,7 @@ public class VerticalLayout implements Layout {
      *             by pdfbox
      */
     protected void layoutAndDrawReleative(final RenderContext renderContext,
-	    Drawable drawable, final LayoutHint layoutHint) throws IOException {
+	    Drawable drawable, final ILayoutHint layoutHint) throws IOException {
 
 	float targetWidth = getTargetWidth(renderContext);
 	boolean movePosition = true;
@@ -186,8 +186,8 @@ public class VerticalLayout implements Layout {
 	}
 
 	float oldMaxWidth = -1;
-	if (drawable instanceof WidthRespecting) {
-	    WidthRespecting flowing = (WidthRespecting) drawable;
+	if (drawable instanceof IWidthRespecting) {
+	    IWidthRespecting flowing = (IWidthRespecting) drawable;
 	    oldMaxWidth = flowing.getMaxWidth();
 	    if (oldMaxWidth < 0) {
 		flowing.setMaxWidth(targetWidth);
@@ -197,9 +197,9 @@ public class VerticalLayout implements Layout {
 	Drawable drawablePart = removeLeadingEmptyVerticalSpace(drawable,
 		renderContext);
 	while (renderContext.getRemainingHeight() < drawablePart.getHeight()) {
-	    Dividable dividable = null;
-	    if (drawablePart instanceof Dividable) {
-		dividable = (Dividable) drawablePart;
+	    IDividable dividable = null;
+	    if (drawablePart instanceof IDividable) {
+		dividable = (IDividable) drawablePart;
 	    } else {
 		dividable = new Cutter(drawablePart);
 	    }
@@ -220,9 +220,9 @@ public class VerticalLayout implements Layout {
 	drawReletivePartAndMovePosition(renderContext, drawablePart,
 		layoutHint, movePosition);
 
-	if (drawable instanceof WidthRespecting) {
+	if (drawable instanceof IWidthRespecting) {
 	    if (oldMaxWidth < 0) {
-		((WidthRespecting) drawable).setMaxWidth(oldMaxWidth);
+		((IWidthRespecting) drawable).setMaxWidth(oldMaxWidth);
 	    }
 	}
     }
@@ -248,14 +248,14 @@ public class VerticalLayout implements Layout {
      */
     protected void drawReletivePartAndMovePosition(
 	    final RenderContext renderContext, Drawable drawable,
-	    final LayoutHint layoutHint, final boolean movePosition)
+	    final ILayoutHint layoutHint, final boolean movePosition)
 	    throws IOException {
 	PDPageContentStream contentStream = renderContext.getContentStream();
 	PageFormat pageFormat = renderContext.getPageFormat();
 	float offsetX = 0;
 	if (layoutHint instanceof VerticalLayoutHint) {
 	    VerticalLayoutHint verticalLayoutHint = (VerticalLayoutHint) layoutHint;
-	    Alignment alignment = verticalLayoutHint.getAlignment();
+	    EAlignment alignment = verticalLayoutHint.getAlignment();
 	    float horizontalExtraSpace = getTargetWidth(renderContext)
 		    - drawable.getWidth();
 	    switch (alignment) {

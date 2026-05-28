@@ -6,15 +6,15 @@ import java.io.IOException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
-import rst.pdfbox.layout.text.DrawListener;
+import rst.pdfbox.layout.text.IDrawListener;
 import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.util.CompatibilityHelper;
 
 /**
  * Abstract base class for shapes which performs the
- * {@link #fill(PDDocument, PDPageContentStream, Position, float, float, Color, DrawListener)}
+ * {@link #fill(PDDocument, PDPageContentStream, Position, float, float, Color, IDrawListener)}
  * and (@link
- * {@link #draw(PDDocument, PDPageContentStream, Position, float, float, Color, Stroke, DrawListener)}
+ * {@link #draw(PDDocument, PDPageContentStream, Position, float, float, Color, Stroke, IDrawListener)}
  * .
  */
 public abstract class AbstractShape implements Shape {
@@ -22,7 +22,7 @@ public abstract class AbstractShape implements Shape {
     @Override
     public void draw(PDDocument pdDocument, PDPageContentStream contentStream,
 	    Position upperLeft, float width, float height, Color color,
-	    Stroke stroke, DrawListener drawListener) throws IOException {
+	    Stroke stroke, IDrawListener drawListener) throws IOException {
 
 	add(pdDocument, contentStream, upperLeft, width, height);
 
@@ -43,7 +43,7 @@ public abstract class AbstractShape implements Shape {
     @Override
     public void fill(PDDocument pdDocument, PDPageContentStream contentStream,
 	    Position upperLeft, float width, float height, Color color,
-	    DrawListener drawListener) throws IOException {
+	    IDrawListener drawListener) throws IOException {
 
 	add(pdDocument, contentStream, upperLeft, width, height);
 

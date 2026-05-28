@@ -11,7 +11,7 @@ import rst.pdfbox.layout.shape.Ellipse;
 import rst.pdfbox.layout.shape.Rect;
 import rst.pdfbox.layout.shape.RoundRect;
 import rst.pdfbox.layout.shape.Stroke;
-import rst.pdfbox.layout.text.Alignment;
+import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.BaseFont;
 import rst.pdfbox.layout.text.Constants;
 
@@ -58,7 +58,7 @@ public class Frames {
 
 	paragraph = new Paragraph();
 	paragraph.addMarkup("{color:#aa00aa}*Ain't no rectangle*", 22, BaseFont.Helvetica);
-	paragraph.setAlignment(Alignment.Center);
+	paragraph.setAlignment(EAlignment.Center);
 	frame = new Frame(paragraph, 300f, 100f);
 	frame.setShape(new Ellipse());
 	frame.setBorder(Color.green, new Stroke(2));

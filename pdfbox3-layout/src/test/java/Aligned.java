@@ -7,7 +7,7 @@ import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import rst.pdfbox.layout.elements.Document;
 import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
-import rst.pdfbox.layout.text.Alignment;
+import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.util.WordBreakerFactory;
 
 public class Aligned {
@@ -20,28 +20,28 @@ public class Aligned {
 	Paragraph paragraph = new Paragraph();
 	paragraph.addText("This is some left aligned text", 11,
 		new PDType1Font(Standard14Fonts.FontName.HELVETICA));
-	paragraph.setAlignment(Alignment.Left);
+	paragraph.setAlignment(EAlignment.Left);
 	paragraph.setMaxWidth(40);
 	document.add(paragraph, VerticalLayoutHint.LEFT);
 
 	paragraph = new Paragraph();
 	paragraph.addText("This is some centered text", 11,
 		new PDType1Font(Standard14Fonts.FontName.HELVETICA));
-	paragraph.setAlignment(Alignment.Center);
+	paragraph.setAlignment(EAlignment.Center);
 	paragraph.setMaxWidth(40);
 	document.add(paragraph, VerticalLayoutHint.CENTER);
 
 	paragraph = new Paragraph();
 	paragraph.addText("This is some right aligned text", 11,
 		new PDType1Font(Standard14Fonts.FontName.HELVETICA));
-	paragraph.setAlignment(Alignment.Right);
+	paragraph.setAlignment(EAlignment.Right);
 	paragraph.setMaxWidth(40);
 	document.add(paragraph, VerticalLayoutHint.RIGHT);
 
 	paragraph = new Paragraph();
 	paragraph.addText("Text is right aligned, and paragraph centered", 11,
 		new PDType1Font(Standard14Fonts.FontName.HELVETICA));
-	paragraph.setAlignment(Alignment.Right);
+	paragraph.setAlignment(EAlignment.Right);
 	paragraph.setMaxWidth(40);
 	document.add(paragraph, VerticalLayoutHint.CENTER);
 

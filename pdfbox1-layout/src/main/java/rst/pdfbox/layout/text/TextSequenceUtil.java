@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 
-import rst.pdfbox.layout.elements.Dividable.Divided;
+import rst.pdfbox.layout.elements.IDividable.Divided;
 import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.util.Pair;
 import rst.pdfbox.layout.util.WordBreakerFactory;
@@ -450,7 +450,7 @@ public class TextSequenceUtil {
      *            the position of the start of the first line.
      * @param drawListener
      *            the listener to
-     *            {@link DrawListener#drawn(Object, Position, float, float)
+     *            {@link IDrawListener#drawn(Object, Position, float, float)
      *            notify} on drawn objects.
      * @param alignment
      *            how to align the text lines.
@@ -466,7 +466,7 @@ public class TextSequenceUtil {
      */
     public static void drawText(TextSequence text,
 	    PDPageContentStream contentStream, Position upperLeft,
-	    DrawListener drawListener, Alignment alignment, float maxWidth,
+	    IDrawListener drawListener, EAlignment alignment, float maxWidth,
 	    final float lineSpacing, final boolean applyLineSpacingToFirstLine)
 	    throws IOException {
 	List<TextLine> lines = wordWrapToLines(text, maxWidth);
@@ -503,7 +503,7 @@ public class TextSequenceUtil {
      *             by pdfbox
      */
     public static float getOffset(final TextSequence textLine,
-	    final float targetWidth, final Alignment alignment)
+	    final float targetWidth, final EAlignment alignment)
 	    throws IOException {
 	switch (alignment) {
 	case Right:

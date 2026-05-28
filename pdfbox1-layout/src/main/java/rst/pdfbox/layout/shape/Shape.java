@@ -6,14 +6,14 @@ import java.io.IOException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 
-import rst.pdfbox.layout.text.DrawListener;
+import rst.pdfbox.layout.text.IDrawListener;
 import rst.pdfbox.layout.text.Position;
 
 /**
  * Shapes can be used to either
- * {@link #draw(PDDocument, PDPageContentStream, Position, float, float, Color, Stroke, DrawListener)
+ * {@link #draw(PDDocument, PDPageContentStream, Position, float, float, Color, Stroke, IDrawListener)
  * stroke} or
- * {@link #fill(PDDocument, PDPageContentStream, Position, float, float, Color, DrawListener)
+ * {@link #fill(PDDocument, PDPageContentStream, Position, float, float, Color, IDrawListener)
  * fill} the path of the shape, or simply
  * {@link #add(PDDocument, PDPageContentStream, Position, float, float) add the
  * path} of the shape to the drawing context.
@@ -39,14 +39,14 @@ public interface Shape {
      *            the stroke to use.
      * @param drawListener
      *            the listener to
-     *            {@link DrawListener#drawn(Object, Position, float, float)
+     *            {@link IDrawListener#drawn(Object, Position, float, float)
      *            notify} on drawn objects.
      * @throws IOException
      *             by pdfbox
      */
     void draw(PDDocument pdDocument, PDPageContentStream contentStream,
 	    Position upperLeft, float width, float height, Color color,
-	    Stroke stroke, DrawListener drawListener) throws IOException;
+	    Stroke stroke, IDrawListener drawListener) throws IOException;
 
     /**
      * Fills the shape.
@@ -65,14 +65,14 @@ public interface Shape {
      *            the color to use.
      * @param drawListener
      *            the listener to
-     *            {@link DrawListener#drawn(Object, Position, float, float)
+     *            {@link IDrawListener#drawn(Object, Position, float, float)
      *            notify} on drawn objects.
      * @throws IOException
      *             by pdfbox
      */
     void fill(PDDocument pdDocument, PDPageContentStream contentStream,
 	    Position upperLeft, float width, float height, Color color,
-	    DrawListener drawListener) throws IOException;
+	    IDrawListener drawListener) throws IOException;
 
     /**
      * Adds (the path of) the shape without drawing anything.

@@ -14,7 +14,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 
 import rst.pdfbox.layout.text.ControlCharacters.BoldControlCharacter;
 import rst.pdfbox.layout.text.ControlCharacters.ColorControlCharacter;
-import rst.pdfbox.layout.text.ControlCharacters.ControlCharacterFactory;
+import rst.pdfbox.layout.text.ControlCharacters.IControlCharacterFactory;
 import rst.pdfbox.layout.text.ControlCharacters.ItalicControlCharacter;
 import rst.pdfbox.layout.text.ControlCharacters.MetricsControlCharacter;
 import rst.pdfbox.layout.text.ControlCharacters.NewLineControlCharacter;
@@ -330,7 +330,7 @@ public class TextFlowUtil {
      * @return the splitted and replaced sequence.
      */
     protected static Iterable<CharSequence> splitByControlCharacter(
-	    ControlCharacterFactory controlCharacterFactory,
+	    IControlCharacterFactory controlCharacterFactory,
 	    final Iterable<CharSequence> markup) {
 	List<CharSequence> result = new ArrayList<CharSequence>();
 	boolean beginOfLine = true;

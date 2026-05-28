@@ -8,282 +8,306 @@ import java.util.regex.Pattern;
 /**
  * Container class for all control character factories.
  */
-public class ControlCharacters {
+public class ControlCharacters
+{
+  /**
+   * Unescapes the escape character backslash.
+   *
+   * @param text
+   *        the text to escape.
+   * @return the unescaped text.
+   */
+  public static String unescapeBackslash (final String text)
+  {
+    return text.replace ("\\\\", "\\");
+  }
+
+  /**
+   * A control character factory is used to create control characters on the fly from the control
+   * pattern. This allows to parameterize the characters as needed for e.g. colors.
+   */
+  public interface IControlCharacterFactory
+  {
+    /**
+     * Creates the control character from the given matched pattern.
+     *
+     * @param text
+     *        the parsed text.
+     * @param matcher
+     *        the matcher.
+     * @param charactersSoFar
+     *        the characters created so far.
+     * @return the created character.
+     */
+    ControlCharacter createControlCharacter (final String text,
+                                             final Matcher matcher,
+                                             final List <CharSequence> charactersSoFar);
 
     /**
-     * Unescapes the escape character backslash.
-     * 
+     * @return the pattern used to match the control character.
+     */
+    Pattern getPattern ();
+
+    /**
+     * Indicates if the pattern should be applied to the begin of line only.
+     *
+     * @return <code>true</code> if the pattern is to be applied at the begin of a line.
+     */
+    boolean patternMatchesBeginOfLine ();
+
+    /**
+     * Unescapes the pattern.
+     *
      * @param text
-     *            the text to escape.
+     *        the text to unescape.
      * @return the unescaped text.
      */
-    public static String unescapeBackslash(final String text) {
-	return text.replaceAll(Pattern.quote("\\\\"), "\\\\");
+    String unescape (final String text);
+
+  }
+
+  /**
+   * The factory for bold control characters.
+   */
+  public static IControlCharacterFactory BOLD_FACTORY = new StaticControlCharacterFactory (new BoldControlCharacter (),
+                                                                                           BoldControlCharacter.PATTERN);
+  /**
+   * The factory for italic control characters.
+   */
+  public static IControlCharacterFactory ITALIC_FACTORY = new StaticControlCharacterFactory (new ItalicControlCharacter (),
+                                                                                             ItalicControlCharacter.PATTERN);
+  /**
+   * The factory for new line control characters.
+   */
+  public static IControlCharacterFactory NEWLINE_FACTORY = new StaticControlCharacterFactory (new NewLineControlCharacter (),
+                                                                                              NewLineControlCharacter.PATTERN);
+  /**
+   * The factory for color control characters.
+   */
+  public static IControlCharacterFactory COLOR_FACTORY = new ColorControlCharacterFactory ();
+
+  /**
+   * The factory for metrics control characters.
+   */
+  public static MetricsControlCharacterFactory METRICS_FACTORY = new MetricsControlCharacterFactory ();
+
+  /**
+   * An asterisk ('*') indicates switching of bold font mode in markup. It can be escaped with a
+   * backslash ('\').
+   */
+  public static class BoldControlCharacter extends ControlCharacter
+  {
+    public static Pattern PATTERN = Pattern.compile ("(?<!\\\\)(\\\\\\\\)*\\*");
+
+    protected BoldControlCharacter ()
+    {
+      super ("BOLD", "*");
+    }
+  }
+
+  /**
+   * An underscore ('_') indicates switching of italic font mode in markup. It can be escaped with a
+   * backslash ('\').
+   */
+  public static class ItalicControlCharacter extends ControlCharacter
+  {
+    private static Pattern PATTERN = Pattern.compile ("(?<!\\\\)(\\\\\\\\)*(?<!_)_(?!_)");
+
+    protected ItalicControlCharacter ()
+    {
+      super ("ITALIC", "_");
+    }
+  }
+
+  /**
+   * LF ('\n') and CRLF ('\r\n') indicates a new line.
+   */
+  public static class NewLineControlCharacter extends ControlCharacter
+  {
+    private static Pattern PATTERN = Pattern.compile ("(\r\n|\n)");
+
+    protected NewLineControlCharacter ()
+    {
+      super ("NEWLINE", null);
+    }
+  }
+
+  /**
+   * An <code>{color:#ee22aa}</code> indicates switching the color in markup, where the color is
+   * given as hex RGB code (ee22aa in this case). It can be escaped with a backslash ('\').
+   */
+  public static class ColorControlCharacter extends ControlCharacter
+  {
+    private final Color color;
+
+    protected ColorControlCharacter (final String hex)
+    {
+      super ("COLOR", ColorControlCharacterFactory.TO_ESCAPE);
+      final int r = Integer.parseUnsignedInt (hex.substring (0, 2), 16);
+      final int g = Integer.parseUnsignedInt (hex.substring (2, 4), 16);
+      final int b = Integer.parseUnsignedInt (hex.substring (4, 6), 16);
+      this.color = new Color (r, g, b);
     }
 
-    /**
-     * A control character factory is used to create control characters on the
-     * fly from the control pattern. This allows to parameterize the characters
-     * as needed for e.g. colors.
-     */
-    public static interface ControlCharacterFactory {
+    public Color getColor ()
+    {
+      return color;
+    }
+  }
 
-	/**
-	 * Creates the control character from the given matched pattern.
-	 * 
-	 * @param text
-	 *            the parsed text.
-	 * @param matcher
-	 *            the matcher.
-	 * @param charactersSoFar
-	 *            the characters created so far.
-	 * @return the created character.
-	 */
-	ControlCharacter createControlCharacter(final String text,
-		final Matcher matcher, final List<CharSequence> charactersSoFar);
+  private static class StaticControlCharacterFactory implements IControlCharacterFactory
+  {
 
-	/**
-	 * @return the pattern used to match the control character.
-	 */
-	Pattern getPattern();
+    private final ControlCharacter controlCharacter;
+    private final Pattern pattern;
 
-	/**
-	 * Indicates if the pattern should be applied to the begin of line only.
-	 * 
-	 * @return <code>true</code> if the pattern is to be applied at the
-	 *         begin of a line.
-	 */
-	boolean patternMatchesBeginOfLine();
-
-	/**
-	 * Unescapes the pattern.
-	 * 
-	 * @param text
-	 *            the text to unescape.
-	 * @return the unescaped text.
-	 */
-	String unescape(final String text);
-
+    public StaticControlCharacterFactory (final ControlCharacter controlCharacter, final Pattern pattern)
+    {
+      this.controlCharacter = controlCharacter;
+      this.pattern = pattern;
     }
 
-    /**
-     * The factory for bold control characters.
-     */
-    public static ControlCharacterFactory BOLD_FACTORY = new StaticControlCharacterFactory(
-	    new BoldControlCharacter(), BoldControlCharacter.PATTERN);
-    /**
-     * The factory for italic control characters.
-     */
-    public static ControlCharacterFactory ITALIC_FACTORY = new StaticControlCharacterFactory(
-	    new ItalicControlCharacter(), ItalicControlCharacter.PATTERN);
-    /**
-     * The factory for new line control characters.
-     */
-    public static ControlCharacterFactory NEWLINE_FACTORY = new StaticControlCharacterFactory(
-	    new NewLineControlCharacter(), NewLineControlCharacter.PATTERN);
-    /**
-     * The factory for color control characters.
-     */
-    public static ControlCharacterFactory COLOR_FACTORY = new ColorControlCharacterFactory();
-
-    /**
-     * The factory for metrics control characters.
-     */
-    public static MetricsControlCharacterFactory METRICS_FACTORY = new MetricsControlCharacterFactory();
-
-    /**
-     * An asterisk ('*') indicates switching of bold font mode in markup. It can
-     * be escaped with a backslash ('\').
-     */
-    public static class BoldControlCharacter extends ControlCharacter {
-	public static Pattern PATTERN = Pattern
-		.compile("(?<!\\\\)(\\\\\\\\)*\\*");
-
-	protected BoldControlCharacter() {
-	    super("BOLD", "*");
-	}
+    @Override
+    public ControlCharacter createControlCharacter (final String text,
+                                                    final Matcher matcher,
+                                                    final List <CharSequence> charactersSoFar)
+    {
+      return controlCharacter;
     }
 
-    /**
-     * An underscore ('_') indicates switching of italic font mode in markup. It
-     * can be escaped with a backslash ('\').
-     */
-    public static class ItalicControlCharacter extends ControlCharacter {
-	private static Pattern PATTERN = Pattern
-		.compile("(?<!\\\\)(\\\\\\\\)*(?<!_)_(?!_)");
-
-	protected ItalicControlCharacter() {
-	    super("ITALIC", "_");
-	}
+    @Override
+    public Pattern getPattern ()
+    {
+      return pattern;
     }
 
-    /**
-     * LF ('\n') and CRLF ('\r\n') indicates a new line.
-     */
-    public static class NewLineControlCharacter extends ControlCharacter {
-	private static Pattern PATTERN = Pattern.compile("(\r\n|\n)");
-
-	protected NewLineControlCharacter() {
-	    super("NEWLINE", null);
-	}
+    @Override
+    public String unescape (final String text)
+    {
+      return controlCharacter.unescape (text);
     }
 
-    /**
-     * An <code>{color:#ee22aa}</code> indicates switching the color in markup,
-     * where the color is given as hex RGB code (ee22aa in this case). It can be
-     * escaped with a backslash ('\').
-     */
-    public static class ColorControlCharacter extends ControlCharacter {
-	private Color color;
-
-	protected ColorControlCharacter(final String hex) {
-	    super("COLOR", ColorControlCharacterFactory.TO_ESCAPE);
-	    int r = Integer.parseUnsignedInt(hex.substring(0, 2), 16);
-	    int g = Integer.parseUnsignedInt(hex.substring(2, 4), 16);
-	    int b = Integer.parseUnsignedInt(hex.substring(4, 6), 16);
-	    this.color = new Color(r, g, b);
-	}
-
-	public Color getColor() {
-	    return color;
-	}
+    @Override
+    public boolean patternMatchesBeginOfLine ()
+    {
+      return false;
     }
 
-    private static class StaticControlCharacterFactory implements
-	    ControlCharacterFactory {
+  }
 
-	private ControlCharacter controlCharacter;
-	private Pattern pattern;
+  private static class ColorControlCharacterFactory implements IControlCharacterFactory
+  {
 
-	public StaticControlCharacterFactory(
-		final ControlCharacter controlCharacter, final Pattern pattern) {
-	    this.controlCharacter = controlCharacter;
-	    this.pattern = pattern;
-	}
+    private final static Pattern PATTERN = Pattern.compile ("(?<!\\\\)(\\\\\\\\)*\\{color:#(\\p{XDigit}{6})\\}");
 
-	@Override
-	public ControlCharacter createControlCharacter(String text,
-		Matcher matcher, final List<CharSequence> charactersSoFar) {
-	    return controlCharacter;
-	}
+    private final static String TO_ESCAPE = "{";
 
-	@Override
-	public Pattern getPattern() {
-	    return pattern;
-	}
-
-	@Override
-	public String unescape(String text) {
-	    return controlCharacter.unescape(text);
-	}
-
-	@Override
-	public boolean patternMatchesBeginOfLine() {
-	    return false;
-	}
-
+    @Override
+    public ControlCharacter createControlCharacter (final String text,
+                                                    final Matcher matcher,
+                                                    final List <CharSequence> charactersSoFar)
+    {
+      return new ColorControlCharacter (matcher.group (2));
     }
 
-    private static class ColorControlCharacterFactory implements
-	    ControlCharacterFactory {
-
-	private final static Pattern PATTERN = Pattern
-		.compile("(?<!\\\\)(\\\\\\\\)*\\{color:#(\\p{XDigit}{6})\\}");
-
-	private final static String TO_ESCAPE = "{";
-
-	@Override
-	public ControlCharacter createControlCharacter(String text,
-		Matcher matcher, final List<CharSequence> charactersSoFar) {
-	    return new ColorControlCharacter(matcher.group(2));
-	}
-
-	@Override
-	public Pattern getPattern() {
-	    return PATTERN;
-	}
-
-	@Override
-	public String unescape(String text) {
-	    return text
-		    .replaceAll("\\\\" + Pattern.quote(TO_ESCAPE), TO_ESCAPE);
-	}
-
-	@Override
-	public boolean patternMatchesBeginOfLine() {
-	    return false;
-	}
-
+    @Override
+    public Pattern getPattern ()
+    {
+      return PATTERN;
     }
 
-    public static class MetricsControlCharacter extends ControlCharacter {
-	private float fontScale;
-	private float baselineOffsetScale;
-
-	protected MetricsControlCharacter(String name, final String fontScale,
-		final String baselineOffset) {
-	    super(name, MetricsControlCharacterFactory.TO_ESCAPE);
-	    this.fontScale = parse(fontScale, 1);
-	    this.baselineOffsetScale = parse(baselineOffset, 0);
-	}
-
-	private static float parse(final String text, final float defaultValue) {
-	    if (text == null || text.trim().isEmpty()) {
-		return defaultValue;
-	    }
-	    return Float.parseFloat(text);
-	}
-
-	public float getFontScale() {
-	    return fontScale;
-	}
-
-	public float getBaselineOffsetScale() {
-	    return baselineOffsetScale;
-	}
-
+    @Override
+    public String unescape (final String text)
+    {
+      return text.replaceAll ("\\\\" + Pattern.quote (TO_ESCAPE), TO_ESCAPE);
     }
 
-    private static class MetricsControlCharacterFactory implements
-	    ControlCharacterFactory {
-
-	private final static Pattern PATTERN = Pattern
-		.compile("(?<!\\\\)(\\\\\\\\)*\\{(_|\\^)(:(-?\\d+(\\.\\d*)?)\\|(-?\\d+(\\.\\d*)?))?}");
-
-	private final static String TO_ESCAPE = "{";
-
-	@Override
-	public ControlCharacter createControlCharacter(String text,
-		Matcher matcher, final List<CharSequence> charactersSoFar) {
-	    boolean isSuperscript = "^".equals(matcher.group(2));
-	    String name = isSuperscript ? "SUPERSCRIPT" : "SUBSCRIPT";
-	    String baselineOffsetScale = isSuperscript ? "-0.4" : "0.15";
-	    if (matcher.groupCount() > 6 && matcher.group(6) != null) {
-		baselineOffsetScale = matcher.group(6);
-	    }
-	    String fontScale = "0.61";
-	    if (matcher.groupCount() > 4 && matcher.group(4) != null) {
-		fontScale = matcher.group(4);
-	    }
-	    return new MetricsControlCharacter(name, fontScale, baselineOffsetScale);
-	}
-
-	@Override
-	public Pattern getPattern() {
-	    return PATTERN;
-	}
-
-	@Override
-	public String unescape(String text) {
-	    return text
-		    .replaceAll("\\\\" + Pattern.quote(TO_ESCAPE), TO_ESCAPE);
-	}
-
-	@Override
-	public boolean patternMatchesBeginOfLine() {
-	    return false;
-	}
-
+    @Override
+    public boolean patternMatchesBeginOfLine ()
+    {
+      return false;
     }
+
+  }
+
+  public static class MetricsControlCharacter extends ControlCharacter
+  {
+    private final float fontScale;
+    private final float baselineOffsetScale;
+
+    protected MetricsControlCharacter (final String name, final String fontScale, final String baselineOffset)
+    {
+      super (name, MetricsControlCharacterFactory.TO_ESCAPE);
+      this.fontScale = parse (fontScale, 1);
+      this.baselineOffsetScale = parse (baselineOffset, 0);
+    }
+
+    private static float parse (final String text, final float defaultValue)
+    {
+      if (text == null || text.trim ().isEmpty ())
+      {
+        return defaultValue;
+      }
+      return Float.parseFloat (text);
+    }
+
+    public float getFontScale ()
+    {
+      return fontScale;
+    }
+
+    public float getBaselineOffsetScale ()
+    {
+      return baselineOffsetScale;
+    }
+
+  }
+
+  private static class MetricsControlCharacterFactory implements IControlCharacterFactory
+  {
+
+    private final static Pattern PATTERN = Pattern.compile ("(?<!\\\\)(\\\\\\\\)*\\{(_|\\^)(:(-?\\d+(\\.\\d*)?)\\|(-?\\d+(\\.\\d*)?))?}");
+
+    private final static String TO_ESCAPE = "{";
+
+    @Override
+    public ControlCharacter createControlCharacter (final String text,
+                                                    final Matcher matcher,
+                                                    final List <CharSequence> charactersSoFar)
+    {
+      final boolean isSuperscript = "^".equals (matcher.group (2));
+      final String name = isSuperscript ? "SUPERSCRIPT" : "SUBSCRIPT";
+      String baselineOffsetScale = isSuperscript ? "-0.4" : "0.15";
+      if (matcher.groupCount () > 6 && matcher.group (6) != null)
+      {
+        baselineOffsetScale = matcher.group (6);
+      }
+      String fontScale = "0.61";
+      if (matcher.groupCount () > 4 && matcher.group (4) != null)
+      {
+        fontScale = matcher.group (4);
+      }
+      return new MetricsControlCharacter (name, fontScale, baselineOffsetScale);
+    }
+
+    @Override
+    public Pattern getPattern ()
+    {
+      return PATTERN;
+    }
+
+    @Override
+    public String unescape (final String text)
+    {
+      return text.replaceAll ("\\\\" + Pattern.quote (TO_ESCAPE), TO_ESCAPE);
+    }
+
+    @Override
+    public boolean patternMatchesBeginOfLine ()
+    {
+      return false;
+    }
+
+  }
 
 }

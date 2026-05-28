@@ -15,7 +15,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 
 import rst.pdfbox.layout.elements.render.Layout;
-import rst.pdfbox.layout.elements.render.LayoutHint;
+import rst.pdfbox.layout.elements.render.ILayoutHint;
 import rst.pdfbox.layout.elements.render.RenderContext;
 import rst.pdfbox.layout.elements.render.RenderListener;
 import rst.pdfbox.layout.elements.render.Renderer;
@@ -32,7 +32,7 @@ public class Document implements RenderListener {
      */
     public final static PageFormat DEFAULT_PAGE_FORMAT = new PageFormat();
 
-    private final List<Entry<Element, LayoutHint>> elements = new ArrayList<>();
+    private final List<Entry<IElement, ILayoutHint>> elements = new ArrayList<>();
     private final List<Renderer> customRenderer = new CopyOnWriteArrayList<Renderer>();
     private final List<RenderListener> renderListener = new CopyOnWriteArrayList<RenderListener>();
 
@@ -98,7 +98,7 @@ public class Document implements RenderListener {
     @Deprecated
     public Document(PDRectangle mediaBox, float marginLeft, float marginRight,
 	    float marginTop, float marginBottom) {
-	this(new PageFormat(mediaBox, Orientation.Portrait, marginLeft,
+	this(new PageFormat(mediaBox, EOrientation.Portrait, marginLeft,
 		marginRight, marginTop, marginBottom));
     }
 
@@ -119,7 +119,7 @@ public class Document implements RenderListener {
      * @param element
      *            the element to add
      */
-    public void add(final Element element) {
+    public void add(final IElement element) {
 	add(element, new VerticalLayoutHint());
     }
 
@@ -131,13 +131,13 @@ public class Document implements RenderListener {
      * @param layoutHint
      *            the hint for the {@link Layout}.
      */
-    public void add(final Element element, final LayoutHint layoutHint) {
+    public void add(final IElement element, final ILayoutHint layoutHint) {
 	elements.add(createEntry(element, layoutHint));
     }
 
-    private Entry<Element, LayoutHint> createEntry(final Element element,
-	    final LayoutHint layoutHint) {
-	return new SimpleEntry<Element, LayoutHint>(element, layoutHint);
+    private Entry<IElement, ILayoutHint> createEntry(final IElement element,
+	    final ILayoutHint layoutHint) {
+	return new SimpleEntry<IElement, ILayoutHint>(element, layoutHint);
     }
 
     /**
@@ -146,7 +146,7 @@ public class Document implements RenderListener {
      * @param element
      *            the element to remove.
      */
-    public void remove(final Element element) {
+    public void remove(final IElement element) {
 	elements.remove(element);
     }
 
@@ -207,7 +207,7 @@ public class Document implements RenderListener {
      * @deprecated use {@link #getPageFormat()} instead.
      */
     @Deprecated
-    public Orientation getOrientation() {
+    public EOrientation getOrientation() {
 	return getPageFormat().getOrientation();
     }
 
@@ -281,9 +281,9 @@ public class Document implements RenderListener {
     public PDDocument render() throws IOException {
 	PDDocument document = getPDDocument();
 	RenderContext renderContext = new RenderContext(this, document);
-	for (Entry<Element, LayoutHint> entry : elements) {
-	    Element element = entry.getKey();
-	    LayoutHint layoutHint = entry.getValue();
+	for (Entry<IElement, ILayoutHint> entry : elements) {
+	    IElement element = entry.getKey();
+	    ILayoutHint layoutHint = entry.getValue();
 	    boolean success = false;
 
 	    // first ask custom renderer to render the element

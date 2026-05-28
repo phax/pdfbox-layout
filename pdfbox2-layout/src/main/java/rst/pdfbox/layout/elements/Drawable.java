@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
-import rst.pdfbox.layout.text.DrawListener;
+import rst.pdfbox.layout.text.IDrawListener;
 import rst.pdfbox.layout.text.Position;
 
 /**
@@ -24,13 +24,13 @@ public interface Drawable extends IDrawable {
      *            the upper left position to start drawing.
      * @param drawListener
      *            the listener to
-     *            {@link DrawListener#drawn(Object, Position, float, float) notify} on
+     *            {@link IDrawListener#drawn(Object, Position, float, float) notify} on
      *            drawn objects.
      * @throws IOException
      *             by pdfbox
      */
     void draw(PDDocument pdDocument, PDPageContentStream contentStream,
-	    Position upperLeft, DrawListener drawListener) throws IOException;
+	    Position upperLeft, IDrawListener drawListener) throws IOException;
 
     @Override
     Drawable removeLeadingEmptyVerticalSpace() throws IOException;

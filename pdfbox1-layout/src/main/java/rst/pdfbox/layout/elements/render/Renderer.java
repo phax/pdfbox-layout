@@ -2,7 +2,7 @@ package rst.pdfbox.layout.elements.render;
 
 import java.io.IOException;
 
-import rst.pdfbox.layout.elements.Element;
+import rst.pdfbox.layout.elements.IElement;
 
 /**
  * A renderer is responsible for rendering certain, but not necessarily all
@@ -24,7 +24,7 @@ public interface Renderer {
      * @throws IOException
      *             by pdfbox
      */
-    boolean render(final RenderContext renderContext, final Element element,
-	    final LayoutHint layoutHint) throws IOException;
+    boolean render(final RenderContext renderContext, final IElement element,
+	    final ILayoutHint layoutHint) throws IOException;
 
 }
