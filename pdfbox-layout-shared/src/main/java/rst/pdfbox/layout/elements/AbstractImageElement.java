@@ -7,8 +7,8 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
-import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.IWidthRespecting;
+import rst.pdfbox.layout.text.Position;
 
 /**
  * PDFBox-version-independent base for {@code ImageElement}. Holds the image data plus its
@@ -24,69 +24,69 @@ public abstract class AbstractImageElement implements IElement, IDrawable, IWidt
    * Set this to {@link #setWidth(float)} resp. {@link #setHeight(float)} (usually both) in order to
    * respect the {@link IWidthRespecting width}.
    */
-  public final static float SCALE_TO_RESPECT_WIDTH = -1f;
+  public static final float SCALE_TO_RESPECT_WIDTH = -1f;
 
-  protected final BufferedImage image;
-  private float width;
-  private float height;
-  private float maxWidth = -1;
-  private Position absolutePosition;
+  protected final BufferedImage m_aImage;
+  private float m_fWidth;
+  private float m_fHeight;
+  private float m_fMaxWidth = -1;
+  private Position m_aAbsolutePosition;
 
-  protected AbstractImageElement (final BufferedImage image)
+  protected AbstractImageElement (final BufferedImage aImage)
   {
-    this.image = image;
-    this.width = image.getWidth ();
-    this.height = image.getHeight ();
+    this.m_aImage = aImage;
+    this.m_fWidth = aImage.getWidth ();
+    this.m_fHeight = aImage.getHeight ();
   }
 
-  protected AbstractImageElement (final InputStream inputStream) throws IOException
+  protected AbstractImageElement (final InputStream aInputStream) throws IOException
   {
-    this (ImageIO.read (inputStream));
+    this (ImageIO.read (aInputStream));
   }
 
-  protected AbstractImageElement (final String filePath) throws IOException
+  protected AbstractImageElement (final String sFilePath) throws IOException
   {
-    this (ImageIO.read (new File (filePath)));
+    this (ImageIO.read (new File (sFilePath)));
   }
 
   @Override
   public float getWidth () throws IOException
   {
-    if (width == SCALE_TO_RESPECT_WIDTH)
+    if (m_fWidth == SCALE_TO_RESPECT_WIDTH)
     {
-      if (getMaxWidth () > 0 && image.getWidth () > getMaxWidth ())
+      if (getMaxWidth () > 0 && m_aImage.getWidth () > getMaxWidth ())
       {
         return getMaxWidth ();
       }
-      return image.getWidth ();
+      return m_aImage.getWidth ();
     }
-    return width;
+    return m_fWidth;
   }
 
   /**
    * Sets the width. Default is the image width. Set to {@link #SCALE_TO_RESPECT_WIDTH} in order to
    * let the image {@link IWidthRespecting respect any given width}.
    *
-   * @param width
+   * @param fWidth
    *        the width to use.
    */
-  public void setWidth (float width)
+  public void setWidth (final float fWidth)
   {
-    this.width = width;
+    this.m_fWidth = fWidth;
   }
 
   @Override
   public float getHeight () throws IOException
   {
-    if (height == SCALE_TO_RESPECT_WIDTH)
+    if (m_fHeight == SCALE_TO_RESPECT_WIDTH)
     {
-      if (getMaxWidth () > 0 && image.getWidth () > getMaxWidth ())
+      if (getMaxWidth () > 0 && m_aImage.getWidth () > getMaxWidth ())
       {
-        return getMaxWidth () / (float) image.getWidth () * (float) image.getHeight ();
+        return getMaxWidth () / m_aImage.getWidth () * m_aImage.getHeight ();
       }
-      return image.getHeight ();
+      return m_aImage.getHeight ();
     }
-    return height;
+    return m_fHeight;
   }
 
   /**
@@ -94,40 +94,40 @@ public abstract class AbstractImageElement implements IElement, IDrawable, IWidt
    * to let the image {@link IWidthRespecting respect any given width}. Usually this makes only
    * sense if you also set the width to {@link #SCALE_TO_RESPECT_WIDTH}.
    *
-   * @param height
+   * @param fHeight
    *        the height to use.
    */
-  public void setHeight (float height)
+  public void setHeight (final float fHeight)
   {
-    this.height = height;
+    this.m_fHeight = fHeight;
   }
 
   @Override
   public float getMaxWidth ()
   {
-    return maxWidth;
+    return m_fMaxWidth;
   }
 
   @Override
-  public void setMaxWidth (float maxWidth)
+  public void setMaxWidth (final float fMaxWidth)
   {
-    this.maxWidth = maxWidth;
+    this.m_fMaxWidth = fMaxWidth;
   }
 
   @Override
   public Position getAbsolutePosition ()
   {
-    return absolutePosition;
+    return m_aAbsolutePosition;
   }
 
   /**
    * Sets the absolute position to render at.
    *
-   * @param absolutePosition
+   * @param aAbsolutePosition
    *        the absolute position.
    */
-  public void setAbsolutePosition (Position absolutePosition)
+  public void setAbsolutePosition (final Position aAbsolutePosition)
   {
-    this.absolutePosition = absolutePosition;
+    this.m_aAbsolutePosition = aAbsolutePosition;
   }
 }

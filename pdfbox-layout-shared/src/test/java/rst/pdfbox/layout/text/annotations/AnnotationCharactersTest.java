@@ -21,11 +21,11 @@ public class AnnotationCharactersTest
   @Test
   public void testUnderlineMarkerMatchesBareUnderscores ()
   {
-    final Matcher matcher = PATTERN.matcher ("__");
-    assertTrue ("expected pattern to match '__'", matcher.find ());
-    matcher.reset ();
-    assertTrue ("expected full pattern to match '__'", matcher.matches ());
-    assertEquals (0, matcher.start ());
-    assertEquals (2, matcher.end ());
+    final Matcher aMatcher = PATTERN.matcher ("__");
+    assertTrue ("expected pattern to match '__'", aMatcher.find ());
+    aMatcher.reset ();
+    assertTrue ("expected full pattern to match '__'", aMatcher.matches ());
+    assertEquals (0, aMatcher.start ());
+    assertEquals (2, aMatcher.end ());
   }
 }

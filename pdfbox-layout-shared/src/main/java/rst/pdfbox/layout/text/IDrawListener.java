@@ -8,14 +8,14 @@ public interface IDrawListener
   /**
    * Indicates that an object has been drawn.
    *
-   * @param drawnObject
+   * @param aDrawnObject
    *        the drawn object.
-   * @param upperLeft
+   * @param aUpperLeft
    *        the upper left position.
-   * @param width
+   * @param fWidth
    *        the width of the drawn object.
-   * @param height
+   * @param fHeight
    *        the height of the drawn object.
    */
-  void drawn (Object drawnObject, Position upperLeft, float width, float height);
+  void drawn (final Object aDrawnObject, final Position aUpperLeft, final float fWidth, final float fHeight);
 }

@@ -14,9 +14,9 @@ public interface IWidthRespecting
 
   /**
    * Sets the max width to respect.
-   * 
-   * @param maxWidth
+   *
+   * @param fMaxWidth
    *        the maximum width.
    */
-  void setMaxWidth (float maxWidth);
+  void setMaxWidth (final float fMaxWidth);
 }

@@ -11,29 +11,29 @@ public class Annotations
    */
   public static class UnderlineAnnotation implements IAnnotation
   {
-    private float baselineOffsetScale = 0f;
-    private float lineWeight = 1f;
+    private float m_fBaselineOffsetScale = 0f;
+    private float m_fLineWeight = 1f;
 
-    public UnderlineAnnotation (final float baselineOffsetScale, final float lineWeight)
+    public UnderlineAnnotation (final float fBaselineOffsetScale, final float fLineWeight)
     {
-      this.baselineOffsetScale = baselineOffsetScale;
-      this.lineWeight = lineWeight;
+      this.m_fBaselineOffsetScale = fBaselineOffsetScale;
+      this.m_fLineWeight = fLineWeight;
     }
 
     public float getBaselineOffsetScale ()
     {
-      return baselineOffsetScale;
+      return m_fBaselineOffsetScale;
     }
 
     public float getLineWeight ()
     {
-      return lineWeight;
+      return m_fLineWeight;
     }
 
     @Override
     public String toString ()
     {
-      return "UnderlineAnnotation [baselineOffsetScale=" + baselineOffsetScale + ", lineWeight=" + lineWeight + "]";
+      return "UnderlineAnnotation [baselineOffsetScale=" + m_fBaselineOffsetScale + ", lineWeight=" + m_fLineWeight + "]";
     }
 
   }
@@ -56,21 +56,21 @@ public class Annotations
       none;
     }
 
-    private final String hyperlinkUri;
-    private final ELinkStyle linkStyle;
+    private final String m_sHyperlinkUri;
+    private final ELinkStyle m_eLinkStyle;
 
     /**
      * Creates a hyperlink annotation.
      *
-     * @param hyperlinkUri
+     * @param sHyperlinkUri
      *        the hyperlinkUri.
-     * @param linkStyle
+     * @param eLinkStyle
      *        the link style.
      */
-    public HyperlinkAnnotation (final String hyperlinkUri, final ELinkStyle linkStyle)
+    public HyperlinkAnnotation (final String sHyperlinkUri, final ELinkStyle eLinkStyle)
     {
-      this.hyperlinkUri = hyperlinkUri;
-      this.linkStyle = linkStyle;
+      this.m_sHyperlinkUri = sHyperlinkUri;
+      this.m_eLinkStyle = eLinkStyle;
     }
 
     /**
@@ -78,18 +78,18 @@ public class Annotations
      */
     public String getHyperlinkURI ()
     {
-      return hyperlinkUri;
+      return m_sHyperlinkUri;
     }
 
     public ELinkStyle getLinkStyle ()
     {
-      return linkStyle;
+      return m_eLinkStyle;
     }
 
     @Override
     public String toString ()
     {
-      return "HyperlinkAnnotation [hyperlinkUri=" + hyperlinkUri + ", linkStyle=" + linkStyle + "]";
+      return "HyperlinkAnnotation [hyperlinkUri=" + m_sHyperlinkUri + ", linkStyle=" + m_eLinkStyle + "]";
     }
 
   }
@@ -99,17 +99,17 @@ public class Annotations
    */
   public static class AnchorAnnotation implements IAnnotation
   {
-    private final String anchor;
+    private final String m_sAnchor;
 
     /**
      * Creates a anchor annotation.
      *
-     * @param anchor
+     * @param sAnchor
      *        the anchor name.
      */
-    public AnchorAnnotation (final String anchor)
+    public AnchorAnnotation (final String sAnchor)
     {
-      this.anchor = anchor;
+      this.m_sAnchor = sAnchor;
     }
 
     /**
@@ -117,13 +117,13 @@ public class Annotations
      */
     public String getAnchor ()
     {
-      return anchor;
+      return m_sAnchor;
     }
 
     @Override
     public String toString ()
     {
-      return "AnchorAnnotation [anchor=" + anchor + "]";
+      return "AnchorAnnotation [anchor=" + m_sAnchor + "]";
     }
 
   }

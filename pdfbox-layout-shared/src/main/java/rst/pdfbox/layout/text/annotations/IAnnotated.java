@@ -9,11 +9,11 @@ public interface IAnnotated extends Iterable <IAnnotation>
   /**
    * Gets the annotations of a specific type.
    *
-   * @param type
+   * @param aType
    *        the type of interest.
    * @return the annotations of that type, or an empty collection.
    * @param <T>
    *        the annotation type.
    */
-  <T extends IAnnotation> Iterable <T> getAnnotationsOfType (Class <T> type);
+  <T extends IAnnotation> Iterable <T> getAnnotationsOfType (final Class <T> aType);
 }

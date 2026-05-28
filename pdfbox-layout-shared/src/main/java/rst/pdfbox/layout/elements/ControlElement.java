@@ -10,16 +10,16 @@ public class ControlElement implements IElement
    */
   public final static ControlElement NEWPAGE = new ControlElement ("NEWPAGE");
 
-  private final String name;
+  private final String m_sName;
 
-  public ControlElement (final String name)
+  public ControlElement (final String sName)
   {
-    this.name = name;
+    this.m_sName = sName;
   }
 
   @Override
   public String toString ()
   {
-    return "ControlElement [NEWPAGE=" + NEWPAGE + ", name=" + name + "]";
+    return "ControlElement [NEWPAGE=" + NEWPAGE + ", name=" + m_sName + "]";
   }
 }

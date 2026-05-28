@@ -49,7 +49,7 @@ import rst.pdfbox.layout.util.Enumerators.RomanEnumerator;
 public class EnumeratorFactory
 {
 
-  private final static Map <String, Class <? extends Enumerator>> ENUMERATORS = new ConcurrentHashMap <String, Class <? extends Enumerator>> ();
+  private static final Map <String, Class <? extends Enumerator>> ENUMERATORS = new ConcurrentHashMap <> ();
 
   static
   {
@@ -62,38 +62,38 @@ public class EnumeratorFactory
 
   /**
    * Registers an Enumerator class for a given key.
-   * 
-   * @param key
+   *
+   * @param sKey
    *        the key (character) used in markup.
-   * @param enumeratorClass
+   * @param aEnumeratorClass
    *        the enumerator class.
    */
-  public static void register (final String key, final Class <? extends Enumerator> enumeratorClass)
+  public static void register (final String sKey, final Class <? extends Enumerator> aEnumeratorClass)
   {
-    ENUMERATORS.put (key, enumeratorClass);
+    ENUMERATORS.put (sKey, aEnumeratorClass);
   }
 
   /**
    * Creates an Enumerator for the given key.
-   * 
-   * @param key
+   *
+   * @param sKey
    *        the key of the enumerator.
    * @return the created enumerator.
    */
-  public static Enumerator createEnumerator (final String key)
+  public static Enumerator createEnumerator (final String sKey)
   {
-    Class <? extends Enumerator> enumeratorClass = ENUMERATORS.get (key);
-    if (enumeratorClass == null)
+    final Class <? extends Enumerator> aEnumeratorClass = ENUMERATORS.get (sKey);
+    if (aEnumeratorClass == null)
     {
-      throw new IllegalArgumentException ("no enumerator found for '" + key + "'");
+      throw new IllegalArgumentException ("no enumerator found for '" + sKey + "'");
     }
     try
     {
-      return enumeratorClass.newInstance ();
+      return aEnumeratorClass.getDeclaredConstructor ().newInstance ();
     }
-    catch (Exception e)
+    catch (final Exception ex)
     {
-      throw new RuntimeException ("failed to create enumerator", e);
+      throw new RuntimeException ("failed to create enumerator", ex);
     }
   }
 }

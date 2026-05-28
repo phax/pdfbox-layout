@@ -5,55 +5,55 @@ package rst.pdfbox.layout.elements;
  */
 public class Rectangle extends Dimension
 {
-  private final float x;
-  private final float y;
+  private final float m_fX;
+  private final float m_fY;
 
-  public Rectangle (final float x, final float y, final float width, final float height)
+  public Rectangle (final float fX, final float fY, final float fWidth, final float fHeight)
   {
-    super (width, height);
-    this.x = x;
-    this.y = y;
+    super (fWidth, fHeight);
+    this.m_fX = fX;
+    this.m_fY = fY;
   }
 
   public float getX ()
   {
-    return x;
+    return m_fX;
   }
 
   public float getY ()
   {
-    return y;
+    return m_fY;
   }
 
   @Override
   public String toString ()
   {
-    return "Rectangle [x=" + x + ", y=" + y + ", width=" + getWidth () + ", height=" + getHeight () + "]";
+    return "Rectangle [x=" + m_fX + ", y=" + m_fY + ", width=" + getWidth () + ", height=" + getHeight () + "]";
   }
 
   @Override
   public int hashCode ()
   {
-    final int prime = 31;
-    int result = super.hashCode ();
-    result = prime * result + Float.floatToIntBits (x);
-    result = prime * result + Float.floatToIntBits (y);
-    return result;
+    final int nPrime = 31;
+    int nResult = super.hashCode ();
+    nResult = nPrime * nResult + Float.floatToIntBits (m_fX);
+    nResult = nPrime * nResult + Float.floatToIntBits (m_fY);
+    return nResult;
   }
 
   @Override
-  public boolean equals (final Object obj)
+  public boolean equals (final Object aObj)
   {
-    if (this == obj)
+    if (this == aObj)
       return true;
-    if (!super.equals (obj))
+    if (!super.equals (aObj))
       return false;
-    if (getClass () != obj.getClass ())
+    if (getClass () != aObj.getClass ())
       return false;
-    final Rectangle other = (Rectangle) obj;
-    if (Float.floatToIntBits (x) != Float.floatToIntBits (other.x))
+    final Rectangle aOther = (Rectangle) aObj;
+    if (Float.floatToIntBits (m_fX) != Float.floatToIntBits (aOther.m_fX))
       return false;
-    if (Float.floatToIntBits (y) != Float.floatToIntBits (other.y))
+    if (Float.floatToIntBits (m_fY) != Float.floatToIntBits (aOther.m_fY))
       return false;
     return true;
   }

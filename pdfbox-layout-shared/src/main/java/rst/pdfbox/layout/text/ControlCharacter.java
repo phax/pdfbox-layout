@@ -9,13 +9,13 @@ import java.util.regex.Pattern;
  */
 public class ControlCharacter implements CharSequence
 {
-  private final String description;
-  private final String charaterToEscape;
+  private final String m_sDescription;
+  private final String m_sCharaterToEscape;
 
-  protected ControlCharacter (final String description, final String charaterToEscape)
+  protected ControlCharacter (final String sDescription, final String sCharaterToEscape)
   {
-    this.description = description;
-    this.charaterToEscape = charaterToEscape;
+    this.m_sDescription = sDescription;
+    this.m_sCharaterToEscape = sCharaterToEscape;
   }
 
   /**
@@ -23,7 +23,7 @@ public class ControlCharacter implements CharSequence
    */
   public String getCharacterToEscape ()
   {
-    return charaterToEscape;
+    return m_sCharaterToEscape;
   }
 
   /**
@@ -37,31 +37,31 @@ public class ControlCharacter implements CharSequence
   /**
    * Escapes the control character in the given text if necessary.
    *
-   * @param text
+   * @param sText
    *        the text to escape.
    * @return the escaped text.
    */
-  public String escape (final String text)
+  public String escape (final String sText)
   {
     if (!mustEscape ())
-      return text;
-    return text.replaceAll (Pattern.quote (getCharacterToEscape ()), "\\" + getCharacterToEscape ());
+      return sText;
+    return sText.replaceAll (Pattern.quote (getCharacterToEscape ()), "\\" + getCharacterToEscape ());
   }
 
   /**
    * Un-escapes the control character in the given text if necessary.
    *
-   * @param text
+   * @param sText
    *        the text to un-escape.
    * @return the un-escaped text.
    */
-  public String unescape (final String text)
+  public String unescape (final String sText)
   {
     if (!mustEscape ())
     {
-      return text;
+      return sText;
     }
-    return text.replaceAll ("\\\\" + Pattern.quote (getCharacterToEscape ()), getCharacterToEscape ());
+    return sText.replaceAll ("\\\\" + Pattern.quote (getCharacterToEscape ()), getCharacterToEscape ());
   }
 
   @Override
@@ -71,13 +71,13 @@ public class ControlCharacter implements CharSequence
   }
 
   @Override
-  public char charAt (final int index)
+  public char charAt (final int nIndex)
   {
-    throw new ArrayIndexOutOfBoundsException (index);
+    throw new ArrayIndexOutOfBoundsException (nIndex);
   }
 
   @Override
-  public CharSequence subSequence (final int start, final int end)
+  public CharSequence subSequence (final int nStart, final int nEnd)
   {
     return null;
   }
@@ -85,6 +85,6 @@ public class ControlCharacter implements CharSequence
   @Override
   public String toString ()
   {
-    return description;
+    return m_sDescription;
   }
 }

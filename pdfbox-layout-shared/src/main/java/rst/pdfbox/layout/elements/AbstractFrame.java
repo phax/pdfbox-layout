@@ -15,33 +15,33 @@ import rst.pdfbox.layout.text.Position;
  */
 public abstract class AbstractFrame implements IElement, IDrawable, IWidthRespecting, IDividable
 {
-  private float paddingLeft;
-  private float paddingRight;
-  private float paddingTop;
-  private float paddingBottom;
+  private float m_fPaddingLeft;
+  private float m_fPaddingRight;
+  private float m_fPaddingTop;
+  private float m_fPaddingBottom;
 
-  private float marginLeft;
-  private float marginRight;
-  private float marginTop;
-  private float marginBottom;
+  private float m_fMarginLeft;
+  private float m_fMarginRight;
+  private float m_fMarginTop;
+  private float m_fMarginBottom;
 
-  private Color borderColor;
-  private Color backgroundColor;
+  private Color m_aBorderColor;
+  private Color m_aBackgroundColor;
 
-  private float maxWidth = -1;
+  private float m_fMaxWidth = -1;
 
-  private Float givenWidth;
-  private Float givenHeight;
+  private Float m_aGivenWidth;
+  private Float m_aGivenHeight;
 
-  private Position absolutePosition;
+  private Position m_aAbsolutePosition;
 
   protected AbstractFrame ()
   {}
 
-  protected AbstractFrame (final Float width, final Float height)
+  protected AbstractFrame (final Float aWidth, final Float aHeight)
   {
-    this.givenWidth = width;
-    this.givenHeight = height;
+    this.m_aGivenWidth = aWidth;
+    this.m_aGivenHeight = aHeight;
   }
 
   /**
@@ -87,7 +87,7 @@ public abstract class AbstractFrame implements IElement, IDrawable, IWidthRespec
    */
   protected Float getGivenHeight ()
   {
-    return givenHeight;
+    return m_aGivenHeight;
   }
 
   /**
@@ -95,7 +95,7 @@ public abstract class AbstractFrame implements IElement, IDrawable, IWidthRespec
    */
   protected Float getGivenWidth ()
   {
-    return givenWidth;
+    return m_aGivenWidth;
   }
 
   /**
@@ -103,18 +103,18 @@ public abstract class AbstractFrame implements IElement, IDrawable, IWidthRespec
    */
   public Color getBorderColor ()
   {
-    return borderColor;
+    return m_aBorderColor;
   }
 
   /**
    * Sets the color to use to draw the border.
    *
-   * @param borderColor
+   * @param aBorderColor
    *        the border color.
    */
-  public void setBorderColor (final Color borderColor)
+  public void setBorderColor (final Color aBorderColor)
   {
-    this.borderColor = borderColor;
+    this.m_aBorderColor = aBorderColor;
   }
 
   /**
@@ -122,18 +122,18 @@ public abstract class AbstractFrame implements IElement, IDrawable, IWidthRespec
    */
   public Color getBackgroundColor ()
   {
-    return backgroundColor;
+    return m_aBackgroundColor;
   }
 
   /**
    * Sets the color to use to draw the background.
    *
-   * @param backgroundColor
+   * @param aBackgroundColor
    *        the background color.
    */
-  public void setBackgroundColor (final Color backgroundColor)
+  public void setBackgroundColor (final Color aBackgroundColor)
   {
-    this.backgroundColor = backgroundColor;
+    this.m_aBackgroundColor = aBackgroundColor;
   }
 
   /**
@@ -141,18 +141,18 @@ public abstract class AbstractFrame implements IElement, IDrawable, IWidthRespec
    */
   public float getPaddingLeft ()
   {
-    return paddingLeft;
+    return m_fPaddingLeft;
   }
 
   /**
    * Sets the left padding.
    *
-   * @param paddingLeft
+   * @param fPaddingLeft
    *        left padding.
    */
-  public void setPaddingLeft (final float paddingLeft)
+  public void setPaddingLeft (final float fPaddingLeft)
   {
-    this.paddingLeft = paddingLeft;
+    this.m_fPaddingLeft = fPaddingLeft;
   }
 
   /**
@@ -160,18 +160,18 @@ public abstract class AbstractFrame implements IElement, IDrawable, IWidthRespec
    */
   public float getPaddingRight ()
   {
-    return paddingRight;
+    return m_fPaddingRight;
   }
 
   /**
    * Sets the right padding.
    *
-   * @param paddingRight
+   * @param fPaddingRight
    *        right padding.
    */
-  public void setPaddingRight (final float paddingRight)
+  public void setPaddingRight (final float fPaddingRight)
   {
-    this.paddingRight = paddingRight;
+    this.m_fPaddingRight = fPaddingRight;
   }
 
   /**
@@ -179,18 +179,18 @@ public abstract class AbstractFrame implements IElement, IDrawable, IWidthRespec
    */
   public float getPaddingTop ()
   {
-    return paddingTop;
+    return m_fPaddingTop;
   }
 
   /**
    * Sets the top padding.
    *
-   * @param paddingTop
+   * @param fPaddingTop
    *        top padding.
    */
-  public void setPaddingTop (final float paddingTop)
+  public void setPaddingTop (final float fPaddingTop)
   {
-    this.paddingTop = paddingTop;
+    this.m_fPaddingTop = fPaddingTop;
   }
 
   /**
@@ -198,38 +198,38 @@ public abstract class AbstractFrame implements IElement, IDrawable, IWidthRespec
    */
   public float getPaddingBottom ()
   {
-    return paddingBottom;
+    return m_fPaddingBottom;
   }
 
   /**
    * Sets the bottom padding.
    *
-   * @param paddingBottom
+   * @param fPaddingBottom
    *        bottom padding.
    */
-  public void setPaddingBottom (final float paddingBottom)
+  public void setPaddingBottom (final float fPaddingBottom)
   {
-    this.paddingBottom = paddingBottom;
+    this.m_fPaddingBottom = fPaddingBottom;
   }
 
   /**
    * Sets the padding.
    *
-   * @param left
+   * @param fLeft
    *        left padding.
-   * @param right
+   * @param fRight
    *        right padding.
-   * @param top
+   * @param fTop
    *        top padding.
-   * @param bottom
+   * @param fBottom
    *        bottom padding.
    */
-  public void setPadding (final float left, final float right, final float top, final float bottom)
+  public void setPadding (final float fLeft, final float fRight, final float fTop, final float fBottom)
   {
-    setPaddingLeft (left);
-    setPaddingRight (right);
-    setPaddingTop (top);
-    setPaddingBottom (bottom);
+    setPaddingLeft (fLeft);
+    setPaddingRight (fRight);
+    setPaddingTop (fTop);
+    setPaddingBottom (fBottom);
   }
 
   /**
@@ -237,18 +237,18 @@ public abstract class AbstractFrame implements IElement, IDrawable, IWidthRespec
    */
   public float getMarginLeft ()
   {
-    return marginLeft;
+    return m_fMarginLeft;
   }
 
   /**
    * Sets the left margin.
    *
-   * @param marginLeft
+   * @param fMarginLeft
    *        left margin.
    */
-  public void setMarginLeft (final float marginLeft)
+  public void setMarginLeft (final float fMarginLeft)
   {
-    this.marginLeft = marginLeft;
+    this.m_fMarginLeft = fMarginLeft;
   }
 
   /**
@@ -256,18 +256,18 @@ public abstract class AbstractFrame implements IElement, IDrawable, IWidthRespec
    */
   public float getMarginRight ()
   {
-    return marginRight;
+    return m_fMarginRight;
   }
 
   /**
    * Sets the right margin.
    *
-   * @param marginRight
+   * @param fMarginRight
    *        right margin.
    */
-  public void setMarginRight (final float marginRight)
+  public void setMarginRight (final float fMarginRight)
   {
-    this.marginRight = marginRight;
+    this.m_fMarginRight = fMarginRight;
   }
 
   /**
@@ -275,18 +275,18 @@ public abstract class AbstractFrame implements IElement, IDrawable, IWidthRespec
    */
   public float getMarginTop ()
   {
-    return marginTop;
+    return m_fMarginTop;
   }
 
   /**
    * Sets the top margin.
    *
-   * @param marginTop
+   * @param fMarginTop
    *        top margin.
    */
-  public void setMarginTop (final float marginTop)
+  public void setMarginTop (final float fMarginTop)
   {
-    this.marginTop = marginTop;
+    this.m_fMarginTop = fMarginTop;
   }
 
   /**
@@ -294,61 +294,61 @@ public abstract class AbstractFrame implements IElement, IDrawable, IWidthRespec
    */
   public float getMarginBottom ()
   {
-    return marginBottom;
+    return m_fMarginBottom;
   }
 
   /**
    * Sets the bottom margin.
    *
-   * @param marginBottom
+   * @param fMarginBottom
    *        bottom margin.
    */
-  public void setMarginBottom (final float marginBottom)
+  public void setMarginBottom (final float fMarginBottom)
   {
-    this.marginBottom = marginBottom;
+    this.m_fMarginBottom = fMarginBottom;
   }
 
   /**
    * Sets the margin.
    *
-   * @param left
+   * @param fLeft
    *        left margin.
-   * @param right
+   * @param fRight
    *        right margin.
-   * @param top
+   * @param fTop
    *        top margin.
-   * @param bottom
+   * @param fBottom
    *        bottom margin.
    */
-  public void setMargin (final float left, final float right, final float top, final float bottom)
+  public void setMargin (final float fLeft, final float fRight, final float fTop, final float fBottom)
   {
-    setMarginLeft (left);
-    setMarginRight (right);
-    setMarginTop (top);
-    setMarginBottom (bottom);
+    setMarginLeft (fLeft);
+    setMarginRight (fRight);
+    setMarginTop (fTop);
+    setMarginBottom (fBottom);
   }
 
   @Override
   public Position getAbsolutePosition () throws IOException
   {
-    return absolutePosition;
+    return m_aAbsolutePosition;
   }
 
   /**
    * Sets the absolute position.
    *
-   * @param absolutePosition
+   * @param aAbsolutePosition
    *        the absolute position to use, or <code>null</code>.
    */
-  public void setAbsolutePosition (final Position absolutePosition)
+  public void setAbsolutePosition (final Position aAbsolutePosition)
   {
-    this.absolutePosition = absolutePosition;
+    this.m_aAbsolutePosition = aAbsolutePosition;
   }
 
   @Override
   public float getMaxWidth ()
   {
-    return maxWidth;
+    return m_fMaxWidth;
   }
 
   /**
@@ -356,8 +356,8 @@ public abstract class AbstractFrame implements IElement, IDrawable, IWidthRespec
    * to propagate the constraint to their inner children — that part needs the per-module
    * {@code Drawable} type.
    */
-  protected void setMaxWidthInternal (final float maxWidth)
+  protected void setMaxWidthInternal (final float fMaxWidth)
   {
-    this.maxWidth = maxWidth;
+    this.m_fMaxWidth = fMaxWidth;
   }
 }

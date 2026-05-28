@@ -13,13 +13,13 @@ public class ControlCharacters
   /**
    * Unescapes the escape character backslash.
    *
-   * @param text
+   * @param sText
    *        the text to escape.
    * @return the unescaped text.
    */
-  public static String unescapeBackslash (final String text)
+  public static String unescapeBackslash (final String sText)
   {
-    return text.replace ("\\\\", "\\");
+    return sText.replace ("\\\\", "\\");
   }
 
   /**
@@ -31,17 +31,17 @@ public class ControlCharacters
     /**
      * Creates the control character from the given matched pattern.
      *
-     * @param text
+     * @param sText
      *        the parsed text.
-     * @param matcher
+     * @param aMatcher
      *        the matcher.
-     * @param charactersSoFar
+     * @param aCharactersSoFar
      *        the characters created so far.
      * @return the created character.
      */
-    ControlCharacter createControlCharacter (final String text,
-                                             final Matcher matcher,
-                                             final List <CharSequence> charactersSoFar);
+    ControlCharacter createControlCharacter (final String sText,
+                                             final Matcher aMatcher,
+                                             final List <CharSequence> aCharactersSoFar);
 
     /**
      * @return the pattern used to match the control character.
@@ -58,11 +58,11 @@ public class ControlCharacters
     /**
      * Unescapes the pattern.
      *
-     * @param text
+     * @param sText
      *        the text to unescape.
      * @return the unescaped text.
      */
-    String unescape (final String text);
+    String unescape (final String sText);
 
   }
 
@@ -138,53 +138,53 @@ public class ControlCharacters
    */
   public static class ColorControlCharacter extends ControlCharacter
   {
-    private final Color color;
+    private final Color m_aColor;
 
-    protected ColorControlCharacter (final String hex)
+    protected ColorControlCharacter (final String sHex)
     {
       super ("COLOR", ColorControlCharacterFactory.TO_ESCAPE);
-      final int r = Integer.parseUnsignedInt (hex.substring (0, 2), 16);
-      final int g = Integer.parseUnsignedInt (hex.substring (2, 4), 16);
-      final int b = Integer.parseUnsignedInt (hex.substring (4, 6), 16);
-      this.color = new Color (r, g, b);
+      final int nR = Integer.parseUnsignedInt (sHex.substring (0, 2), 16);
+      final int nG = Integer.parseUnsignedInt (sHex.substring (2, 4), 16);
+      final int nB = Integer.parseUnsignedInt (sHex.substring (4, 6), 16);
+      this.m_aColor = new Color (nR, nG, nB);
     }
 
     public Color getColor ()
     {
-      return color;
+      return m_aColor;
     }
   }
 
   private static class StaticControlCharacterFactory implements IControlCharacterFactory
   {
 
-    private final ControlCharacter controlCharacter;
-    private final Pattern pattern;
+    private final ControlCharacter m_aControlCharacter;
+    private final Pattern m_aPattern;
 
-    public StaticControlCharacterFactory (final ControlCharacter controlCharacter, final Pattern pattern)
+    public StaticControlCharacterFactory (final ControlCharacter aControlCharacter, final Pattern aPattern)
     {
-      this.controlCharacter = controlCharacter;
-      this.pattern = pattern;
+      this.m_aControlCharacter = aControlCharacter;
+      this.m_aPattern = aPattern;
     }
 
     @Override
-    public ControlCharacter createControlCharacter (final String text,
-                                                    final Matcher matcher,
-                                                    final List <CharSequence> charactersSoFar)
+    public ControlCharacter createControlCharacter (final String sText,
+                                                    final Matcher aMatcher,
+                                                    final List <CharSequence> aCharactersSoFar)
     {
-      return controlCharacter;
+      return m_aControlCharacter;
     }
 
     @Override
     public Pattern getPattern ()
     {
-      return pattern;
+      return m_aPattern;
     }
 
     @Override
-    public String unescape (final String text)
+    public String unescape (final String sText)
     {
-      return controlCharacter.unescape (text);
+      return m_aControlCharacter.unescape (sText);
     }
 
     @Override
@@ -198,16 +198,16 @@ public class ControlCharacters
   private static class ColorControlCharacterFactory implements IControlCharacterFactory
   {
 
-    private final static Pattern PATTERN = Pattern.compile ("(?<!\\\\)(\\\\\\\\)*\\{color:#(\\p{XDigit}{6})\\}");
+    private static final Pattern PATTERN = Pattern.compile ("(?<!\\\\)(\\\\\\\\)*\\{color:#(\\p{XDigit}{6})\\}");
 
-    private final static String TO_ESCAPE = "{";
+    private static final String TO_ESCAPE = "{";
 
     @Override
-    public ControlCharacter createControlCharacter (final String text,
-                                                    final Matcher matcher,
-                                                    final List <CharSequence> charactersSoFar)
+    public ControlCharacter createControlCharacter (final String sText,
+                                                    final Matcher aMatcher,
+                                                    final List <CharSequence> aCharactersSoFar)
     {
-      return new ColorControlCharacter (matcher.group (2));
+      return new ColorControlCharacter (aMatcher.group (2));
     }
 
     @Override
@@ -217,9 +217,9 @@ public class ControlCharacters
     }
 
     @Override
-    public String unescape (final String text)
+    public String unescape (final String sText)
     {
-      return text.replaceAll ("\\\\" + Pattern.quote (TO_ESCAPE), TO_ESCAPE);
+      return sText.replaceAll ("\\\\" + Pattern.quote (TO_ESCAPE), TO_ESCAPE);
     }
 
     @Override
@@ -232,33 +232,33 @@ public class ControlCharacters
 
   public static class MetricsControlCharacter extends ControlCharacter
   {
-    private final float fontScale;
-    private final float baselineOffsetScale;
+    private final float m_fFontScale;
+    private final float m_fBaselineOffsetScale;
 
-    protected MetricsControlCharacter (final String name, final String fontScale, final String baselineOffset)
+    protected MetricsControlCharacter (final String sName, final String sFontScale, final String sBaselineOffset)
     {
-      super (name, MetricsControlCharacterFactory.TO_ESCAPE);
-      this.fontScale = parse (fontScale, 1);
-      this.baselineOffsetScale = parse (baselineOffset, 0);
+      super (sName, MetricsControlCharacterFactory.TO_ESCAPE);
+      this.m_fFontScale = _parse (sFontScale, 1);
+      this.m_fBaselineOffsetScale = _parse (sBaselineOffset, 0);
     }
 
-    private static float parse (final String text, final float defaultValue)
+    private static float _parse (final String sText, final float fDefaultValue)
     {
-      if (text == null || text.trim ().isEmpty ())
+      if (sText == null || sText.trim ().isEmpty ())
       {
-        return defaultValue;
+        return fDefaultValue;
       }
-      return Float.parseFloat (text);
+      return Float.parseFloat (sText);
     }
 
     public float getFontScale ()
     {
-      return fontScale;
+      return m_fFontScale;
     }
 
     public float getBaselineOffsetScale ()
     {
-      return baselineOffsetScale;
+      return m_fBaselineOffsetScale;
     }
 
   }
@@ -266,28 +266,28 @@ public class ControlCharacters
   private static class MetricsControlCharacterFactory implements IControlCharacterFactory
   {
 
-    private final static Pattern PATTERN = Pattern.compile ("(?<!\\\\)(\\\\\\\\)*\\{(_|\\^)(:(-?\\d+(\\.\\d*)?)\\|(-?\\d+(\\.\\d*)?))?}");
+    private static final Pattern PATTERN = Pattern.compile ("(?<!\\\\)(\\\\\\\\)*\\{(_|\\^)(:(-?\\d+(\\.\\d*)?)\\|(-?\\d+(\\.\\d*)?))?}");
 
-    private final static String TO_ESCAPE = "{";
+    private static final String TO_ESCAPE = "{";
 
     @Override
-    public ControlCharacter createControlCharacter (final String text,
-                                                    final Matcher matcher,
-                                                    final List <CharSequence> charactersSoFar)
+    public ControlCharacter createControlCharacter (final String sText,
+                                                    final Matcher aMatcher,
+                                                    final List <CharSequence> aCharactersSoFar)
     {
-      final boolean isSuperscript = "^".equals (matcher.group (2));
-      final String name = isSuperscript ? "SUPERSCRIPT" : "SUBSCRIPT";
-      String baselineOffsetScale = isSuperscript ? "-0.4" : "0.15";
-      if (matcher.groupCount () > 6 && matcher.group (6) != null)
+      final boolean bIsSuperscript = "^".equals (aMatcher.group (2));
+      final String sName = bIsSuperscript ? "SUPERSCRIPT" : "SUBSCRIPT";
+      String sBaselineOffsetScale = bIsSuperscript ? "-0.4" : "0.15";
+      if (aMatcher.groupCount () > 6 && aMatcher.group (6) != null)
       {
-        baselineOffsetScale = matcher.group (6);
+        sBaselineOffsetScale = aMatcher.group (6);
       }
-      String fontScale = "0.61";
-      if (matcher.groupCount () > 4 && matcher.group (4) != null)
+      String sFontScale = "0.61";
+      if (aMatcher.groupCount () > 4 && aMatcher.group (4) != null)
       {
-        fontScale = matcher.group (4);
+        sFontScale = aMatcher.group (4);
       }
-      return new MetricsControlCharacter (name, fontScale, baselineOffsetScale);
+      return new MetricsControlCharacter (sName, sFontScale, sBaselineOffsetScale);
     }
 
     @Override
@@ -297,9 +297,9 @@ public class ControlCharacters
     }
 
     @Override
-    public String unescape (final String text)
+    public String unescape (final String sText)
     {
-      return text.replaceAll ("\\\\" + Pattern.quote (TO_ESCAPE), TO_ESCAPE);
+      return sText.replaceAll ("\\\\" + Pattern.quote (TO_ESCAPE), TO_ESCAPE);
     }
 
     @Override

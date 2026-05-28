@@ -8,76 +8,78 @@ import rst.pdfbox.layout.text.EAlignment;
  */
 public class ColumnLayoutHint extends VerticalLayoutHint
 {
-  public final static ColumnLayoutHint LEFT = new ColumnLayoutHint (EAlignment.Left);
-  public final static ColumnLayoutHint CENTER = new ColumnLayoutHint (EAlignment.Center);
-  public final static ColumnLayoutHint RIGHT = new ColumnLayoutHint (EAlignment.Right);
+  @SuppressWarnings ("hiding")
+  public static final ColumnLayoutHint LEFT = new ColumnLayoutHint (EAlignment.Left);
+  @SuppressWarnings ("hiding")
+  public static final ColumnLayoutHint CENTER = new ColumnLayoutHint (EAlignment.Center);
+  @SuppressWarnings ("hiding")
+  public static final ColumnLayoutHint RIGHT = new ColumnLayoutHint (EAlignment.Right);
 
   /**
    * Creates a layout hint with {@link EAlignment#Left left alignment}.
    */
   public ColumnLayoutHint ()
-  {
-  }
+  {}
 
   /**
    * Creates a layout hint with the given alignment.
    *
-   * @param alignment
+   * @param eAlignment
    *        the element alignment.
    */
-  public ColumnLayoutHint (final EAlignment alignment)
+  public ColumnLayoutHint (final EAlignment eAlignment)
   {
-    super (alignment);
+    super (eAlignment);
   }
 
   /**
    * Creates a layout hint with the given alignment and margins.
    *
-   * @param alignment
+   * @param eAlignment
    *        the element alignment.
-   * @param marginLeft
+   * @param fMarginLeft
    *        the left alignment.
-   * @param marginRight
+   * @param fMarginRight
    *        the right alignment.
-   * @param marginTop
+   * @param fMarginTop
    *        the top alignment.
-   * @param marginBottom
+   * @param fMarginBottom
    *        the bottom alignment.
    */
-  public ColumnLayoutHint (final EAlignment alignment,
-                           final float marginLeft,
-                           final float marginRight,
-                           final float marginTop,
-                           final float marginBottom)
+  public ColumnLayoutHint (final EAlignment eAlignment,
+                           final float fMarginLeft,
+                           final float fMarginRight,
+                           final float fMarginTop,
+                           final float fMarginBottom)
   {
-    super (alignment, marginLeft, marginRight, marginTop, marginBottom);
+    super (eAlignment, fMarginLeft, fMarginRight, fMarginTop, fMarginBottom);
   }
 
   /**
    * Creates a layout hint with the given alignment and margins.
    *
-   * @param alignment
+   * @param eAlignment
    *        the element alignment.
-   * @param marginLeft
+   * @param fMarginLeft
    *        the left alignment.
-   * @param marginRight
+   * @param fMarginRight
    *        the right alignment.
-   * @param marginTop
+   * @param fMarginTop
    *        the top alignment.
-   * @param marginBottom
+   * @param fMarginBottom
    *        the bottom alignment.
-   * @param resetY
+   * @param bResetY
    *        if <code>true</code>, the y coordinate will be reset to the point before layouting the
    *        element.
    */
-  public ColumnLayoutHint (final EAlignment alignment,
-                           final float marginLeft,
-                           final float marginRight,
-                           final float marginTop,
-                           final float marginBottom,
-                           final boolean resetY)
+  public ColumnLayoutHint (final EAlignment eAlignment,
+                           final float fMarginLeft,
+                           final float fMarginRight,
+                           final float fMarginTop,
+                           final float fMarginBottom,
+                           final boolean bResetY)
   {
-    super (alignment, marginLeft, marginRight, marginTop, marginBottom, resetY);
+    super (eAlignment, fMarginLeft, fMarginRight, fMarginTop, fMarginBottom, bResetY);
   }
 
   /**
@@ -98,7 +100,12 @@ public class ColumnLayoutHint extends VerticalLayoutHint
     @Override
     public ColumnLayoutHint build ()
     {
-      return new ColumnLayoutHint (alignment, marginLeft, marginRight, marginTop, marginBottom, resetY);
+      return new ColumnLayoutHint (m_eAlignment,
+                                   m_fMarginLeft,
+                                   m_fMarginRight,
+                                   m_fMarginTop,
+                                   m_fMarginBottom,
+                                   m_bResetY);
     }
 
   }

@@ -8,32 +8,32 @@ public class Enumerators
 
   /**
    * Uses arabic numbers for the enumeration, and dot as the default separator. <br>
-   * 
+   *
    * <pre>
    * 1. At vero eos et accusam.
-   * 2. Et justo duo dolores ea rebum. 
+   * 2. Et justo duo dolores ea rebum.
    * 3. Stet clita ...
    * </pre>
    */
   public static class ArabicEnumerator implements Enumerator
   {
 
-    private int count;
+    private int m_nCount;
 
     public ArabicEnumerator ()
     {
       this (1);
     }
 
-    public ArabicEnumerator (final int startCount)
+    public ArabicEnumerator (final int nStartCount)
     {
-      this.count = startCount;
+      this.m_nCount = nStartCount;
     }
 
     @Override
     public String next ()
     {
-      return String.valueOf (count++);
+      return String.valueOf (m_nCount++);
     }
 
     @Override
@@ -45,10 +45,10 @@ public class Enumerators
 
   /**
    * Uses lower case letters for the enumeration, and braces as the default separator. <br>
-   * 
+   *
    * <pre>
    * a) At vero eos et accusam.
-   * b) Et justo duo dolores ea rebum. 
+   * b) Et justo duo dolores ea rebum.
    * c) Stet clita ...
    * </pre>
    */
@@ -56,13 +56,11 @@ public class Enumerators
   {
 
     public LowerCaseAlphabeticEnumerator ()
-    {
-      super ();
-    }
+    {}
 
-    public LowerCaseAlphabeticEnumerator (final int startCount)
+    public LowerCaseAlphabeticEnumerator (final int nStartCount)
     {
-      super (startCount);
+      super (nStartCount);
     }
 
     @Override
@@ -74,17 +72,17 @@ public class Enumerators
 
   /**
    * Uses upper case letters for the enumeration, and braces as the default separator. <br>
-   * 
+   *
    * <pre>
    * A) At vero eos et accusam.
-   * B) Et justo duo dolores ea rebum. 
+   * B) Et justo duo dolores ea rebum.
    * C) Stet clita ...
    * </pre>
    */
   public static class AlphabeticEnumerator implements Enumerator
   {
 
-    final static char [] digits = { 'A',
+    static final char [] DIGITS = { 'A',
                                     'B',
                                     'C',
                                     'D',
@@ -111,22 +109,22 @@ public class Enumerators
                                     'Y',
                                     'Z' };
 
-    private int count;
+    private int m_nCount;
 
     public AlphabeticEnumerator ()
     {
       this (1);
     }
 
-    public AlphabeticEnumerator (final int startCount)
+    public AlphabeticEnumerator (final int nStartCount)
     {
-      this.count = startCount;
+      this.m_nCount = nStartCount;
     }
 
     @Override
     public String next ()
     {
-      return toString (count++ - 1);
+      return _toString (m_nCount++ - 1);
     }
 
     @Override
@@ -135,31 +133,31 @@ public class Enumerators
       return ")";
     }
 
-    private static String toString (int i)
+    private static String _toString (final int nSrcValue)
     {
-      char buf[] = new char [33];
-      int charPos = 32;
+      final char [] aBuf = new char [33];
+      int nCharPos = 32;
 
-      i = -i;
+      int nValue = -nSrcValue;
 
-      while (i <= -digits.length)
+      while (nValue <= -DIGITS.length)
       {
-        buf[charPos--] = digits[-(i % digits.length)];
-        i = i / digits.length;
+        aBuf[nCharPos--] = DIGITS[-(nValue % DIGITS.length)];
+        nValue = nValue / DIGITS.length;
       }
-      buf[charPos] = digits[-i];
+      aBuf[nCharPos] = DIGITS[-nValue];
 
-      return new String (buf, charPos, (33 - charPos));
+      return new String (aBuf, nCharPos, (33 - nCharPos));
     }
 
   }
 
   /**
    * Uses lower case roman numbers for the enumeration, and dot as the default separator. <br>
-   * 
+   *
    * <pre>
    *   i. At vero eos et accusam.
-   *  ii. Et justo duo dolores ea rebum. 
+   *  ii. Et justo duo dolores ea rebum.
    * iii. Stet clita ...
    * </pre>
    */
@@ -167,13 +165,11 @@ public class Enumerators
   {
 
     public LowerCaseRomanEnumerator ()
-    {
-      super ();
-    }
+    {}
 
-    public LowerCaseRomanEnumerator (final int startCount)
+    public LowerCaseRomanEnumerator (final int nStartCount)
     {
-      super (startCount);
+      super (nStartCount);
     }
 
     @Override
@@ -185,32 +181,32 @@ public class Enumerators
 
   /**
    * Uses upper case roman numbers for the enumeration, and dot as the default separator. <br>
-   * 
+   *
    * <pre>
    *   I. At vero eos et accusam.
-   *  II. Et justo duo dolores ea rebum. 
+   *  II. Et justo duo dolores ea rebum.
    * III. Stet clita ...
    * </pre>
    */
   public static class RomanEnumerator implements Enumerator
   {
 
-    private int count;
+    private int m_nCount;
 
     public RomanEnumerator ()
     {
       this (1);
     }
 
-    public RomanEnumerator (final int startCount)
+    public RomanEnumerator (final int nStartCount)
     {
-      this.count = startCount;
+      this.m_nCount = nStartCount;
     }
 
     @Override
     public String next ()
     {
-      return toRoman (count++);
+      return _toRoman (m_nCount++);
     }
 
     @Override
@@ -219,77 +215,78 @@ public class Enumerators
       return ".";
     }
 
-    private String toRoman (int input)
+    private String _toRoman (final int nSrcValue)
     {
-      if (input < 1 || input > 3999)
+      int nValue = nSrcValue;
+      if (nValue < 1 || nValue > 3999)
         return "Invalid Roman Number Value";
-      String s = "";
-      while (input >= 1000)
+      final StringBuilder sResult = new StringBuilder ();
+      while (nValue >= 1000)
       {
-        s += "M";
-        input -= 1000;
+        sResult.append ("M");
+        nValue -= 1000;
       }
-      while (input >= 900)
+      while (nValue >= 900)
       {
-        s += "CM";
-        input -= 900;
+        sResult.append ("CM");
+        nValue -= 900;
       }
-      while (input >= 500)
+      while (nValue >= 500)
       {
-        s += "D";
-        input -= 500;
+        sResult.append ("D");
+        nValue -= 500;
       }
-      while (input >= 400)
+      while (nValue >= 400)
       {
-        s += "CD";
-        input -= 400;
+        sResult.append ("CD");
+        nValue -= 400;
       }
-      while (input >= 100)
+      while (nValue >= 100)
       {
-        s += "C";
-        input -= 100;
+        sResult.append ("C");
+        nValue -= 100;
       }
-      while (input >= 90)
+      while (nValue >= 90)
       {
-        s += "XC";
-        input -= 90;
+        sResult.append ("XC");
+        nValue -= 90;
       }
-      while (input >= 50)
+      while (nValue >= 50)
       {
-        s += "L";
-        input -= 50;
+        sResult.append ("L");
+        nValue -= 50;
       }
-      while (input >= 40)
+      while (nValue >= 40)
       {
-        s += "XL";
-        input -= 40;
+        sResult.append ("XL");
+        nValue -= 40;
       }
-      while (input >= 10)
+      while (nValue >= 10)
       {
-        s += "X";
-        input -= 10;
+        sResult.append ("X");
+        nValue -= 10;
       }
-      while (input >= 9)
+      while (nValue >= 9)
       {
-        s += "IX";
-        input -= 9;
+        sResult.append ("IX");
+        nValue -= 9;
       }
-      while (input >= 5)
+      while (nValue >= 5)
       {
-        s += "V";
-        input -= 5;
+        sResult.append ("V");
+        nValue -= 5;
       }
-      while (input >= 4)
+      while (nValue >= 4)
       {
-        s += "IV";
-        input -= 4;
+        sResult.append ("IV");
+        nValue -= 4;
       }
-      while (input >= 1)
+      while (nValue >= 1)
       {
-        s += "I";
-        input -= 1;
+        sResult.append ("I");
+        nValue -= 1;
       }
-      return s;
+      return sResult.toString ();
     }
   }
 

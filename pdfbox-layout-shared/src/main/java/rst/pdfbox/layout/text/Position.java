@@ -6,21 +6,21 @@ package rst.pdfbox.layout.text;
  */
 public class Position
 {
-  private final float x;
-  private final float y;
+  private final float m_fX;
+  private final float m_fY;
 
   /**
    * Creates a position at the given coordinates.
    *
-   * @param x
+   * @param fX
    *        the x coordinate.
-   * @param y
+   * @param fY
    *        the y coordinate.
    */
-  public Position (final float x, final float y)
+  public Position (final float fX, final float fY)
   {
-    this.x = x;
-    this.y = y;
+    this.m_fX = fX;
+    this.m_fY = fY;
   }
 
   /**
@@ -28,7 +28,7 @@ public class Position
    */
   public float getX ()
   {
-    return x;
+    return m_fX;
   }
 
   /**
@@ -36,52 +36,52 @@ public class Position
    */
   public float getY ()
   {
-    return y;
+    return m_fY;
   }
 
   /**
    * Adds an offset to the current position and returns it as a new position.
    *
-   * @param x
+   * @param fX
    *        the x offset to add.
-   * @param y
+   * @param fY
    *        the y offset to add.
    * @return the new position.
    */
-  public Position add (final float x, final float y)
+  public Position add (final float fX, final float fY)
   {
-    return new Position (this.x + x, this.y + y);
+    return new Position (this.m_fX + fX, this.m_fY + fY);
   }
 
   @Override
   public String toString ()
   {
-    return "Position [x=" + x + ", y=" + y + "]";
+    return "Position [x=" + m_fX + ", y=" + m_fY + "]";
   }
 
   @Override
   public int hashCode ()
   {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + Float.floatToIntBits (x);
-    result = prime * result + Float.floatToIntBits (y);
-    return result;
+    final int nPrime = 31;
+    int nResult = 1;
+    nResult = nPrime * nResult + Float.floatToIntBits (m_fX);
+    nResult = nPrime * nResult + Float.floatToIntBits (m_fY);
+    return nResult;
   }
 
   @Override
-  public boolean equals (final Object obj)
+  public boolean equals (final Object aObj)
   {
-    if (this == obj)
+    if (this == aObj)
       return true;
-    if (obj == null)
+    if (aObj == null)
       return false;
-    if (getClass () != obj.getClass ())
+    if (getClass () != aObj.getClass ())
       return false;
-    final Position other = (Position) obj;
-    if (Float.floatToIntBits (x) != Float.floatToIntBits (other.x))
+    final Position aOther = (Position) aObj;
+    if (Float.floatToIntBits (m_fX) != Float.floatToIntBits (aOther.m_fX))
       return false;
-    if (Float.floatToIntBits (y) != Float.floatToIntBits (other.y))
+    if (Float.floatToIntBits (m_fY) != Float.floatToIntBits (aOther.m_fY))
       return false;
     return true;
   }

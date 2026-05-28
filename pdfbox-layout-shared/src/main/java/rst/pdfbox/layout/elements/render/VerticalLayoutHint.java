@@ -12,16 +12,16 @@ import rst.pdfbox.layout.text.EAlignment;
  */
 public class VerticalLayoutHint implements ILayoutHint
 {
-  public final static VerticalLayoutHint LEFT = new VerticalLayoutHint (EAlignment.Left);
-  public final static VerticalLayoutHint CENTER = new VerticalLayoutHint (EAlignment.Center);
-  public final static VerticalLayoutHint RIGHT = new VerticalLayoutHint (EAlignment.Right);
+  public static final VerticalLayoutHint LEFT = new VerticalLayoutHint (EAlignment.Left);
+  public static final VerticalLayoutHint CENTER = new VerticalLayoutHint (EAlignment.Center);
+  public static final VerticalLayoutHint RIGHT = new VerticalLayoutHint (EAlignment.Right);
 
-  private final EAlignment alignment;
-  private final float marginLeft;
-  private final float marginRight;
-  private final float marginTop;
-  private final float marginBottom;
-  private final boolean resetY;
+  private final EAlignment m_eAlignment;
+  private final float m_fMarginLeft;
+  private final float m_fMarginRight;
+  private final float m_fMarginTop;
+  private final float m_fMarginBottom;
+  private final boolean m_bResetY;
 
   /**
    * Creates a layout hint with {@link EAlignment#Left left alignment}.
@@ -34,114 +34,114 @@ public class VerticalLayoutHint implements ILayoutHint
   /**
    * Creates a layout hint with the given alignment.
    *
-   * @param alignment
+   * @param eAlignment
    *        the element alignment.
    */
-  public VerticalLayoutHint (final EAlignment alignment)
+  public VerticalLayoutHint (final EAlignment eAlignment)
   {
-    this (alignment, 0, 0, 0, 0);
+    this (eAlignment, 0, 0, 0, 0);
   }
 
   /**
    * Creates a layout hint with the given alignment and margins.
    *
-   * @param alignment
+   * @param eAlignment
    *        the element alignment.
-   * @param marginLeft
+   * @param fMarginLeft
    *        the left alignment.
-   * @param marginRight
+   * @param fMarginRight
    *        the right alignment.
-   * @param marginTop
+   * @param fMarginTop
    *        the top alignment.
-   * @param marginBottom
+   * @param fMarginBottom
    *        the bottom alignment.
    */
-  public VerticalLayoutHint (final EAlignment alignment,
-                             final float marginLeft,
-                             final float marginRight,
-                             final float marginTop,
-                             final float marginBottom)
+  public VerticalLayoutHint (final EAlignment eAlignment,
+                             final float fMarginLeft,
+                             final float fMarginRight,
+                             final float fMarginTop,
+                             final float fMarginBottom)
   {
-    this (alignment, marginLeft, marginRight, marginTop, marginBottom, false);
+    this (eAlignment, fMarginLeft, fMarginRight, fMarginTop, fMarginBottom, false);
   }
 
   /**
    * Creates a layout hint with the given alignment and margins.
    *
-   * @param alignment
+   * @param eAlignment
    *        the element alignment.
-   * @param marginLeft
+   * @param fMarginLeft
    *        the left alignment.
-   * @param marginRight
+   * @param fMarginRight
    *        the right alignment.
-   * @param marginTop
+   * @param fMarginTop
    *        the top alignment.
-   * @param marginBottom
+   * @param fMarginBottom
    *        the bottom alignment.
-   * @param resetY
+   * @param bResetY
    *        if <code>true</code>, the y coordinate will be reset to the point before layouting the
    *        element.
    */
-  public VerticalLayoutHint (final EAlignment alignment,
-                             final float marginLeft,
-                             final float marginRight,
-                             final float marginTop,
-                             final float marginBottom,
-                             final boolean resetY)
+  public VerticalLayoutHint (final EAlignment eAlignment,
+                             final float fMarginLeft,
+                             final float fMarginRight,
+                             final float fMarginTop,
+                             final float fMarginBottom,
+                             final boolean bResetY)
   {
-    this.alignment = alignment;
-    this.marginLeft = marginLeft;
-    this.marginRight = marginRight;
-    this.marginTop = marginTop;
-    this.marginBottom = marginBottom;
-    this.resetY = resetY;
+    this.m_eAlignment = eAlignment;
+    this.m_fMarginLeft = fMarginLeft;
+    this.m_fMarginRight = fMarginRight;
+    this.m_fMarginTop = fMarginTop;
+    this.m_fMarginBottom = fMarginBottom;
+    this.m_bResetY = bResetY;
   }
 
   public EAlignment getAlignment ()
   {
-    return alignment;
+    return m_eAlignment;
   }
 
   public float getMarginLeft ()
   {
-    return marginLeft;
+    return m_fMarginLeft;
   }
 
   public float getMarginRight ()
   {
-    return marginRight;
+    return m_fMarginRight;
   }
 
   public float getMarginTop ()
   {
-    return marginTop;
+    return m_fMarginTop;
   }
 
   public float getMarginBottom ()
   {
-    return marginBottom;
+    return m_fMarginBottom;
   }
 
   public boolean isResetY ()
   {
-    return resetY;
+    return m_bResetY;
   }
 
   @Override
   public String toString ()
   {
     return "VerticalLayoutHint [alignment=" +
-           alignment +
+           m_eAlignment +
            ", marginLeft=" +
-           marginLeft +
+           m_fMarginLeft +
            ", marginRight=" +
-           marginRight +
+           m_fMarginRight +
            ", marginTop=" +
-           marginTop +
+           m_fMarginTop +
            ", marginBottom=" +
-           marginBottom +
+           m_fMarginBottom +
            ", resetY=" +
-           resetY +
+           m_bResetY +
            "]";
   }
 
@@ -159,61 +159,61 @@ public class VerticalLayoutHint implements ILayoutHint
    */
   public static class VerticalLayoutHintBuilder
   {
-    protected EAlignment alignment = EAlignment.Left;
-    protected float marginLeft = 0;
-    protected float marginRight = 0;
-    protected float marginTop = 0;
-    protected float marginBottom = 0;
-    protected boolean resetY = false;
+    protected EAlignment m_eAlignment = EAlignment.Left;
+    protected float m_fMarginLeft = 0;
+    protected float m_fMarginRight = 0;
+    protected float m_fMarginTop = 0;
+    protected float m_fMarginBottom = 0;
+    protected boolean m_bResetY = false;
 
-    public VerticalLayoutHintBuilder alignment (final EAlignment alignment)
+    public VerticalLayoutHintBuilder alignment (final EAlignment eAlignment)
     {
-      this.alignment = alignment;
+      this.m_eAlignment = eAlignment;
       return this;
     }
 
-    public VerticalLayoutHintBuilder marginLeft (final float marginLeft)
+    public VerticalLayoutHintBuilder marginLeft (final float fMarginLeft)
     {
-      this.marginLeft = marginLeft;
+      this.m_fMarginLeft = fMarginLeft;
       return this;
     }
 
-    public VerticalLayoutHintBuilder marginRight (final float marginRight)
+    public VerticalLayoutHintBuilder marginRight (final float fMarginRight)
     {
-      this.marginRight = marginRight;
+      this.m_fMarginRight = fMarginRight;
       return this;
     }
 
-    public VerticalLayoutHintBuilder marginTop (final float marginTop)
+    public VerticalLayoutHintBuilder marginTop (final float fMarginTop)
     {
-      this.marginTop = marginTop;
+      this.m_fMarginTop = fMarginTop;
       return this;
     }
 
-    public VerticalLayoutHintBuilder marginBottom (final float marginBottom)
+    public VerticalLayoutHintBuilder marginBottom (final float fMarginBottom)
     {
-      this.marginBottom = marginBottom;
+      this.m_fMarginBottom = fMarginBottom;
       return this;
     }
 
-    public VerticalLayoutHintBuilder margins (final float marginLeft, final float marginRight, final float marginTop, final float marginBottom)
+    public VerticalLayoutHintBuilder margins (final float fMarginLeft, final float fMarginRight, final float fMarginTop, final float fMarginBottom)
     {
-      this.marginLeft = marginLeft;
-      this.marginRight = marginRight;
-      this.marginTop = marginTop;
-      this.marginBottom = marginBottom;
+      this.m_fMarginLeft = fMarginLeft;
+      this.m_fMarginRight = fMarginRight;
+      this.m_fMarginTop = fMarginTop;
+      this.m_fMarginBottom = fMarginBottom;
       return this;
     }
 
-    public VerticalLayoutHintBuilder resetY (final boolean resetY)
+    public VerticalLayoutHintBuilder resetY (final boolean bResetY)
     {
-      this.resetY = resetY;
+      this.m_bResetY = bResetY;
       return this;
     }
 
     public VerticalLayoutHint build ()
     {
-      return new VerticalLayoutHint (alignment, marginLeft, marginRight, marginTop, marginBottom, resetY);
+      return new VerticalLayoutHint (m_eAlignment, m_fMarginLeft, m_fMarginRight, m_fMarginTop, m_fMarginBottom, m_bResetY);
     }
 
   }

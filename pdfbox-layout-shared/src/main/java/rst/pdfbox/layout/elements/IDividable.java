@@ -13,39 +13,39 @@ public interface IDividable
    * Divides the drawable vetically into pieces where the first part is to respect the given
    * remaining height. The page height allows to make better decisions on how to divide best.
    *
-   * @param remainingHeight
+   * @param fRemainingHeight
    *        the remaining height on the page dictating the height of the first part.
-   * @param nextPageHeight
+   * @param fNextPageHeight
    *        the height of the next page allows to make better decisions on how to divide best, e.g.
    *        maybe the element fits completely on the next page.
    * @return the Divided containing the first part and the tail.
    * @throws IOException
    *         by pdfbox.
    */
-  Divided divide (final float remainingHeight, final float nextPageHeight) throws IOException;
+  Divided divide (final float fRemainingHeight, final float fNextPageHeight) throws IOException;
 
   /**
    * A container for the result of a {@link IDividable#divide(float, float)} operation.
    */
   public static class Divided
   {
-    private final IDrawable first;
-    private final IDrawable tail;
+    private final IDrawable m_aFirst;
+    private final IDrawable m_aTail;
 
-    public Divided (final IDrawable first, final IDrawable tail)
+    public Divided (final IDrawable aFirst, final IDrawable aTail)
     {
-      this.first = first;
-      this.tail = tail;
+      this.m_aFirst = aFirst;
+      this.m_aTail = aTail;
     }
 
     public IDrawable getFirst ()
     {
-      return first;
+      return m_aFirst;
     }
 
     public IDrawable getTail ()
     {
-      return tail;
+      return m_aTail;
     }
   }
 }

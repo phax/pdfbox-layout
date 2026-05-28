@@ -45,7 +45,7 @@ public class ImageElement extends AbstractImageElement implements Drawable, IDiv
                     Position upperLeft,
                     IDrawListener drawListener) throws IOException
   {
-    CompatibilityHelper.drawImage (image, pdDocument, contentStream, upperLeft, getWidth (), getHeight ());
+    CompatibilityHelper.drawImage (m_aImage, pdDocument, contentStream, upperLeft, getWidth (), getHeight ());
     if (drawListener != null)
     {
       drawListener.drawn (this, upperLeft, getWidth (), getHeight ());

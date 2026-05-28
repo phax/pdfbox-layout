@@ -9,68 +9,68 @@ package rst.pdfbox.layout.util;
 public class Pair <T>
 {
 
-  private T first;
-  private T second;
+  private T m_aFirst;
+  private T m_aSecond;
 
-  public Pair (T first, T second)
+  public Pair (final T aFirst, final T aSecond)
   {
     super ();
-    this.first = first;
-    this.second = second;
+    this.m_aFirst = aFirst;
+    this.m_aSecond = aSecond;
   }
 
   public T getFirst ()
   {
-    return first;
+    return m_aFirst;
   }
 
   public T getSecond ()
   {
-    return second;
+    return m_aSecond;
   }
 
   @Override
   public String toString ()
   {
-    return "Tuple [first=" + first + ", second=" + second + "]";
+    return "Tuple [first=" + m_aFirst + ", second=" + m_aSecond + "]";
   }
 
   @Override
   public int hashCode ()
   {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((first == null) ? 0 : first.hashCode ());
-    result = prime * result + ((second == null) ? 0 : second.hashCode ());
-    return result;
+    final int nPrime = 31;
+    int nResult = 1;
+    nResult = nPrime * nResult + ((m_aFirst == null) ? 0 : m_aFirst.hashCode ());
+    nResult = nPrime * nResult + ((m_aSecond == null) ? 0 : m_aSecond.hashCode ());
+    return nResult;
   }
 
   @Override
-  public boolean equals (Object obj)
+  public boolean equals (final Object aObj)
   {
-    if (this == obj)
+    if (this == aObj)
       return true;
-    if (obj == null)
+    if (aObj == null)
       return false;
-    if (getClass () != obj.getClass ())
+    if (getClass () != aObj.getClass ())
       return false;
     @SuppressWarnings ("rawtypes")
-    Pair other = (Pair) obj;
-    if (first == null)
+    final Pair aOther = (Pair) aObj;
+    if (m_aFirst == null)
     {
-      if (other.first != null)
+      if (aOther.m_aFirst != null)
         return false;
     }
     else
-      if (!first.equals (other.first))
+      if (!m_aFirst.equals (aOther.m_aFirst))
         return false;
-    if (second == null)
+    if (m_aSecond == null)
     {
-      if (other.second != null)
+      if (aOther.m_aSecond != null)
         return false;
     }
     else
-      if (!second.equals (other.second))
+      if (!m_aSecond.equals (aOther.m_aSecond))
         return false;
     return true;
   }
