@@ -1,4 +1,5 @@
 package rst.pdfbox.layout;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -16,76 +17,74 @@ import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.EBaseFont;
 import rst.pdfbox.layout.text.Position;
 
-public class LetterTest extends AbstractExampleTest {
+public class LetterTest extends AbstractExampleTest
+{
 
-    @Test
-    public void test() throws Exception {
-	float hMargin = 40;
-	float vMargin = 50;
-	Document document = new Document(hMargin, hMargin, vMargin, vMargin);
+  @Test
+  public void test () throws Exception
+  {
+    final float hMargin = 40;
+    final float vMargin = 50;
+    final Document document = new Document (hMargin, hMargin, vMargin, vMargin);
 
-	ImageElement image;
-	if (new File("arrow.png").exists()) {
-	    image = new ImageElement("arrow.png");
-	} else {
-	    image = new ImageElement(LetterTest.class.getResourceAsStream("/arrow.png"));
-	}
-	image.setWidth(image.getWidth()/7);
-	image.setHeight(image.getHeight()/7);
-	document.add(image, new VerticalLayoutHint(EAlignment.Right, 0, 0,
-		0, 0, true));
-	
-	document.add(new VerticalSpacer(100));
-
-	Paragraph paragraph = new Paragraph();
-	paragraph.addText("Blubberhausen, 01.04.2016", 11,
-		new PDType1Font(Standard14Fonts.FontName.HELVETICA));
-	document.add(paragraph, new VerticalLayoutHint(EAlignment.Right, 0, 0,
-		0, 0, true));
-
-	paragraph = new Paragraph();
-	String address = "Ralf Stuckert\nAm Hollergraben 24\n67346 Blubberhausen";
-	paragraph.addText(address, 11, new PDType1Font(Standard14Fonts.FontName.HELVETICA));
-	document.add(paragraph);
-
-	paragraph = new Paragraph();
-	paragraph.addMarkup("*Labore et dolore magna aliquyam erat*", 11,
-		EBaseFont.Helvetica);
-	document.add(paragraph, new VerticalLayoutHint(EAlignment.Left, 0, 0,
-		40, 20));
-
-	String text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, "
-		+ "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna "
-		+ "aliquyam erat, _sed diam_ voluptua. At vero eos et *accusam et justo* "
-		+ "duo dolores et ea rebum.\n\nStet clita kasd gubergren, no sea takimata "
-		+ "sanctus est *Lorem ipsum _dolor* sit_ amet. Lorem ipsum dolor sit amet, "
-		+ "consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt "
-		+ "ut labore et dolore magna aliquyam erat, *sed diam voluptua.\n\n"
-		+ "At vero eos et accusam* et justo duo dolores et ea rebum. Stet clita kasd "
-		+ "gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\n\n";
-	paragraph = new Paragraph();
-	paragraph.addMarkup(text, 11, EBaseFont.Helvetica);
-	document.add(paragraph);
-
-	document.add(paragraph);
-
-	paragraph = new Paragraph();
-	paragraph.addMarkup("Dolore magna aliquyam erat\nRalf Stuckert", 11,
-		EBaseFont.Helvetica);
-	document.add(paragraph, new VerticalLayoutHint(EAlignment.Left, 60, 0,
-		40, 0));
-
-	paragraph = new Paragraph();
-	paragraph.addMarkup("*Sanctus est:* Lorem ipsum dolor consetetur "
-		+ "sadipscing sed diam nonumy eirmod tempor invidunt", 6,
-		EBaseFont.Times);
-	paragraph.setAbsolutePosition(new Position(hMargin, vMargin));
-	document.add(paragraph);
-
-	final OutputStream outputStream = new FileOutputStream("letter.pdf");
-	document.save(outputStream);
-
-        verifyPdf();
-
+    ImageElement image;
+    if (new File ("arrow.png").exists ())
+    {
+      image = new ImageElement ("arrow.png");
     }
+    else
+    {
+      image = new ImageElement (LetterTest.class.getResourceAsStream ("/arrow.png"));
+    }
+    image.setWidth (image.getWidth () / 7);
+    image.setHeight (image.getHeight () / 7);
+    document.add (image, new VerticalLayoutHint (EAlignment.Right, 0, 0, 0, 0, true));
+
+    document.add (new VerticalSpacer (100));
+
+    Paragraph paragraph = new Paragraph ();
+    paragraph.addText ("Blubberhausen, 01.04.2016", 11, new PDType1Font (Standard14Fonts.FontName.HELVETICA));
+    document.add (paragraph, new VerticalLayoutHint (EAlignment.Right, 0, 0, 0, 0, true));
+
+    paragraph = new Paragraph ();
+    final String address = "Ralf Stuckert\nAm Hollergraben 24\n67346 Blubberhausen";
+    paragraph.addText (address, 11, new PDType1Font (Standard14Fonts.FontName.HELVETICA));
+    document.add (paragraph);
+
+    paragraph = new Paragraph ();
+    paragraph.addMarkup ("*Labore et dolore magna aliquyam erat*", 11, EBaseFont.Helvetica);
+    document.add (paragraph, new VerticalLayoutHint (EAlignment.Left, 0, 0, 40, 20));
+
+    final String text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, " +
+                  "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna " +
+                  "aliquyam erat, _sed diam_ voluptua. At vero eos et *accusam et justo* " +
+                  "duo dolores et ea rebum.\n\nStet clita kasd gubergren, no sea takimata " +
+                  "sanctus est *Lorem ipsum _dolor* sit_ amet. Lorem ipsum dolor sit amet, " +
+                  "consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt " +
+                  "ut labore et dolore magna aliquyam erat, *sed diam voluptua.\n\n" +
+                  "At vero eos et accusam* et justo duo dolores et ea rebum. Stet clita kasd " +
+                  "gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\n\n";
+    paragraph = new Paragraph ();
+    paragraph.addMarkup (text, 11, EBaseFont.Helvetica);
+    document.add (paragraph);
+
+    document.add (paragraph);
+
+    paragraph = new Paragraph ();
+    paragraph.addMarkup ("Dolore magna aliquyam erat\nRalf Stuckert", 11, EBaseFont.Helvetica);
+    document.add (paragraph, new VerticalLayoutHint (EAlignment.Left, 60, 0, 40, 0));
+
+    paragraph = new Paragraph ();
+    paragraph.addMarkup ("*Sanctus est:* Lorem ipsum dolor consetetur " +
+                         "sadipscing sed diam nonumy eirmod tempor invidunt",
+                         6,
+                         EBaseFont.Times);
+    paragraph.setAbsolutePosition (new Position (hMargin, vMargin));
+    document.add (paragraph);
+
+    final OutputStream outputStream = new FileOutputStream ("letter.pdf");
+    document.save (outputStream);
+
+    verifyPdf ();
+  }
 }
