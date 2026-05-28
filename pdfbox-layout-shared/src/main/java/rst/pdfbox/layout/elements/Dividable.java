@@ -32,19 +32,19 @@ public interface Dividable {
      */
     public static class Divided {
 
-	private final Drawable first;
-	private final Drawable tail;
+	private final IDrawable first;
+	private final IDrawable tail;
 
-	public Divided(Drawable first, Drawable tail) {
+	public Divided(IDrawable first, IDrawable tail) {
 	    this.first = first;
 	    this.tail = tail;
 	}
 
-	public Drawable getFirst() {
+	public IDrawable getFirst() {
 	    return first;
 	}
 
-	public Drawable getTail() {
+	public IDrawable getTail() {
 	    return tail;
 	}
 

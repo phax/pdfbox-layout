@@ -1,10 +1,11 @@
 package rst.pdfbox.layout.elements;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import java.awt.Color;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
@@ -23,31 +24,12 @@ import rst.pdfbox.layout.text.WidthRespecting;
  * contained item. The size available for the inner element is reduced by the
  * margin, padding and border width.
  */
-public class Frame implements Element, Drawable, WidthRespecting, Dividable {
+public class Frame extends AbstractFrame implements Drawable {
 
     private List<Drawable> innerList = new CopyOnWriteArrayList<Drawable>();
 
-    private float paddingLeft;
-    private float paddingRight;
-    private float paddingTop;
-    private float paddingBottom;
-
-    private float marginLeft;
-    private float marginRight;
-    private float marginTop;
-    private float marginBottom;
-
     private Shape shape = new Rect();
     private Stroke borderStroke = new Stroke();
-    private Color borderColor;
-    private Color backgroundColor;
-
-    private float maxWidth = -1;
-
-    private Float givenWidth;
-    private Float givenHeight;
-
-    private Position absolutePosition;
 
     /**
      * Creates an empty frame.
@@ -58,7 +40,7 @@ public class Frame implements Element, Drawable, WidthRespecting, Dividable {
 
     /**
      * Creates a frame containing the inner element.
-     * 
+     *
      * @param inner
      *            the item to contain.
      */
@@ -71,7 +53,7 @@ public class Frame implements Element, Drawable, WidthRespecting, Dividable {
      * the given dimensions. These contraints target the border-box of the
      * frame, means: the inner element plus padding plus border width, but not
      * the margin.
-     * 
+     *
      * @param inner
      *            the item to contain.
      * @param width
@@ -90,7 +72,7 @@ public class Frame implements Element, Drawable, WidthRespecting, Dividable {
      * Creates a frame constraint by the given dimensions. These contraints
      * target the border-box of the frame, means: the inner element plus padding
      * plus border width, but not the margin.
-     * 
+     *
      * @param width
      *            the width to constrain the border-box of the frame to, or
      *            <code>null</code>.
@@ -99,8 +81,7 @@ public class Frame implements Element, Drawable, WidthRespecting, Dividable {
      *            <code>null</code>.
      */
     public Frame(final Float width, final Float height) {
-	this.givenWidth = width;
-	this.givenHeight = height;
+	super(width, height);
     }
 
     /**
@@ -124,7 +105,7 @@ public class Frame implements Element, Drawable, WidthRespecting, Dividable {
 
     /**
      * Sets the shape to use as border and/or background.
-     * 
+     *
      * @param shape
      *            the shape to use.
      */
@@ -134,7 +115,7 @@ public class Frame implements Element, Drawable, WidthRespecting, Dividable {
 
     /**
      * The stroke to use to draw the border.
-     * 
+     *
      * @return the stroke to use.
      */
     public Stroke getBorderStroke() {
@@ -143,7 +124,7 @@ public class Frame implements Element, Drawable, WidthRespecting, Dividable {
 
     /**
      * Sets the stroke to use to draw the border.
-     * 
+     *
      * @param borderStroke
      *            the stroke to use.
      */
@@ -154,6 +135,7 @@ public class Frame implements Element, Drawable, WidthRespecting, Dividable {
     /**
      * @return the widht of the {@link #getBorderStroke()} or <code>0</code>.
      */
+    @Override
     protected float getBorderWidth() {
 	return hasBorder() ? getBorderStroke().getLineWidth() : 0;
     }
@@ -168,25 +150,8 @@ public class Frame implements Element, Drawable, WidthRespecting, Dividable {
     }
 
     /**
-     * @return the color to use to draw the border.
-     */
-    public Color getBorderColor() {
-	return borderColor;
-    }
-
-    /**
-     * Sets the color to use to draw the border.
-     * 
-     * @param borderColor
-     *            the border color.
-     */
-    public void setBorderColor(Color borderColor) {
-	this.borderColor = borderColor;
-    }
-
-    /**
      * Convenience method for setting both border color and stroke.
-     * 
+     *
      * @param borderColor
      *            the border color.
      * @param borderStroke
@@ -198,25 +163,8 @@ public class Frame implements Element, Drawable, WidthRespecting, Dividable {
     }
 
     /**
-     * @return the color to use to draw the background.
-     */
-    public Color getBackgroundColor() {
-	return backgroundColor;
-    }
-
-    /**
-     * Sets the color to use to draw the background.
-     * 
-     * @param backgroundColor
-     *            the background color.
-     */
-    public void setBackgroundColor(Color backgroundColor) {
-	this.backgroundColor = backgroundColor;
-    }
-
-    /**
      * Copies all attributes but the inner drawable and size to the given frame.
-     * 
+     *
      * @param other
      *            the frame to copy the attributes to.
      */
@@ -235,222 +183,6 @@ public class Frame implements Element, Drawable, WidthRespecting, Dividable {
 	other.setMarginLeft(this.getMarginLeft());
 	other.setMarginRight(this.getMarginRight());
 	other.setMarginTop(this.getMarginTop());
-    }
-
-    /**
-     * @return the left padding
-     */
-    public float getPaddingLeft() {
-	return paddingLeft;
-    }
-
-    /**
-     * Sets the left padding.
-     * 
-     * @param paddingLeft
-     *            left padding.
-     */
-    public void setPaddingLeft(float paddingLeft) {
-	this.paddingLeft = paddingLeft;
-    }
-
-    /**
-     * @return the right padding
-     */
-    public float getPaddingRight() {
-	return paddingRight;
-    }
-
-    /**
-     * Sets the right padding.
-     * 
-     * @param paddingRight
-     *            right padding.
-     */
-    public void setPaddingRight(float paddingRight) {
-	this.paddingRight = paddingRight;
-    }
-
-    /**
-     * @return the top padding
-     */
-    public float getPaddingTop() {
-	return paddingTop;
-    }
-
-    /**
-     * Sets the top padding.
-     * 
-     * @param paddingTop
-     *            top padding.
-     */
-    public void setPaddingTop(float paddingTop) {
-	this.paddingTop = paddingTop;
-    }
-
-    /**
-     * @return the bottom padding
-     */
-    public float getPaddingBottom() {
-	return paddingBottom;
-    }
-
-    /**
-     * Sets the bottom padding.
-     * 
-     * @param paddingBottom
-     *            bottom padding.
-     */
-    public void setPaddingBottom(float paddingBottom) {
-	this.paddingBottom = paddingBottom;
-    }
-
-    /**
-     * Sets the padding.
-     * 
-     * @param left
-     *            left padding.
-     * @param right
-     *            right padding.
-     * @param top
-     *            top padding.
-     * @param bottom
-     *            bottom padding.
-     */
-    public void setPadding(float left, float right, float top, float bottom) {
-	setPaddingLeft(left);
-	setPaddingRight(right);
-	setPaddingTop(top);
-	setPaddingBottom(bottom);
-    }
-
-    /**
-     * @return the left margin
-     */
-    public float getMarginLeft() {
-	return marginLeft;
-    }
-
-    /**
-     * Sets the left margin.
-     * 
-     * @param marginLeft
-     *            left margin.
-     */
-    public void setMarginLeft(float marginLeft) {
-	this.marginLeft = marginLeft;
-    }
-
-    /**
-     * @return the right margin
-     */
-    public float getMarginRight() {
-	return marginRight;
-    }
-
-    /**
-     * Sets the right margin.
-     * 
-     * @param marginRight
-     *            right margin.
-     */
-    public void setMarginRight(float marginRight) {
-	this.marginRight = marginRight;
-    }
-
-    /**
-     * @return the top margin
-     */
-    public float getMarginTop() {
-	return marginTop;
-    }
-
-    /**
-     * Sets the top margin.
-     * 
-     * @param marginTop
-     *            top margin.
-     */
-    public void setMarginTop(float marginTop) {
-	this.marginTop = marginTop;
-    }
-
-    /**
-     * @return the bottom margin
-     */
-    public float getMarginBottom() {
-	return marginBottom;
-    }
-
-    /**
-     * Sets the bottom margin.
-     * 
-     * @param marginBottom
-     *            bottom margin.
-     */
-    public void setMarginBottom(float marginBottom) {
-	this.marginBottom = marginBottom;
-    }
-
-    /**
-     * Sets the margin.
-     * 
-     * @param left
-     *            left margin.
-     * @param right
-     *            right margin.
-     * @param top
-     *            top margin.
-     * @param bottom
-     *            bottom margin.
-     */
-    public void setMargin(float left, float right, float top, float bottom) {
-	setMarginLeft(left);
-	setMarginRight(right);
-	setMarginTop(top);
-	setMarginBottom(bottom);
-    }
-
-    /**
-     * @return the sum of left/right padding and border width.
-     */
-    protected float getHorizontalShapeSpacing() {
-	return 2 * getBorderWidth() + getPaddingLeft() + getPaddingRight();
-    }
-
-    /**
-     * @return the sum of top/bottom padding and border width.
-     */
-    protected float getVerticalShapeSpacing() {
-	return 2 * getBorderWidth() + getPaddingTop() + getPaddingBottom();
-    }
-
-    /**
-     * @return the sum of left/right margin, padding and border width.
-     */
-    protected float getHorizontalSpacing() {
-	return getMarginLeft() + getMarginRight() + getHorizontalShapeSpacing();
-    }
-
-    /**
-     * @return the sum of top/bottom margin, padding and border width.
-     */
-    protected float getVerticalSpacing() {
-	return getMarginTop() + getMarginBottom() + getVerticalShapeSpacing();
-    }
-
-    /**
-     * @return the height given to constrain the size of the shape.
-     */
-    protected Float getGivenHeight() {
-	return givenHeight;
-    }
-
-    /**
-     * @return the width given to constrain the size of the shape.
-     */
-    protected Float getGivenWidth() {
-	return givenWidth;
     }
 
     @Override
@@ -490,28 +222,8 @@ public class Frame implements Element, Drawable, WidthRespecting, Dividable {
     }
 
     @Override
-    public Position getAbsolutePosition() throws IOException {
-	return absolutePosition;
-    }
-
-    /**
-     * Sets th absolute position.
-     * 
-     * @param absolutePosition
-     *            the absolute position to use, or <code>null</code>.
-     */
-    public void setAbsolutePosition(Position absolutePosition) {
-	this.absolutePosition = absolutePosition;
-    }
-
-    @Override
-    public float getMaxWidth() {
-	return maxWidth;
-    }
-
-    @Override
     public void setMaxWidth(float maxWidth) {
-	this.maxWidth = maxWidth;
+	setMaxWidthInternal(maxWidth);
 
 	for (Drawable inner : innerList) {
 	    setMaxWidth(inner, maxWidth);
@@ -533,7 +245,7 @@ public class Frame implements Element, Drawable, WidthRespecting, Dividable {
     /**
      * Propagates the max width to the inner item if there is a given size, but
      * no absolute position.
-     * 
+     *
      * @throws IOException
      *             by pdfbox.
      */
@@ -634,14 +346,14 @@ public class Frame implements Element, Drawable, WidthRespecting, Dividable {
 	    first.addAll(dividedList.getHead());
 	}
 	if (divided != null) {
-	    first.add(divided.getFirst());
+	    first.add((Drawable) divided.getFirst());
 	}
 
 	// create tail sub frame
 	Frame tail = new Frame(getGivenWidth(), tailHeight);
 	copyAllButInnerAndSizeTo(tail);
 	if (divided != null) {
-	    tail.add(divided.getTail());
+	    tail.add((Drawable) divided.getTail());
 	}
 	if (dividedList.getTail() != null) {
 	    tail.addAll(dividedList.getTail());

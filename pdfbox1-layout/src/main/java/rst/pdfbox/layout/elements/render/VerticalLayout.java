@@ -206,13 +206,13 @@ public class VerticalLayout implements Layout {
 	    Divided divided = dividable.divide(
 		    renderContext.getRemainingHeight(),
 		    renderContext.getHeight());
-	    drawReletivePartAndMovePosition(renderContext, divided.getFirst(),
+	    drawReletivePartAndMovePosition(renderContext, (Drawable) divided.getFirst(),
 		    layoutHint, true);
 
 	    // new page
 	    turnPage(renderContext);
 
-	    drawablePart = divided.getTail();
+	    drawablePart = (Drawable) divided.getTail();
 	    drawablePart = removeLeadingEmptyVerticalSpace(drawablePart,
 		    renderContext);
 	}
