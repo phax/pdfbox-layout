@@ -17,128 +17,128 @@ import rst.pdfbox.layout.text.StyledText;
  */
 public class AnnotatedStyledText extends StyledText implements IAnnotated
 {
-  private final List <IAnnotation> annotations = new ArrayList <> ();
+  private final List <IAnnotation> m_aAnnotations = new ArrayList <> ();
 
   /**
    * Creates a styled text.
    *
-   * @param text
+   * @param sText
    *        the text to draw. Must not contain line feeds ('\n').
-   * @param fontDescriptor
+   * @param aFontDescriptor
    *        the font to use.
-   * @param color
+   * @param aColor
    *        the color to use.
-   * @param baselineOffset
+   * @param fBaselineOffset
    *        the offset of the baseline.
-   * @param leftMargin
+   * @param fLeftMargin
    *        the margin left to the text.
-   * @param rightMargin
+   * @param fRightMargin
    *        the margin right to the text.
-   * @param annotations
+   * @param aAnnotations
    *        the annotations associated with the text.
    */
-  public AnnotatedStyledText (final String text,
-                              final FontDescriptor fontDescriptor,
-                              final Color color,
-                              final float leftMargin,
-                              final float rightMargin,
-                              final float baselineOffset,
-                              final Collection <? extends IAnnotation> annotations)
+  public AnnotatedStyledText (final String sText,
+                              final FontDescriptor aFontDescriptor,
+                              final Color aColor,
+                              final float fLeftMargin,
+                              final float fRightMargin,
+                              final float fBaselineOffset,
+                              final Collection <? extends IAnnotation> aAnnotations)
   {
-    super (text, fontDescriptor, color, baselineOffset, leftMargin, rightMargin);
-    if (annotations != null)
+    super (sText, aFontDescriptor, aColor, fBaselineOffset, fLeftMargin, fRightMargin);
+    if (aAnnotations != null)
     {
-      this.annotations.addAll (annotations);
+      this.m_aAnnotations.addAll (aAnnotations);
     }
   }
 
   /**
    * Creates a styled text.
    *
-   * @param text
+   * @param sText
    *        the text to draw. Must not contain line feeds ('\n').
-   * @param size
+   * @param fSize
    *        the size of the font.
-   * @param font
+   * @param aFont
    *        the font to use..
-   * @param color
+   * @param aColor
    *        the color to use.
-   * @param baselineOffset
+   * @param fBaselineOffset
    *        the offset of the baseline.
-   * @param annotations
+   * @param aAnnotations
    *        the annotations associated with the text.
    */
-  public AnnotatedStyledText (final String text,
-                              final float size,
-                              final PDFont font,
-                              final Color color,
-                              final float baselineOffset,
-                              final Collection <? extends IAnnotation> annotations)
+  public AnnotatedStyledText (final String sText,
+                              final float fSize,
+                              final PDFont aFont,
+                              final Color aColor,
+                              final float fBaselineOffset,
+                              final Collection <? extends IAnnotation> aAnnotations)
   {
-    this (text, new FontDescriptor (font, size), color, baselineOffset, 0, 0, annotations);
+    this (sText, new FontDescriptor (aFont, fSize), aColor, fBaselineOffset, 0, 0, aAnnotations);
   }
 
   @Override
   public Iterator <IAnnotation> iterator ()
   {
-    return annotations.iterator ();
+    return m_aAnnotations.iterator ();
   }
 
   @SuppressWarnings ("unchecked")
   @Override
-  public <T extends IAnnotation> Iterable <T> getAnnotationsOfType (final Class <T> type)
+  public <T extends IAnnotation> Iterable <T> getAnnotationsOfType (final Class <T> aType)
   {
-    List <T> result = null;
-    for (final IAnnotation annotation : annotations)
+    List <T> aResult = null;
+    for (final IAnnotation aAnnotation : m_aAnnotations)
     {
-      if (type.isAssignableFrom (annotation.getClass ()))
+      if (aType.isAssignableFrom (aAnnotation.getClass ()))
       {
-        if (result == null)
+        if (aResult == null)
         {
-          result = new ArrayList <> ();
+          aResult = new ArrayList <> ();
         }
-        result.add ((T) annotation);
+        aResult.add ((T) aAnnotation);
       }
     }
 
-    if (result == null)
+    if (aResult == null)
     {
       return Collections.emptyList ();
     }
-    return result;
+    return aResult;
   }
 
   /**
    * Adds an annotation.
    *
-   * @param annotation
+   * @param aAnnotation
    *        the annotation to add.
    */
-  public void addAnnotation (final IAnnotation annotation)
+  public void addAnnotation (final IAnnotation aAnnotation)
   {
-    annotations.add (annotation);
+    m_aAnnotations.add (aAnnotation);
   }
 
   /**
    * Adds all annotations.
    *
-   * @param annos
+   * @param aAnnos
    *        the annotations to add.
    */
-  public void addAllAnnotation (final Collection <IAnnotation> annos)
+  public void addAllAnnotation (final Collection <IAnnotation> aAnnos)
   {
-    annotations.addAll (annos);
+    m_aAnnotations.addAll (aAnnos);
   }
 
   @Override
-  public AnnotatedStyledText inheritAttributes (final String text, final float leftMargin, final float rightMargin)
+  public AnnotatedStyledText inheritAttributes (final String sText, final float fLeftMargin, final float fRightMargin)
   {
-    return new AnnotatedStyledText (text,
+    return new AnnotatedStyledText (sText,
                                     getFontDescriptor (),
                                     getColor (),
                                     getBaselineOffset (),
-                                    leftMargin,
-                                    rightMargin,
-                                    annotations);
+                                    fLeftMargin,
+                                    fRightMargin,
+                                    m_aAnnotations);
   }
 }

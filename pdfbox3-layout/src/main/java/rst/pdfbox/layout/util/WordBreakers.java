@@ -18,14 +18,14 @@ public class WordBreakers
   /**
    * May by used for legacy compatibility, does not break at all.
    */
-  public static class NonBreakingWordBreaker implements WordBreaker
+  public static class NonBreakingWordBreaker implements IWordBreaker
   {
 
     @Override
-    public Pair <String> breakWord (String word,
-                                    FontDescriptor fontDescriptor,
-                                    float maxWidth,
-                                    boolean breakHardIfNecessary) throws IOException
+    public Pair <String> breakWord (final String sWord,
+                                    final FontDescriptor aFontDescriptor,
+                                    final float fMaxWidth,
+                                    final boolean bBreakHardIfNecessary) throws IOException
     {
       return null;
     }
@@ -37,80 +37,81 @@ public class WordBreakers
    * {@link #breakWordSoft(String, FontDescriptor, float) softly}, or - if this is not possible -
    * {@link #breakWordHard(String, FontDescriptor, float) hard}.
    */
-  public static abstract class AbstractWordBreaker implements WordBreaker
+  public static abstract class AbstractWordBreaker implements IWordBreaker
   {
 
     @Override
-    public Pair <String> breakWord (final String word,
-                                    final FontDescriptor fontDescriptor,
-                                    final float maxWidth,
-                                    final boolean breakHardIfNecessary) throws IOException
+    public Pair <String> breakWord (final String sWord,
+                                    final FontDescriptor aFontDescriptor,
+                                    final float fMaxWidth,
+                                    final boolean bBreakHardIfNecessary) throws IOException
     {
-      Pair <String> brokenWord = breakWordSoft (word, fontDescriptor, maxWidth);
-      if (brokenWord == null && breakHardIfNecessary)
+      Pair <String> aBrokenWord = breakWordSoft (sWord, aFontDescriptor, fMaxWidth);
+      if (aBrokenWord == null && bBreakHardIfNecessary)
       {
-        brokenWord = breakWordHard (word, fontDescriptor, maxWidth);
+        aBrokenWord = breakWordHard (sWord, aFontDescriptor, fMaxWidth);
       }
-      return brokenWord;
+      return aBrokenWord;
     }
 
     /**
      * To be implemented by subclasses. Give your best to break the word softly using your strategy,
      * otherwise return <code>null</code>.
-     * 
-     * @param word
+     *
+     * @param sWord
      *        the word to break.
-     * @param fontDescriptor
+     * @param aFontDescriptor
      *        describing the font's type and size.
-     * @param maxWidth
+     * @param fMaxWidth
      *        the maximum width to obey.
      * @return the broken word, or <code>null</code> if it cannot be broken.
      * @throws IOException
      *         by pdfbox
      */
-    abstract protected Pair <String> breakWordSoft (final String word,
-                                                    final FontDescriptor fontDescriptor,
-                                                    final float maxWidth) throws IOException;
+    abstract protected Pair <String> breakWordSoft (final String sWord,
+                                                    final FontDescriptor aFontDescriptor,
+                                                    final float fMaxWidth) throws IOException;
 
     /**
      * Breaks the word hard at the outermost position that fits the given max width.
-     * 
-     * @param word
+     *
+     * @param sWord
      *        the word to break.
-     * @param fontDescriptor
+     * @param aFontDescriptor
      *        describing the font's type and size.
-     * @param maxWidth
+     * @param fMaxWidth
      *        the maximum width to obey.
      * @return the broken word, or <code>null</code> if it cannot be broken.
      * @throws IOException
      *         by pdfbox
      */
-    protected Pair <String> breakWordHard (final String word, final FontDescriptor fontDescriptor, final float maxWidth)
-                                                                                                                         throws IOException
+    protected Pair <String> breakWordHard (final String sWord,
+                                           final FontDescriptor aFontDescriptor,
+                                           final float fMaxWidth) throws IOException
     {
-      int cutIndex = (int) (maxWidth / getEmWidth (fontDescriptor));
-      float currentWidth = getStringWidth (word.substring (0, cutIndex), fontDescriptor);
-      if (currentWidth > maxWidth)
+      int nCutIndex = (int) (fMaxWidth / getEmWidth (aFontDescriptor));
+      float fCurrentWidth = getStringWidth (sWord.substring (0, nCutIndex), aFontDescriptor);
+      if (fCurrentWidth > fMaxWidth)
       {
-        while (currentWidth > maxWidth)
+        while (fCurrentWidth > fMaxWidth)
         {
-          --cutIndex;
-          currentWidth = getStringWidth (word.substring (0, cutIndex), fontDescriptor);
+          --nCutIndex;
+          fCurrentWidth = getStringWidth (sWord.substring (0, nCutIndex), aFontDescriptor);
         }
-        ++cutIndex;
+        ++nCutIndex;
       }
       else
-        if (currentWidth < maxWidth)
+        if (fCurrentWidth < fMaxWidth)
         {
-          while (currentWidth < maxWidth)
+          while (fCurrentWidth < fMaxWidth)
           {
-            ++cutIndex;
-            currentWidth = getStringWidth (word.substring (0, cutIndex), fontDescriptor);
+            ++nCutIndex;
+            fCurrentWidth = getStringWidth (sWord.substring (0, nCutIndex), aFontDescriptor);
           }
-          --cutIndex;
+          --nCutIndex;
         }
 
-      return new Pair <String> (word.substring (0, cutIndex), word.substring (cutIndex));
+      return new Pair <> (sWord.substring (0, nCutIndex), sWord.substring (nCutIndex));
     }
 
   }
@@ -130,36 +131,37 @@ public class WordBreakers
     /**
      * A letter followed by either <code>-</code>, <code>.</code>, <code>,</code> or <code>/</code>.
      */
-    private final Pattern breakPattern = Pattern.compile ("[A-Za-z\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u00FF]([\\-\\.\\,/])");
+    private final Pattern m_aBreakPattern = Pattern.compile ("[A-Za-zÀ-ÖØ-öø-ÿ]([\\-\\.\\,/])");
 
     @Override
-    protected Pair <String> breakWordSoft (final String word, final FontDescriptor fontDescriptor, final float maxWidth)
-                                                                                                                         throws IOException
+    protected Pair <String> breakWordSoft (final String sWord,
+                                           final FontDescriptor aFontDescriptor,
+                                           final float fMaxWidth) throws IOException
     {
-      Matcher matcher = breakPattern.matcher (word);
-      int breakIndex = -1;
-      boolean maxWidthExceeded = false;
-      while (!maxWidthExceeded && matcher.find ())
+      final Matcher aMatcher = m_aBreakPattern.matcher (sWord);
+      int nBreakIndex = -1;
+      boolean bMaxWidthExceeded = false;
+      while (!bMaxWidthExceeded && aMatcher.find ())
       {
-        int currentIndex = matcher.end ();
-        if (currentIndex < word.length () - 1)
+        final int nCurrentIndex = aMatcher.end ();
+        if (nCurrentIndex < sWord.length () - 1)
         {
-          if (getStringWidth (word.substring (0, currentIndex), fontDescriptor) < maxWidth)
+          if (getStringWidth (sWord.substring (0, nCurrentIndex), aFontDescriptor) < fMaxWidth)
           {
-            breakIndex = currentIndex;
+            nBreakIndex = nCurrentIndex;
           }
           else
           {
-            maxWidthExceeded = true;
+            bMaxWidthExceeded = true;
           }
         }
       }
 
-      if (breakIndex < 0)
+      if (nBreakIndex < 0)
       {
         return null;
       }
-      return new Pair <String> (word.substring (0, breakIndex), word.substring (breakIndex));
+      return new Pair <> (sWord.substring (0, nBreakIndex), sWord.substring (nBreakIndex));
     }
 
   }

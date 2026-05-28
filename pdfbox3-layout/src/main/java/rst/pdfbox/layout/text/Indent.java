@@ -16,194 +16,194 @@ public class Indent extends ControlFragment
    */
   public final static Indent UNINDENT = new Indent (0);
 
-  protected float indentWidth = 4;
-  protected ESpaceUnit indentUnit = ESpaceUnit.em;
-  protected EAlignment alignment = EAlignment.Left;
-  protected StyledText styledText;
+  protected float m_fIndentWidth = 4;
+  protected ESpaceUnit m_eIndentUnit = ESpaceUnit.em;
+  protected EAlignment m_eAlignment = EAlignment.Left;
+  protected StyledText m_aStyledText;
 
   /**
    * Creates a new line with the given font descriptor.
-   * 
-   * @param indentWidth
+   *
+   * @param fIndentWidth
    *        the indentation.
-   * @param indentUnit
+   * @param eIndentUnit
    *        the indentation unit.
    * @throws IOException
    *         by pdfbox
    */
-  public Indent (final float indentWidth, final ESpaceUnit indentUnit) throws IOException
+  public Indent (final float fIndentWidth, final ESpaceUnit eIndentUnit) throws IOException
   {
-    this ("", indentWidth, indentUnit, DEFAULT_FONT_DESCRIPTOR, EAlignment.Left, Color.black);
+    this ("", fIndentWidth, eIndentUnit, DEFAULT_FONT_DESCRIPTOR, EAlignment.Left, Color.black);
   }
 
   /**
    * Creates a new line with the {@link ControlFragment#DEFAULT_FONT_DESCRIPTOR}'s font and the
    * given height.
-   * 
-   * @param label
+   *
+   * @param sLabel
    *        the label of the indentation.
-   * @param indentWidth
+   * @param fIndentWidth
    *        the indentation.
-   * @param indentUnit
+   * @param eIndentUnit
    *        the indentation unit.
-   * @param fontSize
+   * @param fFontSize
    *        the font size, resp. the height of the new line.
-   * @param font
+   * @param aFont
    *        the font to use.
    * @throws IOException
    *         by pdfbox
    */
-  public Indent (final String label,
-                 final float indentWidth,
-                 final ESpaceUnit indentUnit,
-                 final float fontSize,
-                 final PDFont font) throws IOException
+  public Indent (final String sLabel,
+                 final float fIndentWidth,
+                 final ESpaceUnit eIndentUnit,
+                 final float fFontSize,
+                 final PDFont aFont) throws IOException
   {
-    this (label, indentWidth, indentUnit, fontSize, font, EAlignment.Left, Color.black);
+    this (sLabel, fIndentWidth, eIndentUnit, fFontSize, aFont, EAlignment.Left, Color.black);
   }
 
   /**
    * Creates a new line with the {@link ControlFragment#DEFAULT_FONT_DESCRIPTOR}'s font and the
    * given height.
-   * 
-   * @param label
+   *
+   * @param sLabel
    *        the label of the indentation.
-   * @param indentWidth
+   * @param fIndentWidth
    *        the indentation.
-   * @param indentUnit
+   * @param eIndentUnit
    *        the indentation unit.
-   * @param fontSize
+   * @param fFontSize
    *        the font size, resp. the height of the new line.
-   * @param font
+   * @param aFont
    *        the font to use.
-   * @param alignment
+   * @param eAlignment
    *        the alignment of the label.
    * @throws IOException
    *         by pdfbox
    */
-  public Indent (final String label,
-                 final float indentWidth,
-                 final ESpaceUnit indentUnit,
-                 final float fontSize,
-                 final PDFont font,
-                 final EAlignment alignment) throws IOException
+  public Indent (final String sLabel,
+                 final float fIndentWidth,
+                 final ESpaceUnit eIndentUnit,
+                 final float fFontSize,
+                 final PDFont aFont,
+                 final EAlignment eAlignment) throws IOException
   {
-    this (label, indentWidth, indentUnit, fontSize, font, alignment, Color.black);
+    this (sLabel, fIndentWidth, eIndentUnit, fFontSize, aFont, eAlignment, Color.black);
   }
 
   /**
    * Creates a new line with the {@link ControlFragment#DEFAULT_FONT_DESCRIPTOR}'s font and the
    * given height.
-   * 
-   * @param label
+   *
+   * @param sLabel
    *        the label of the indentation.
-   * @param indentWidth
+   * @param fIndentWidth
    *        the indentation.
-   * @param indentUnit
+   * @param eIndentUnit
    *        the indentation unit.
-   * @param fontSize
+   * @param fFontSize
    *        the font size, resp. the height of the new line.
-   * @param font
+   * @param aFont
    *        the font to use.
-   * @param alignment
+   * @param eAlignment
    *        the alignment of the label.
-   * @param color
+   * @param aColor
    *        the color to use.
    * @throws IOException
    *         by pdfbox
    */
-  public Indent (final String label,
-                 final float indentWidth,
-                 final ESpaceUnit indentUnit,
-                 final float fontSize,
-                 final PDFont font,
-                 final EAlignment alignment,
-                 final Color color) throws IOException
+  public Indent (final String sLabel,
+                 final float fIndentWidth,
+                 final ESpaceUnit eIndentUnit,
+                 final float fFontSize,
+                 final PDFont aFont,
+                 final EAlignment eAlignment,
+                 final Color aColor) throws IOException
   {
-    this (label, indentWidth, indentUnit, new FontDescriptor (font, fontSize), alignment, color);
+    this (sLabel, fIndentWidth, eIndentUnit, new FontDescriptor (aFont, fFontSize), eAlignment, aColor);
   }
 
   /**
    * Creates a new line with the given font descriptor.
-   * 
-   * @param label
+   *
+   * @param sLabel
    *        the label of the indentation.
-   * @param indentWidth
+   * @param fIndentWidth
    *        the indentation width.
-   * @param indentUnit
+   * @param eIndentUnit
    *        the indentation unit.
-   * @param fontDescriptor
+   * @param aFontDescriptor
    *        the font and size associated with this new line.
-   * @param alignment
+   * @param eAlignment
    *        the alignment of the label.
-   * @param color
+   * @param aColor
    *        the color to use.
    * @throws IOException
    *         by pdfbox
    */
-  public Indent (final String label,
-                 final float indentWidth,
-                 final ESpaceUnit indentUnit,
-                 final FontDescriptor fontDescriptor,
-                 final EAlignment alignment,
-                 final Color color) throws IOException
+  public Indent (final String sLabel,
+                 final float fIndentWidth,
+                 final ESpaceUnit eIndentUnit,
+                 final FontDescriptor aFontDescriptor,
+                 final EAlignment eAlignment,
+                 final Color aColor) throws IOException
   {
-    super ("INDENT", label, fontDescriptor, color);
+    super ("INDENT", sLabel, aFontDescriptor, aColor);
 
-    float indent = calculateIndent (indentWidth, indentUnit, fontDescriptor);
-    float textWidth = 0;
-    if (label != null && !label.isEmpty ())
+    final float fIndent = _calculateIndent (fIndentWidth, eIndentUnit, aFontDescriptor);
+    float fTextWidth = 0;
+    if (sLabel != null && !sLabel.isEmpty ())
     {
-      textWidth = fontDescriptor.getSize () * fontDescriptor.getFont ().getStringWidth (label) / 1000f;
+      fTextWidth = aFontDescriptor.getSize () * aFontDescriptor.getFont ().getStringWidth (sLabel) / 1000f;
     }
-    float marginLeft = 0;
-    float marginRight = 0;
-    if (textWidth < indent)
+    float fMarginLeft = 0;
+    float fMarginRight = 0;
+    if (fTextWidth < fIndent)
     {
-      switch (alignment)
+      switch (eAlignment)
       {
         case Left:
-          marginRight = indent - textWidth;
+          fMarginRight = fIndent - fTextWidth;
           break;
         case Right:
-          marginLeft = indent - textWidth;
+          fMarginLeft = fIndent - fTextWidth;
           break;
         default:
-          marginLeft = (indent - textWidth) / 2f;
-          marginRight = marginLeft;
+          fMarginLeft = (fIndent - fTextWidth) / 2f;
+          fMarginRight = fMarginLeft;
           break;
       }
     }
-    styledText = new StyledText (label, getFontDescriptor (), getColor (), 0, marginLeft, marginRight);
+    m_aStyledText = new StyledText (sLabel, getFontDescriptor (), getColor (), 0, fMarginLeft, fMarginRight);
   }
 
   /**
    * Directly creates an indent of the given width in pt.
-   * 
-   * @param indentPt
+   *
+   * @param fIndentPt
    *        the indentation in pt.
    */
-  public Indent (final float indentPt)
+  public Indent (final float fIndentPt)
   {
     super ("", DEFAULT_FONT_DESCRIPTOR);
-    styledText = new StyledText ("", getFontDescriptor (), getColor (), 0, indentPt, 0);
+    m_aStyledText = new StyledText ("", getFontDescriptor (), getColor (), 0, fIndentPt, 0);
   }
 
-  private float calculateIndent (final float indentWidth,
-                                 final ESpaceUnit indentUnit,
-                                 final FontDescriptor fontDescriptor) throws IOException
+  private float _calculateIndent (final float fIndentWidth,
+                                  final ESpaceUnit eIndentUnit,
+                                  final FontDescriptor aFontDescriptor) throws IOException
   {
-    if (indentWidth < 0)
+    if (fIndentWidth < 0)
     {
       return 0;
     }
-    return indentUnit.toPt (indentWidth, fontDescriptor);
+    return eIndentUnit.toPt (fIndentWidth, aFontDescriptor);
   }
 
   @Override
   public float getWidth () throws IOException
   {
-    return styledText.getWidth ();
+    return m_aStyledText.getWidth ();
   }
 
   /**
@@ -211,13 +211,13 @@ public class Indent extends ControlFragment
    */
   public StyledText toStyledText ()
   {
-    return styledText;
+    return m_aStyledText;
   }
 
   @Override
   public String toString ()
   {
-    return "ControlFragment [" + getName () + ", " + styledText + "]";
+    return "ControlFragment [" + getName () + ", " + m_aStyledText + "]";
   }
 
 }

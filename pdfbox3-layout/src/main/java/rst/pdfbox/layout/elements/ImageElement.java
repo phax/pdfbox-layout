@@ -11,44 +11,44 @@ import rst.pdfbox.layout.text.IDrawListener;
 import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.util.CompatibilityHelper;
 
-public class ImageElement extends AbstractImageElement implements Drawable, IDividable
+public class ImageElement extends AbstractImageElement implements IDrawable3, IDividable
 {
 
-  public ImageElement (final BufferedImage image)
+  public ImageElement (final BufferedImage aImage)
   {
-    super (image);
+    super (aImage);
   }
 
-  public ImageElement (final InputStream inputStream) throws IOException
+  public ImageElement (final InputStream aInputStream) throws IOException
   {
-    super (inputStream);
+    super (aInputStream);
   }
 
-  public ImageElement (final String filePath) throws IOException
+  public ImageElement (final String sFilePath) throws IOException
   {
-    super (filePath);
+    super (sFilePath);
   }
 
   @Override
-  public Divided divide (float remainingHeight, float nextPageHeight) throws IOException
+  public Divided divide (final float fRemainingHeight, final float fNextPageHeight) throws IOException
   {
-    if (getHeight () <= nextPageHeight)
+    if (getHeight () <= fNextPageHeight)
     {
-      return new Divided (new VerticalSpacer (remainingHeight), this);
+      return new Divided (new VerticalSpacer (fRemainingHeight), this);
     }
-    return new Cutter (this).divide (remainingHeight, nextPageHeight);
+    return new Cutter (this).divide (fRemainingHeight, fNextPageHeight);
   }
 
   @Override
-  public void draw (PDDocument pdDocument,
-                    PDPageContentStream contentStream,
-                    Position upperLeft,
-                    IDrawListener drawListener) throws IOException
+  public void draw (final PDDocument aPdDocument,
+                    final PDPageContentStream aContentStream,
+                    final Position aUpperLeft,
+                    final IDrawListener aDrawListener) throws IOException
   {
-    CompatibilityHelper.drawImage (m_aImage, pdDocument, contentStream, upperLeft, getWidth (), getHeight ());
-    if (drawListener != null)
+    CompatibilityHelper.drawImage (m_aImage, aPdDocument, aContentStream, aUpperLeft, getWidth (), getHeight ());
+    if (aDrawListener != null)
     {
-      drawListener.drawn (this, upperLeft, getWidth (), getHeight ());
+      aDrawListener.drawn (this, aUpperLeft, getWidth (), getHeight ());
     }
   }
 

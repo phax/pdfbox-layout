@@ -1,30 +1,28 @@
+package rst.pdfbox.layout;
 
 import java.awt.Color;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+import org.junit.Test;
 
 import rst.pdfbox.layout.shape.RoundRect;
 import rst.pdfbox.layout.shape.Shape;
 import rst.pdfbox.layout.shape.Stroke;
+import rst.pdfbox.layout.text.Constants;
 import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.EBaseFont;
-import rst.pdfbox.layout.text.Constants;
 import rst.pdfbox.layout.text.IDrawContext;
 import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.TextFlow;
 import rst.pdfbox.layout.text.TextFlowUtil;
 import rst.pdfbox.layout.text.TextSequenceUtil;
 import rst.pdfbox.layout.text.annotations.AnnotationDrawListener;
-import examples.AbstractExampleTest;
-import org.junit.Test;
 
 public class LowLevelTextTest extends AbstractExampleTest {
 

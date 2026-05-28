@@ -39,7 +39,7 @@ public class CompatibilityHelper
   private final static String DOUBLE_ANGLE = "»";
 
   private static final String IMAGE_CACHE = "IMAGE_CACHE";
-  private static Map <PDDocument, Map <String, Map <?, ?>>> documentCaches = new WeakHashMap <PDDocument, Map <String, Map <?, ?>>> ();
+  private static Map <PDDocument, Map <String, Map <?, ?>>> s_aDocumentCaches = new WeakHashMap <> ();
 
   /**
    * Returns the bullet character for the given level. Actually only two bullets are used for odd
@@ -47,340 +47,347 @@ public class CompatibilityHelper
    * the {@link #DOUBLE_ANGLE double angle}. You may customize this by setting the system properties
    * <code>pdfbox.layout.bullet.odd</code> and/or <code>pdfbox.layout.bullet.even</code>.
    *
-   * @param level
+   * @param nLevel
    *        the level to return the bullet for.
    * @return the bullet character for the leve.
    */
-  public static String getBulletCharacter (final int level)
+  public static String getBulletCharacter (final int nLevel)
   {
-    if (level % 2 == 1)
+    if (nLevel % 2 == 1)
     {
       return System.getProperty ("pdfbox.layout.bullet.odd", BULLET);
     }
     return System.getProperty ("pdfbox.layout.bullet.even", DOUBLE_ANGLE);
   }
 
-  public static void clip (final PDPageContentStream contentStream) throws IOException
+  public static void clip (final PDPageContentStream aContentStream) throws IOException
   {
-    contentStream.clip ();
+    aContentStream.clip ();
   }
 
-  public static void transform (final PDPageContentStream contentStream,
-                                float a,
-                                float b,
-                                float c,
-                                float d,
-                                float e,
-                                float f) throws IOException
+  public static void transform (final PDPageContentStream aContentStream,
+                                final float a,
+                                final float b,
+                                final float c,
+                                final float d,
+                                final float e,
+                                final float f) throws IOException
   {
-    contentStream.transform (new Matrix (a, b, c, d, e, f));
+    aContentStream.transform (new Matrix (a, b, c, d, e, f));
   }
 
-  public static void curveTo (final PDPageContentStream contentStream,
-                              float x1,
-                              float y1,
-                              float x2,
-                              float y2,
-                              float x3,
-                              float y3) throws IOException
+  public static void curveTo (final PDPageContentStream aContentStream,
+                              final float x1,
+                              final float y1,
+                              final float x2,
+                              final float y2,
+                              final float x3,
+                              final float y3) throws IOException
   {
-    contentStream.curveTo (x1, y1, x2, y2, x3, y3);
+    aContentStream.curveTo (x1, y1, x2, y2, x3, y3);
   }
 
-  public static void curveTo1 (final PDPageContentStream contentStream, float x1, float y1, float x3, float y3)
-                                                                                                                throws IOException
+  public static void curveTo1 (final PDPageContentStream aContentStream,
+                               final float x1,
+                               final float y1,
+                               final float x3,
+                               final float y3) throws IOException
   {
-    contentStream.curveTo1 (x1, y1, x3, y3);
+    aContentStream.curveTo1 (x1, y1, x3, y3);
   }
 
-  public static void fillNonZero (final PDPageContentStream contentStream) throws IOException
+  public static void fillNonZero (final PDPageContentStream aContentStream) throws IOException
   {
-    contentStream.fill ();
+    aContentStream.fill ();
   }
 
-  public static void showText (final PDPageContentStream contentStream, final String text) throws IOException
+  public static void showText (final PDPageContentStream aContentStream, final String sText) throws IOException
   {
-    contentStream.showText (text);
+    aContentStream.showText (sText);
   }
 
-  public static void setTextTranslation (final PDPageContentStream contentStream, final float x, final float y)
-                                                                                                                throws IOException
+  public static void setTextTranslation (final PDPageContentStream aContentStream, final float x, final float y)
+                                                                                                                 throws IOException
   {
-    contentStream.setTextMatrix (Matrix.getTranslateInstance (x, y));
+    aContentStream.setTextMatrix (Matrix.getTranslateInstance (x, y));
   }
 
-  public static void moveTextPosition (final PDPageContentStream contentStream, final float x, final float y)
-                                                                                                              throws IOException
+  public static void moveTextPosition (final PDPageContentStream aContentStream, final float x, final float y)
+                                                                                                               throws IOException
   {
     // PDFBox 3 forbids cm (concatenate-CTM) inside text objects. Use Tm
     // (setTextMatrix) with absolute coordinates instead. Callers (rewritten
     // by adaptToPdfBox3) pass absolute x/y rather than deltas.
-    contentStream.setTextMatrix (Matrix.getTranslateInstance (x, y));
+    aContentStream.setTextMatrix (Matrix.getTranslateInstance (x, y));
   }
 
-  public static PDPageContentStream createAppendablePDPageContentStream (final PDDocument pdDocument, final PDPage page)
-                                                                                                                         throws IOException
+  public static PDPageContentStream createAppendablePDPageContentStream (final PDDocument aPdDocument,
+                                                                         final PDPage aPage) throws IOException
   {
-    return new PDPageContentStream (pdDocument, page, PDPageContentStream.AppendMode.APPEND, true);
+    return new PDPageContentStream (aPdDocument, aPage, PDPageContentStream.AppendMode.APPEND, true);
   }
 
-  public static void drawImage (final BufferedImage image,
-                                final PDDocument document,
-                                final PDPageContentStream contentStream,
-                                Position upperLeft,
-                                final float width,
-                                final float height) throws IOException
+  public static void drawImage (final BufferedImage aImage,
+                                final PDDocument aDocument,
+                                final PDPageContentStream aContentStream,
+                                final Position aUpperLeft,
+                                final float fWidth,
+                                final float fHeight) throws IOException
   {
-    PDImageXObject cachedImage = getCachedImage (document, image);
-    float x = upperLeft.getX ();
-    float y = upperLeft.getY () - height;
-    contentStream.drawImage (cachedImage, x, y, width, height);
+    final PDImageXObject aCachedImage = _getCachedImage (aDocument, aImage);
+    final float x = aUpperLeft.getX ();
+    final float y = aUpperLeft.getY () - fHeight;
+    aContentStream.drawImage (aCachedImage, x, y, fWidth, fHeight);
   }
 
-  public static int getPageRotation (final PDPage page)
+  public static int getPageRotation (final PDPage aPage)
   {
-    return page.getRotation ();
+    return aPage.getRotation ();
   }
 
   /**
    * Renders the given page as an RGB image.
-   * 
-   * @param document
+   *
+   * @param aDocument
    *        the document containing the page.
-   * @param pageIndex
+   * @param nPageIndex
    *        the index of the page to render.
-   * @param resolution
+   * @param nResolution
    *        the image resolution.
    * @return the rendered image
    * @throws IOException
    *         by pdfbox
    */
-  public static BufferedImage createImageFromPage (final PDDocument document, int pageIndex, final int resolution)
-                                                                                                                   throws IOException
+  public static BufferedImage createImageFromPage (final PDDocument aDocument,
+                                                   final int nPageIndex,
+                                                   final int nResolution) throws IOException
   {
-    PDFRenderer pdfRenderer = new PDFRenderer (document);
-    return pdfRenderer.renderImageWithDPI (pageIndex, resolution, ImageType.RGB);
+    final PDFRenderer aPdfRenderer = new PDFRenderer (aDocument);
+    return aPdfRenderer.renderImageWithDPI (nPageIndex, nResolution, ImageType.RGB);
   }
 
-  public static PDAnnotationLink createLink (PDPage page,
-                                             PDRectangle rect,
-                                             Color color,
-                                             ELinkStyle linkStyle,
-                                             final String uri)
+  public static PDAnnotationLink createLink (final PDPage aPage,
+                                             final PDRectangle aRect,
+                                             final Color aColor,
+                                             final ELinkStyle eLinkStyle,
+                                             final String sUri)
   {
-    PDAnnotationLink pdLink = createLink (page, rect, color, linkStyle);
+    final PDAnnotationLink aPdLink = _createLink (aPage, aRect, aColor, eLinkStyle);
 
-    PDActionURI actionUri = new PDActionURI ();
-    actionUri.setURI (uri);
-    pdLink.setAction (actionUri);
-    return pdLink;
+    final PDActionURI aActionUri = new PDActionURI ();
+    aActionUri.setURI (sUri);
+    aPdLink.setAction (aActionUri);
+    return aPdLink;
   }
 
-  public static PDAnnotationLink createLink (PDPage page,
-                                             PDRectangle rect,
-                                             Color color,
-                                             ELinkStyle linkStyle,
-                                             final PDDestination destination)
+  public static PDAnnotationLink createLink (final PDPage aPage,
+                                             final PDRectangle aRect,
+                                             final Color aColor,
+                                             final ELinkStyle eLinkStyle,
+                                             final PDDestination aDestination)
   {
-    PDAnnotationLink pdLink = createLink (page, rect, color, linkStyle);
+    final PDAnnotationLink aPdLink = _createLink (aPage, aRect, aColor, eLinkStyle);
 
-    PDActionGoTo gotoAction = new PDActionGoTo ();
-    gotoAction.setDestination (destination);
-    pdLink.setAction (gotoAction);
-    return pdLink;
+    final PDActionGoTo aGotoAction = new PDActionGoTo ();
+    aGotoAction.setDestination (aDestination);
+    aPdLink.setAction (aGotoAction);
+    return aPdLink;
   }
 
   /**
    * Sets the color in the annotation.
-   * 
-   * @param annotation
+   *
+   * @param aAnnotation
    *        the annotation.
-   * @param color
+   * @param aColor
    *        the color to set.
    */
-  public static void setAnnotationColor (final PDAnnotation annotation, Color color)
+  public static void setAnnotationColor (final PDAnnotation aAnnotation, final Color aColor)
   {
-    annotation.setColor (toPDColor (color));
+    aAnnotation.setColor (_toPDColor (aColor));
   }
 
-  private static PDAnnotationLink createLink (PDPage page, PDRectangle rect, Color color, ELinkStyle linkStyle)
+  private static PDAnnotationLink _createLink (final PDPage aPage,
+                                               final PDRectangle aRect,
+                                               final Color aColor,
+                                               final ELinkStyle eLinkStyle)
   {
-    PDAnnotationLink pdLink = new PDAnnotationLink ();
-    pdLink.setBorderStyle (toBorderStyle (linkStyle));
-    PDRectangle rotatedRect = transformToPageRotation (rect, page);
-    pdLink.setRectangle (rotatedRect);
-    setAnnotationColor (pdLink, color);
-    return pdLink;
+    final PDAnnotationLink aPdLink = new PDAnnotationLink ();
+    aPdLink.setBorderStyle (_toBorderStyle (eLinkStyle));
+    final PDRectangle aRotatedRect = transformToPageRotation (aRect, aPage);
+    aPdLink.setRectangle (aRotatedRect);
+    setAnnotationColor (aPdLink, aColor);
+    return aPdLink;
   }
 
-  private static PDBorderStyleDictionary toBorderStyle (final ELinkStyle linkStyle)
+  private static PDBorderStyleDictionary _toBorderStyle (final ELinkStyle eLinkStyle)
   {
-    if (linkStyle == ELinkStyle.none)
+    if (eLinkStyle == ELinkStyle.none)
     {
-      return getNoBorder ();
+      return _getNoBorder ();
     }
-    PDBorderStyleDictionary borderStyle = new PDBorderStyleDictionary ();
-    borderStyle.setStyle (PDBorderStyleDictionary.STYLE_UNDERLINE);
-    return borderStyle;
+    final PDBorderStyleDictionary aBorderStyle = new PDBorderStyleDictionary ();
+    aBorderStyle.setStyle (PDBorderStyleDictionary.STYLE_UNDERLINE);
+    return aBorderStyle;
   }
 
-  private static PDColor toPDColor (final Color color)
+  private static PDColor _toPDColor (final Color aColor)
   {
-    float [] components = new float [] { color.getRed () / 255f, color.getGreen () / 255f, color.getBlue () / 255f };
-    return new PDColor (components, PDDeviceRGB.INSTANCE);
+    final float [] aComponents = { aColor.getRed () / 255f, aColor.getGreen () / 255f, aColor.getBlue () / 255f };
+    return new PDColor (aComponents, PDDeviceRGB.INSTANCE);
   }
 
   /**
    * Return the quad points representation of the given rect.
    *
-   * @param rect
+   * @param aRect
    *        the rectangle.
    * @return the quad points.
    */
-  public static float [] toQuadPoints (final PDRectangle rect)
+  public static float [] toQuadPoints (final PDRectangle aRect)
   {
-    return toQuadPoints (rect, 0, 0);
+    return toQuadPoints (aRect, 0, 0);
   }
 
   /**
    * Return the quad points representation of the given rect.
    *
-   * @param rect
+   * @param aRect
    *        the rectangle.
-   * @param xOffset
+   * @param fXOffset
    *        the offset in x-direction to add.
-   * @param yOffset
+   * @param fYOffset
    *        the offset in y-direction to add.
    * @return the quad points.
    */
-  public static float [] toQuadPoints (final PDRectangle rect, float xOffset, float yOffset)
+  public static float [] toQuadPoints (final PDRectangle aRect, final float fXOffset, final float fYOffset)
   {
-    float [] quads = new float [8];
-    quads[0] = rect.getLowerLeftX () + xOffset; // x1
-    quads[1] = rect.getUpperRightY () + yOffset; // y1
-    quads[2] = rect.getUpperRightX () + xOffset; // x2
-    quads[3] = quads[1]; // y2
-    quads[4] = quads[0]; // x3
-    quads[5] = rect.getLowerLeftY () + yOffset; // y3
-    quads[6] = quads[2]; // x4
-    quads[7] = quads[5]; // y5
-    return quads;
+    final float [] aQuads = new float [8];
+    aQuads[0] = aRect.getLowerLeftX () + fXOffset; // x1
+    aQuads[1] = aRect.getUpperRightY () + fYOffset; // y1
+    aQuads[2] = aRect.getUpperRightX () + fXOffset; // x2
+    aQuads[3] = aQuads[1]; // y2
+    aQuads[4] = aQuads[0]; // x3
+    aQuads[5] = aRect.getLowerLeftY () + fYOffset; // y3
+    aQuads[6] = aQuads[2]; // x4
+    aQuads[7] = aQuads[5]; // y5
+    return aQuads;
   }
 
   /**
    * Transform the quad points in order to match the page rotation
-   * 
-   * @param quadPoints
+   *
+   * @param aQuadPoints
    *        the quad points.
-   * @param page
+   * @param aPage
    *        the page.
    * @return the transformed quad points.
    */
-  public static float [] transformToPageRotation (final float [] quadPoints, final PDPage page)
+  public static float [] transformToPageRotation (final float [] aQuadPoints, final PDPage aPage)
   {
-    AffineTransform transform = transformToPageRotation (page);
-    if (transform == null)
+    final AffineTransform aTransform = _transformToPageRotation (aPage);
+    if (aTransform == null)
     {
-      return quadPoints;
+      return aQuadPoints;
     }
-    float [] rotatedPoints = new float [quadPoints.length];
-    transform.transform (quadPoints, 0, rotatedPoints, 0, 4);
-    return rotatedPoints;
+    final float [] aRotatedPoints = new float [aQuadPoints.length];
+    aTransform.transform (aQuadPoints, 0, aRotatedPoints, 0, 4);
+    return aRotatedPoints;
   }
 
   /**
    * Transform the rectangle in order to match the page rotation
-   * 
-   * @param rect
+   *
+   * @param aRect
    *        the rectangle.
-   * @param page
+   * @param aPage
    *        the page.
    * @return the transformed rectangle.
    */
-  public static PDRectangle transformToPageRotation (final PDRectangle rect, final PDPage page)
+  public static PDRectangle transformToPageRotation (final PDRectangle aRect, final PDPage aPage)
   {
-    AffineTransform transform = transformToPageRotation (page);
-    if (transform == null)
+    final AffineTransform aTransform = _transformToPageRotation (aPage);
+    if (aTransform == null)
     {
-      return rect;
+      return aRect;
     }
-    float [] points = new float [] { rect.getLowerLeftX (),
-                                     rect.getLowerLeftY (),
-                                     rect.getUpperRightX (),
-                                     rect.getUpperRightY () };
-    float [] rotatedPoints = new float [4];
-    transform.transform (points, 0, rotatedPoints, 0, 2);
-    PDRectangle rotated = new PDRectangle ();
-    rotated.setLowerLeftX (rotatedPoints[0]);
-    rotated.setLowerLeftY (rotatedPoints[1]);
-    rotated.setUpperRightX (rotatedPoints[2]);
-    rotated.setUpperRightY (rotatedPoints[3]);
-    return rotated;
+    final float [] aPoints = { aRect.getLowerLeftX (),
+                               aRect.getLowerLeftY (),
+                               aRect.getUpperRightX (),
+                               aRect.getUpperRightY () };
+    final float [] aRotatedPoints = new float [4];
+    aTransform.transform (aPoints, 0, aRotatedPoints, 0, 2);
+    final PDRectangle aRotated = new PDRectangle ();
+    aRotated.setLowerLeftX (aRotatedPoints[0]);
+    aRotated.setLowerLeftY (aRotatedPoints[1]);
+    aRotated.setUpperRightX (aRotatedPoints[2]);
+    aRotated.setUpperRightY (aRotatedPoints[3]);
+    return aRotated;
   }
 
-  private static AffineTransform transformToPageRotation (final PDPage page)
+  private static AffineTransform _transformToPageRotation (final PDPage aPage)
   {
-    int pageRotation = getPageRotation (page);
-    if (pageRotation == 0)
+    final int nPageRotation = getPageRotation (aPage);
+    if (nPageRotation == 0)
     {
       return null;
     }
-    float pageWidth = page.getMediaBox ().getHeight ();
-    float pageHeight = page.getMediaBox ().getWidth ();
-    AffineTransform transform = new AffineTransform ();
-    transform.rotate (pageRotation * Math.PI / 180, pageHeight / 2, pageWidth / 2);
-    double offset = Math.abs (pageHeight - pageWidth) / 2;
-    transform.translate (-offset, offset);
-    return transform;
+    final float fPageWidth = aPage.getMediaBox ().getHeight ();
+    final float fPageHeight = aPage.getMediaBox ().getWidth ();
+    final AffineTransform aTransform = new AffineTransform ();
+    aTransform.rotate (nPageRotation * Math.PI / 180, fPageHeight / 2, fPageWidth / 2);
+    final double dOffset = Math.abs (fPageHeight - fPageWidth) / 2;
+    aTransform.translate (-dOffset, dOffset);
+    return aTransform;
   }
 
-  private static PDBorderStyleDictionary getNoBorder ()
+  private static PDBorderStyleDictionary _getNoBorder ()
   {
     // Each call returns a fresh instance: a single PDBorderStyleDictionary
     // wraps a COSDictionary that becomes tied to the first PDDocument it is
     // attached to. Sharing it across documents (e.g. when ExampleTest runs
     // many example main() methods in one JVM) leaks PDF object state and
     // makes rendering non-deterministic across tests.
-    PDBorderStyleDictionary noBorder = new PDBorderStyleDictionary ();
-    noBorder.setWidth (0);
-    return noBorder;
+    final PDBorderStyleDictionary aNoBorder = new PDBorderStyleDictionary ();
+    aNoBorder.setWidth (0);
+    return aNoBorder;
   }
 
-  private static synchronized Map <String, Map <?, ?>> getDocumentCache (final PDDocument document)
+  private static synchronized Map <String, Map <?, ?>> _getDocumentCache (final PDDocument aDocument)
   {
-    Map <String, Map <?, ?>> cache = documentCaches.get (document);
-    if (cache == null)
+    Map <String, Map <?, ?>> aCache = s_aDocumentCaches.get (aDocument);
+    if (aCache == null)
     {
-      cache = new HashMap <String, Map <?, ?>> ();
-      documentCaches.put (document, cache);
+      aCache = new HashMap <> ();
+      s_aDocumentCaches.put (aDocument, aCache);
     }
-    return cache;
+    return aCache;
   }
 
-  private static synchronized Map <BufferedImage, PDImageXObject> getImageCache (final PDDocument document)
+  private static synchronized Map <BufferedImage, PDImageXObject> _getImageCache (final PDDocument aDocument)
   {
-    Map <String, Map <?, ?>> documentCache = getDocumentCache (document);
+    final Map <String, Map <?, ?>> aDocumentCache = _getDocumentCache (aDocument);
     @SuppressWarnings ("unchecked")
-    Map <BufferedImage, PDImageXObject> imageCache = (Map <BufferedImage, PDImageXObject>) documentCache.get (IMAGE_CACHE);
-    if (imageCache == null)
+    Map <BufferedImage, PDImageXObject> aImageCache = (Map <BufferedImage, PDImageXObject>) aDocumentCache.get (IMAGE_CACHE);
+    if (aImageCache == null)
     {
-      imageCache = new HashMap <BufferedImage, PDImageXObject> ();
-      documentCache.put (IMAGE_CACHE, imageCache);
+      aImageCache = new HashMap <> ();
+      aDocumentCache.put (IMAGE_CACHE, aImageCache);
     }
-    return imageCache;
+    return aImageCache;
   }
 
-  private static synchronized PDImageXObject getCachedImage (final PDDocument document, final BufferedImage image)
-                                                                                                                   throws IOException
+  private static synchronized PDImageXObject _getCachedImage (final PDDocument aDocument, final BufferedImage aImage)
+                                                                                                                      throws IOException
   {
-    Map <BufferedImage, PDImageXObject> imageCache = getImageCache (document);
-    PDImageXObject pdxObjectImage = imageCache.get (image);
-    if (pdxObjectImage == null)
+    final Map <BufferedImage, PDImageXObject> aImageCache = _getImageCache (aDocument);
+    PDImageXObject aPdxObjectImage = aImageCache.get (aImage);
+    if (aPdxObjectImage == null)
     {
-      pdxObjectImage = LosslessFactory.createFromImage (document, image);
-      imageCache.put (image, pdxObjectImage);
+      aPdxObjectImage = LosslessFactory.createFromImage (aDocument, aImage);
+      aImageCache.put (aImage, aPdxObjectImage);
     }
-    return pdxObjectImage;
+    return aPdxObjectImage;
   }
 
 }

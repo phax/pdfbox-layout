@@ -12,7 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class AnnotationProcessorFactory
 {
 
-  private final static List <Class <? extends AnnotationProcessor>> ANNOTATION_PROCESSORS = new CopyOnWriteArrayList <Class <? extends AnnotationProcessor>> ();
+  private final static List <Class <? extends AnnotationProcessor>> ANNOTATION_PROCESSORS = new CopyOnWriteArrayList <> ();
 
   static
   {
@@ -23,12 +23,12 @@ public class AnnotationProcessorFactory
   /**
    * Use this method to register your (custom) annotation processors.
    *
-   * @param annotationProcessor
+   * @param aAnnotationProcessor
    *        the processor to register.
    */
-  public static void register (final Class <? extends AnnotationProcessor> annotationProcessor)
+  public static void register (final Class <? extends AnnotationProcessor> aAnnotationProcessor)
   {
-    ANNOTATION_PROCESSORS.add (annotationProcessor);
+    ANNOTATION_PROCESSORS.add (aAnnotationProcessor);
   }
 
   /**
@@ -49,18 +49,18 @@ public class AnnotationProcessorFactory
    */
   public static Iterable <AnnotationProcessor> createAnnotationProcessors ()
   {
-    List <AnnotationProcessor> annotationProcessors = new ArrayList <AnnotationProcessor> ();
-    for (Class <? extends AnnotationProcessor> annotationProcessorClass : ANNOTATION_PROCESSORS)
+    final List <AnnotationProcessor> aAnnotationProcessors = new ArrayList <> ();
+    for (final Class <? extends AnnotationProcessor> aAnnotationProcessorClass : ANNOTATION_PROCESSORS)
     {
       try
       {
-        annotationProcessors.add (annotationProcessorClass.newInstance ());
+        aAnnotationProcessors.add (aAnnotationProcessorClass.getDeclaredConstructor ().newInstance ());
       }
-      catch (Exception e)
+      catch (final Exception ex)
       {
-        throw new RuntimeException ("failed to create AnnotationProcessor", e);
+        throw new RuntimeException ("failed to create AnnotationProcessor", ex);
       }
     }
-    return annotationProcessors;
+    return aAnnotationProcessors;
   }
 }

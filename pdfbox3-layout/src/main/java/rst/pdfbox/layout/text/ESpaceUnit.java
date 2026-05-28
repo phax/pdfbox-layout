@@ -19,19 +19,19 @@ public enum ESpaceUnit
   /**
    * Converts the given unit to pt.
    *
-   * @param size
+   * @param fSize
    *        the size with respect to the unit.
-   * @param fontDescriptor
+   * @param aFontDescriptor
    *        the font/size to use.
    * @return the size in pt.
    * @throws IOException
    *         by pdfbox
    */
-  public float toPt (final float size, final FontDescriptor fontDescriptor) throws IOException
+  public float toPt (final float fSize, final FontDescriptor aFontDescriptor) throws IOException
   {
     if (this == em)
-      return fontDescriptor.getSize () * fontDescriptor.getFont ().getAverageFontWidth () / 1000 * size;
+      return aFontDescriptor.getSize () * aFontDescriptor.getFont ().getAverageFontWidth () / 1000 * fSize;
 
-    return size;
+    return fSize;
   }
 }

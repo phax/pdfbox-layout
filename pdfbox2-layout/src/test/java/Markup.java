@@ -4,8 +4,8 @@ import java.io.OutputStream;
 import rst.pdfbox.layout.elements.Document;
 import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
-import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.BaseFont;
+import rst.pdfbox.layout.text.EAlignment;
 
 public class Markup {
 

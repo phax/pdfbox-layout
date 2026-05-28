@@ -8,13 +8,13 @@ import rst.pdfbox.layout.elements.ControlElement;
 import rst.pdfbox.layout.elements.Cutter;
 import rst.pdfbox.layout.elements.IDividable;
 import rst.pdfbox.layout.elements.IDividable.Divided;
-import rst.pdfbox.layout.elements.Drawable;
+import rst.pdfbox.layout.elements.IDrawable3;
 import rst.pdfbox.layout.elements.IElement;
 import rst.pdfbox.layout.elements.PageFormat;
 import rst.pdfbox.layout.elements.VerticalSpacer;
 import rst.pdfbox.layout.text.EAlignment;
-import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.IWidthRespecting;
+import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.util.CompatibilityHelper;
 
 /**
@@ -23,149 +23,153 @@ import rst.pdfbox.layout.util.CompatibilityHelper;
  * {@link VerticalLayoutHint} will be taken into account to calculate the position, width, alignment
  * etc.
  */
-public class VerticalLayout implements Layout
+public class VerticalLayout implements ILayout
 {
 
-  protected boolean removeLeadingEmptyVerticalSpace = true;
+  protected boolean m_bRemoveLeadingEmptyVerticalSpace = true;
 
   /**
-   * See {@link Drawable#removeLeadingEmptyVerticalSpace()}
-   * 
+   * See {@link IDrawable3#removeLeadingEmptyVerticalSpace()}
+   *
    * @return <code>true</code> if empty space (e.g. empty lines) should be removed at the begin of a
    *         page.
    */
   public boolean isRemoveLeadingEmptyVerticalSpace ()
   {
-    return removeLeadingEmptyVerticalSpace;
+    return m_bRemoveLeadingEmptyVerticalSpace;
   }
 
   /**
    * Indicates if empty space (e.g. empty lines) should be removed at the begin of a page. See
-   * {@link Drawable#removeLeadingEmptyVerticalSpace()}
-   * 
-   * @param removeLeadingEmptyLines
+   * {@link IDrawable3#removeLeadingEmptyVerticalSpace()}
+   *
+   * @param bRemoveLeadingEmptyLines
    *        <code>true</code> if space should be removed.
    */
-  public void setRemoveLeadingEmptyVerticalSpace (boolean removeLeadingEmptyLines)
+  public void setRemoveLeadingEmptyVerticalSpace (final boolean bRemoveLeadingEmptyLines)
   {
-    this.removeLeadingEmptyVerticalSpace = removeLeadingEmptyLines;
+    this.m_bRemoveLeadingEmptyVerticalSpace = bRemoveLeadingEmptyLines;
   }
 
   /**
    * Turns to the next area, usually a page.
-   * 
-   * @param renderContext
+   *
+   * @param aRenderContext
    *        the render context.
    * @throws IOException
    *         by pdfbox.
    */
-  protected void turnPage (final RenderContext renderContext) throws IOException
+  protected void turnPage (final RenderContext aRenderContext) throws IOException
   {
-    renderContext.newPage ();
+    aRenderContext.newPage ();
   }
 
   /**
-   * @param renderContext
+   * @param aRenderContext
    *        the render context.
    * @return the target width to draw to.
    */
-  protected float getTargetWidth (final RenderContext renderContext)
+  protected float getTargetWidth (final RenderContext aRenderContext)
   {
-    float targetWidth = renderContext.getWidth ();
-    return targetWidth;
+    final float fTargetWidth = aRenderContext.getWidth ();
+    return fTargetWidth;
   }
 
   @Override
-  public boolean render (RenderContext renderContext, IElement element, ILayoutHint layoutHint) throws IOException
+  public boolean render (final RenderContext aRenderContext,
+                         final IElement aElement,
+                         final ILayoutHint aLayoutHint) throws IOException
   {
-    if (element instanceof Drawable)
+    if (aElement instanceof IDrawable3)
     {
-      render (renderContext, (Drawable) element, layoutHint);
+      render (aRenderContext, (IDrawable3) aElement, aLayoutHint);
       return true;
     }
-    if (element == ControlElement.NEWPAGE)
+    if (aElement == ControlElement.NEWPAGE)
     {
-      turnPage (renderContext);
+      turnPage (aRenderContext);
       return true;
     }
 
     return false;
   }
 
-  public void render (final RenderContext renderContext, Drawable drawable, final ILayoutHint layoutHint)
-                                                                                                         throws IOException
+  public void render (final RenderContext aRenderContext,
+                      final IDrawable3 aDrawable,
+                      final ILayoutHint aLayoutHint) throws IOException
   {
-    if (drawable.getAbsolutePosition () != null)
+    if (aDrawable.getAbsolutePosition () != null)
     {
-      renderAbsolute (renderContext, drawable, layoutHint, drawable.getAbsolutePosition ());
+      renderAbsolute (aRenderContext, aDrawable, aLayoutHint, aDrawable.getAbsolutePosition ());
     }
     else
     {
-      renderReleative (renderContext, drawable, layoutHint);
+      renderReleative (aRenderContext, aDrawable, aLayoutHint);
     }
   }
 
   /**
    * Draws at the given position, ignoring all layouting rules.
-   * 
-   * @param renderContext
+   *
+   * @param aRenderContext
    *        the context providing all rendering state.
-   * @param drawable
+   * @param aDrawable
    *        the drawable to draw.
-   * @param layoutHint
+   * @param aLayoutHint
    *        the layout hint used to layout.
-   * @param position
+   * @param aPosition
    *        the left upper position to start drawing at.
    * @throws IOException
    *         by pdfbox
    */
-  protected void renderAbsolute (final RenderContext renderContext,
-                                 Drawable drawable,
-                                 final ILayoutHint layoutHint,
-                                 final Position position) throws IOException
+  protected void renderAbsolute (final RenderContext aRenderContext,
+                                 final IDrawable3 aDrawable,
+                                 final ILayoutHint aLayoutHint,
+                                 final Position aPosition) throws IOException
   {
-    drawable.draw (renderContext.getPdDocument (), renderContext.getContentStream (), position, renderContext);
+    aDrawable.draw (aRenderContext.getPdDocument (), aRenderContext.getContentStream (), aPosition, aRenderContext);
   }
 
   /**
    * Renders the drawable at the {@link RenderContext#getCurrentPosition() current position}. This
    * method is responsible taking any top or bottom margin described by the (Vertical-)LayoutHint
    * into account. The actual rendering of the drawable is performed by
-   * {@link #layoutAndDrawReleative(RenderContext, Drawable, ILayoutHint)}.
-   * 
-   * @param renderContext
+   * {@link #layoutAndDrawReleative(RenderContext, IDrawable3, ILayoutHint)}.
+   *
+   * @param aRenderContext
    *        the context providing all rendering state.
-   * @param drawable
+   * @param aDrawable
    *        the drawable to draw.
-   * @param layoutHint
+   * @param aLayoutHint
    *        the layout hint used to layout.
    * @throws IOException
    *         by pdfbox
    */
-  protected void renderReleative (final RenderContext renderContext, Drawable drawable, final ILayoutHint layoutHint)
-                                                                                                                     throws IOException
+  protected void renderReleative (final RenderContext aRenderContext,
+                                  final IDrawable3 aDrawable,
+                                  final ILayoutHint aLayoutHint) throws IOException
   {
-    VerticalLayoutHint verticalLayoutHint = null;
-    if (layoutHint instanceof VerticalLayoutHint)
+    VerticalLayoutHint aVerticalLayoutHint = null;
+    if (aLayoutHint instanceof VerticalLayoutHint)
     {
-      verticalLayoutHint = (VerticalLayoutHint) layoutHint;
-      if (verticalLayoutHint.getMarginTop () > 0)
+      aVerticalLayoutHint = (VerticalLayoutHint) aLayoutHint;
+      if (aVerticalLayoutHint.getMarginTop () > 0)
       {
-        layoutAndDrawReleative (renderContext,
-                                new VerticalSpacer (verticalLayoutHint.getMarginTop ()),
-                                verticalLayoutHint);
+        layoutAndDrawReleative (aRenderContext,
+                                new VerticalSpacer (aVerticalLayoutHint.getMarginTop ()),
+                                aVerticalLayoutHint);
       }
     }
 
-    layoutAndDrawReleative (renderContext, drawable, verticalLayoutHint);
+    layoutAndDrawReleative (aRenderContext, aDrawable, aVerticalLayoutHint);
 
-    if (verticalLayoutHint != null)
+    if (aVerticalLayoutHint != null)
     {
-      if (verticalLayoutHint.getMarginBottom () > 0)
+      if (aVerticalLayoutHint.getMarginBottom () > 0)
       {
-        layoutAndDrawReleative (renderContext,
-                                new VerticalSpacer (verticalLayoutHint.getMarginBottom ()),
-                                verticalLayoutHint);
+        layoutAndDrawReleative (aRenderContext,
+                                new VerticalSpacer (aVerticalLayoutHint.getMarginBottom ()),
+                                aVerticalLayoutHint);
       }
     }
   }
@@ -173,72 +177,72 @@ public class VerticalLayout implements Layout
   /**
    * Adjusts the width of the drawable (if it is {@link IWidthRespecting}), and divides it onto
    * multiple pages if necessary. Actual drawing is delegated to
-   * {@link #drawReletivePartAndMovePosition(RenderContext, Drawable, ILayoutHint, boolean)} .
-   * 
-   * @param renderContext
+   * {@link #drawReletivePartAndMovePosition(RenderContext, IDrawable3, ILayoutHint, boolean)} .
+   *
+   * @param aRenderContext
    *        the context providing all rendering state.
-   * @param drawable
+   * @param aDrawable
    *        the drawable to draw.
-   * @param layoutHint
+   * @param aLayoutHint
    *        the layout hint used to layout.
    * @throws IOException
    *         by pdfbox
    */
-  protected void layoutAndDrawReleative (final RenderContext renderContext,
-                                         Drawable drawable,
-                                         final ILayoutHint layoutHint) throws IOException
+  protected void layoutAndDrawReleative (final RenderContext aRenderContext,
+                                         final IDrawable3 aDrawable,
+                                         final ILayoutHint aLayoutHint) throws IOException
   {
-    float targetWidth = getTargetWidth (renderContext);
-    boolean movePosition = true;
-    VerticalLayoutHint verticalLayoutHint = null;
-    if (layoutHint instanceof VerticalLayoutHint)
+    float fTargetWidth = getTargetWidth (aRenderContext);
+    boolean bMovePosition = true;
+    VerticalLayoutHint aVerticalLayoutHint = null;
+    if (aLayoutHint instanceof VerticalLayoutHint)
     {
-      verticalLayoutHint = (VerticalLayoutHint) layoutHint;
-      targetWidth -= verticalLayoutHint.getMarginLeft ();
-      targetWidth -= verticalLayoutHint.getMarginRight ();
-      movePosition = !verticalLayoutHint.isResetY ();
+      aVerticalLayoutHint = (VerticalLayoutHint) aLayoutHint;
+      fTargetWidth -= aVerticalLayoutHint.getMarginLeft ();
+      fTargetWidth -= aVerticalLayoutHint.getMarginRight ();
+      bMovePosition = !aVerticalLayoutHint.isResetY ();
     }
 
-    float oldMaxWidth = -1;
-    if (drawable instanceof IWidthRespecting)
+    float fOldMaxWidth = -1;
+    if (aDrawable instanceof IWidthRespecting)
     {
-      IWidthRespecting flowing = (IWidthRespecting) drawable;
-      oldMaxWidth = flowing.getMaxWidth ();
-      if (oldMaxWidth < 0)
+      final IWidthRespecting aFlowing = (IWidthRespecting) aDrawable;
+      fOldMaxWidth = aFlowing.getMaxWidth ();
+      if (fOldMaxWidth < 0)
       {
-        flowing.setMaxWidth (targetWidth);
+        aFlowing.setMaxWidth (fTargetWidth);
       }
     }
 
-    Drawable drawablePart = removeLeadingEmptyVerticalSpace (drawable, renderContext);
-    while (renderContext.getRemainingHeight () < drawablePart.getHeight ())
+    IDrawable3 aDrawablePart = removeLeadingEmptyVerticalSpace (aDrawable, aRenderContext);
+    while (aRenderContext.getRemainingHeight () < aDrawablePart.getHeight ())
     {
-      IDividable dividable = null;
-      if (drawablePart instanceof IDividable)
+      IDividable aDividable = null;
+      if (aDrawablePart instanceof IDividable)
       {
-        dividable = (IDividable) drawablePart;
+        aDividable = (IDividable) aDrawablePart;
       }
       else
       {
-        dividable = new Cutter (drawablePart);
+        aDividable = new Cutter (aDrawablePart);
       }
-      Divided divided = dividable.divide (renderContext.getRemainingHeight (), renderContext.getHeight ());
-      drawReletivePartAndMovePosition (renderContext, (Drawable) divided.getFirst (), layoutHint, true);
+      final Divided aDivided = aDividable.divide (aRenderContext.getRemainingHeight (), aRenderContext.getHeight ());
+      drawReletivePartAndMovePosition (aRenderContext, (IDrawable3) aDivided.getFirst (), aLayoutHint, true);
 
       // new page
-      turnPage (renderContext);
+      turnPage (aRenderContext);
 
-      drawablePart = (Drawable) divided.getTail ();
-      drawablePart = removeLeadingEmptyVerticalSpace (drawablePart, renderContext);
+      aDrawablePart = (IDrawable3) aDivided.getTail ();
+      aDrawablePart = removeLeadingEmptyVerticalSpace (aDrawablePart, aRenderContext);
     }
 
-    drawReletivePartAndMovePosition (renderContext, drawablePart, layoutHint, movePosition);
+    drawReletivePartAndMovePosition (aRenderContext, aDrawablePart, aLayoutHint, bMovePosition);
 
-    if (drawable instanceof IWidthRespecting)
+    if (aDrawable instanceof IWidthRespecting)
     {
-      if (oldMaxWidth < 0)
+      if (fOldMaxWidth < 0)
       {
-        ((IWidthRespecting) drawable).setMaxWidth (oldMaxWidth);
+        ((IWidthRespecting) aDrawable).setMaxWidth (fOldMaxWidth);
       }
     }
   }
@@ -247,94 +251,94 @@ public class VerticalLayout implements Layout
    * Actually draws the (drawble) part at the {@link RenderContext#getCurrentPosition()} and -
    * depending on flag <code>movePosition</code> - moves to the new Y position. Any left or right
    * margin is taken into account to calculate the position and alignment.
-   * 
-   * @param renderContext
+   *
+   * @param aRenderContext
    *        the context providing all rendering state.
-   * @param drawable
+   * @param aDrawable
    *        the drawable to draw.
-   * @param layoutHint
+   * @param aLayoutHint
    *        the layout hint used to layout.
-   * @param movePosition
+   * @param bMovePosition
    *        indicates if the position should be moved (vertically) after drawing.
    * @throws IOException
    *         by pdfbox
    */
-  protected void drawReletivePartAndMovePosition (final RenderContext renderContext,
-                                                  Drawable drawable,
-                                                  final ILayoutHint layoutHint,
-                                                  final boolean movePosition) throws IOException
+  protected void drawReletivePartAndMovePosition (final RenderContext aRenderContext,
+                                                  final IDrawable3 aDrawable,
+                                                  final ILayoutHint aLayoutHint,
+                                                  final boolean bMovePosition) throws IOException
   {
-    PDPageContentStream contentStream = renderContext.getContentStream ();
-    PageFormat pageFormat = renderContext.getPageFormat ();
-    float offsetX = 0;
-    if (layoutHint instanceof VerticalLayoutHint)
+    final PDPageContentStream aContentStream = aRenderContext.getContentStream ();
+    final PageFormat aPageFormat = aRenderContext.getPageFormat ();
+    float fOffsetX = 0;
+    if (aLayoutHint instanceof VerticalLayoutHint)
     {
-      VerticalLayoutHint verticalLayoutHint = (VerticalLayoutHint) layoutHint;
-      EAlignment alignment = verticalLayoutHint.getAlignment ();
-      float horizontalExtraSpace = getTargetWidth (renderContext) - drawable.getWidth ();
-      switch (alignment)
+      final VerticalLayoutHint aVerticalLayoutHint = (VerticalLayoutHint) aLayoutHint;
+      final EAlignment eAlignment = aVerticalLayoutHint.getAlignment ();
+      final float fHorizontalExtraSpace = getTargetWidth (aRenderContext) - aDrawable.getWidth ();
+      switch (eAlignment)
       {
         case Right:
-          offsetX = horizontalExtraSpace - verticalLayoutHint.getMarginRight ();
+          fOffsetX = fHorizontalExtraSpace - aVerticalLayoutHint.getMarginRight ();
           break;
         case Center:
-          offsetX = horizontalExtraSpace / 2f;
+          fOffsetX = fHorizontalExtraSpace / 2f;
           break;
         default:
-          offsetX = verticalLayoutHint.getMarginLeft ();
+          fOffsetX = aVerticalLayoutHint.getMarginLeft ();
           break;
       }
     }
 
-    contentStream.saveGraphicsState ();
-    contentStream.addRect (0, pageFormat.getMarginBottom (), renderContext.getPageWidth (), renderContext.getHeight ());
-    CompatibilityHelper.clip (contentStream);
+    aContentStream.saveGraphicsState ();
+    aContentStream.addRect (0, aPageFormat.getMarginBottom (), aRenderContext.getPageWidth (), aRenderContext.getHeight ());
+    CompatibilityHelper.clip (aContentStream);
 
-    drawable.draw (renderContext.getPdDocument (),
-                   contentStream,
-                   renderContext.getCurrentPosition ().add (offsetX, 0),
-                   renderContext);
+    aDrawable.draw (aRenderContext.getPdDocument (),
+                    aContentStream,
+                    aRenderContext.getCurrentPosition ().add (fOffsetX, 0),
+                    aRenderContext);
 
-    contentStream.restoreGraphicsState ();
+    aContentStream.restoreGraphicsState ();
 
-    if (movePosition)
+    if (bMovePosition)
     {
-      renderContext.movePositionBy (0, -drawable.getHeight ());
+      aRenderContext.movePositionBy (0, -aDrawable.getHeight ());
     }
   }
 
   /**
    * Indicates if the current position is the top of page.
-   * 
-   * @param renderContext
+   *
+   * @param aRenderContext
    *        the render context.
    * @return <code>true</code> if the current position is top of page.
    */
-  protected boolean isPositionTopOfPage (final RenderContext renderContext)
+  protected boolean isPositionTopOfPage (final RenderContext aRenderContext)
   {
-    return renderContext.getCurrentPosition ().getY () == renderContext.getUpperLeft ().getY ();
+    return aRenderContext.getCurrentPosition ().getY () == aRenderContext.getUpperLeft ().getY ();
   }
 
   /**
    * Removes empty space (e.g. empty lines) at the begin of a page. See
-   * {@link Drawable#removeLeadingEmptyVerticalSpace()}
-   * 
-   * @param drawable
+   * {@link IDrawable3#removeLeadingEmptyVerticalSpace()}
+   *
+   * @param aDrawable
    *        the drawable to process.
-   * @param renderContext
+   * @param aRenderContext
    *        the render context.
    * @return the processed drawable
    * @throws IOException
    *         by pdfbox
    */
-  protected Drawable removeLeadingEmptyVerticalSpace (final Drawable drawable, final RenderContext renderContext)
-                                                                                                                  throws IOException
+  protected IDrawable3 removeLeadingEmptyVerticalSpace (final IDrawable3 aDrawable,
+                                                      final RenderContext aRenderContext) throws IOException
   {
-    if (isRemoveLeadingEmptyVerticalSpace () && isPositionTopOfPage (renderContext))
+    if (isRemoveLeadingEmptyVerticalSpace () && isPositionTopOfPage (aRenderContext))
     {
-      return drawable.removeLeadingEmptyVerticalSpace ();
+      return aDrawable.removeLeadingEmptyVerticalSpace ();
     }
-    return drawable;
+    return aDrawable;
   }
 
 }

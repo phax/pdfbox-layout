@@ -37,31 +37,31 @@ public class IndentCharacters
   public static class IndentCharacter extends ControlCharacter
   {
 
-    protected int level = 1;
-    protected float indentWidth = 4;
-    protected ESpaceUnit indentUnit = ESpaceUnit.em;
+    protected int m_nLevel = 1;
+    protected float m_fIndentWidth = 4;
+    protected ESpaceUnit m_eIndentUnit = ESpaceUnit.em;
 
-    public IndentCharacter (final String level, final String indentWidth, final String indentUnit)
+    public IndentCharacter (final String sLevel, final String sIndentWidth, final String sIndentUnit)
     {
       super ("INDENT", IndentCharacterFactory.TO_ESCAPE);
       try
       {
-        this.level = level == null ? 0 : level.length () + 1;
+        this.m_nLevel = sLevel == null ? 0 : sLevel.length () + 1;
       }
-      catch (NumberFormatException e)
+      catch (final NumberFormatException ex)
       {}
       try
       {
-        this.indentUnit = indentUnit == null ? ESpaceUnit.em : ESpaceUnit.valueOf (indentUnit);
+        this.m_eIndentUnit = sIndentUnit == null ? ESpaceUnit.em : ESpaceUnit.valueOf (sIndentUnit);
       }
-      catch (NumberFormatException e)
+      catch (final NumberFormatException ex)
       {}
-      float defaultIndent = this.indentUnit == ESpaceUnit.em ? 4 : 10;
+      final float fDefaultIndent = this.m_eIndentUnit == ESpaceUnit.em ? 4 : 10;
       try
       {
-        this.indentWidth = indentWidth == null ? defaultIndent : Integer.parseInt (indentWidth);
+        this.m_fIndentWidth = sIndentWidth == null ? fDefaultIndent : Integer.parseInt (sIndentWidth);
       }
-      catch (NumberFormatException e)
+      catch (final NumberFormatException ex)
       {}
     }
 
@@ -70,7 +70,7 @@ public class IndentCharacters
      */
     public int getLevel ()
     {
-      return level;
+      return m_nLevel;
     }
 
     /**
@@ -84,48 +84,48 @@ public class IndentCharacters
 
     /**
      * Creates the actual {@link Indent} fragment from this control character.
-     * 
-     * @param fontSize
+     *
+     * @param fFontSize
      *        the current font size.
-     * @param font
+     * @param aFont
      *        the current font.
-     * @param color
+     * @param aColor
      *        the color to use.
      * @return the new Indent.
      * @throws IOException
      *         by pdfbox
      */
-    public Indent createNewIndent (final float fontSize, final PDFont font, final Color color) throws IOException
+    public Indent createNewIndent (final float fFontSize, final PDFont aFont, final Color aColor) throws IOException
     {
-      return new Indent (nextLabel (), level * indentWidth, indentUnit, fontSize, font, EAlignment.Right, color);
+      return new Indent (nextLabel (), m_nLevel * m_fIndentWidth, m_eIndentUnit, fFontSize, aFont, EAlignment.Right, aColor);
     }
 
     @Override
     public int hashCode ()
     {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + ((indentUnit == null) ? 0 : indentUnit.hashCode ());
-      result = prime * result + Float.floatToIntBits (indentWidth);
-      result = prime * result + level;
-      return result;
+      final int nPrime = 31;
+      int nResult = 1;
+      nResult = nPrime * nResult + ((m_eIndentUnit == null) ? 0 : m_eIndentUnit.hashCode ());
+      nResult = nPrime * nResult + Float.floatToIntBits (m_fIndentWidth);
+      nResult = nPrime * nResult + m_nLevel;
+      return nResult;
     }
 
     @Override
-    public boolean equals (Object obj)
+    public boolean equals (final Object aObj)
     {
-      if (this == obj)
+      if (this == aObj)
         return true;
-      if (obj == null)
+      if (aObj == null)
         return false;
-      if (getClass () != obj.getClass ())
+      if (getClass () != aObj.getClass ())
         return false;
-      IndentCharacter other = (IndentCharacter) obj;
-      if (indentUnit != other.indentUnit)
+      final IndentCharacter aOther = (IndentCharacter) aObj;
+      if (m_eIndentUnit != aOther.m_eIndentUnit)
         return false;
-      if (Float.floatToIntBits (indentWidth) != Float.floatToIntBits (other.indentWidth))
+      if (Float.floatToIntBits (m_fIndentWidth) != Float.floatToIntBits (aOther.m_fIndentWidth))
         return false;
-      if (level != other.level)
+      if (m_nLevel != aOther.m_nLevel)
         return false;
       return true;
     }
@@ -142,57 +142,60 @@ public class IndentCharacters
   public static class ListCharacter extends IndentCharacter
   {
 
-    protected String label;
+    protected String m_sLabel;
 
-    protected ListCharacter (String level, String indentWidth, String indentUnit, String bulletCharacter)
+    protected ListCharacter (final String sLevel,
+                             final String sIndentWidth,
+                             final String sIndentUnit,
+                             final String sBulletCharacter)
     {
-      super (level, indentWidth, indentUnit);
-      if (bulletCharacter != null)
+      super (sLevel, sIndentWidth, sIndentUnit);
+      if (sBulletCharacter != null)
       {
-        label = bulletCharacter;
-        if (!label.endsWith (" "))
+        m_sLabel = sBulletCharacter;
+        if (!m_sLabel.endsWith (" "))
         {
-          label += " ";
+          m_sLabel += " ";
         }
       }
       else
       {
-        label = CompatibilityHelper.getBulletCharacter (getLevel ()) + " ";
+        m_sLabel = CompatibilityHelper.getBulletCharacter (getLevel ()) + " ";
       }
     }
 
     @Override
     protected String nextLabel ()
     {
-      return label;
+      return m_sLabel;
     }
 
     @Override
     public int hashCode ()
     {
-      final int prime = 31;
-      int result = super.hashCode ();
-      result = prime * result + ((label == null) ? 0 : label.hashCode ());
-      return result;
+      final int nPrime = 31;
+      int nResult = super.hashCode ();
+      nResult = nPrime * nResult + ((m_sLabel == null) ? 0 : m_sLabel.hashCode ());
+      return nResult;
     }
 
     @Override
-    public boolean equals (Object obj)
+    public boolean equals (final Object aObj)
     {
-      if (this == obj)
+      if (this == aObj)
         return true;
-      if (!super.equals (obj))
+      if (!super.equals (aObj))
         return false;
-      if (getClass () != obj.getClass ())
+      if (getClass () != aObj.getClass ())
         return false;
-      ListCharacter other = (ListCharacter) obj;
-      if (label == null)
+      final ListCharacter aOther = (ListCharacter) aObj;
+      if (m_sLabel == null)
       {
-        if (other.label != null)
+        if (aOther.m_sLabel != null)
           return false;
       }
       else
-        if (!label.equals (other.label))
+        if (!m_sLabel.equals (aOther.m_sLabel))
           return false;
       return true;
     }
@@ -203,86 +206,87 @@ public class IndentCharacters
    * An <code>-#{a):7em}</code> indicates an enumeration indentation of 7 characters in markup,
    * using <code>a)...b)...etc</code> as the enumeration. The number, the unit, enumeration
    * type/separator, and the brackets are optional. Default indentation is 4 characters, default
-   * unit is <code>em</code>. Default enumeration are arabic numbers, the separator depends on the
+   * unit is <code>em</code>. Default enumerators are arabic numbers, the separator depends on the
    * enumerator by default ('.' for arabic). For available enumerators see
    * {@link EnumeratorFactory}.It can be escaped with a backslash ('\').
    */
   public static class EnumerationCharacter extends IndentCharacter
   {
 
-    protected Enumerator enumerator;
-    protected String separator;
+    protected Enumerator m_aEnumerator;
+    protected String m_sSeparator;
 
-    protected EnumerationCharacter (String level,
-                                    String indentWidth,
-                                    String indentUnit,
-                                    String enumerationType,
-                                    String separator)
+    protected EnumerationCharacter (final String sLevel,
+                                    final String sIndentWidth,
+                                    final String sIndentUnit,
+                                    final String sEnumerationType,
+                                    final String sSeparator)
     {
-      super (level, indentWidth, indentUnit);
+      super (sLevel, sIndentWidth, sIndentUnit);
 
-      if (enumerationType == null)
+      String sActualEnumerationType = sEnumerationType;
+      if (sActualEnumerationType == null)
       {
-        enumerationType = "1";
+        sActualEnumerationType = "1";
       }
-      enumerator = EnumeratorFactory.createEnumerator (enumerationType);
-      this.separator = separator != null ? separator : enumerator.getDefaultSeperator ();
+      m_aEnumerator = EnumeratorFactory.createEnumerator (sActualEnumerationType);
+      this.m_sSeparator = sSeparator != null ? sSeparator : m_aEnumerator.getDefaultSeperator ();
     }
 
     @Override
     protected String nextLabel ()
     {
-      String next = enumerator.next ();
-      StringBuilder bob = new StringBuilder (next.length () + separator.length () + 1);
-      bob.append (next);
-      bob.append (separator);
-      if (!separator.endsWith (" "))
+      final String sNext = m_aEnumerator.next ();
+      final StringBuilder aBob = new StringBuilder (sNext.length () + m_sSeparator.length () + 1);
+      aBob.append (sNext);
+      aBob.append (m_sSeparator);
+      if (!m_sSeparator.endsWith (" "))
       {
-        bob.append (" ");
+        aBob.append (" ");
       }
-      return bob.toString ();
+      return aBob.toString ();
     }
 
     @Override
     public int hashCode ()
     {
-      final int prime = 31;
-      int result = super.hashCode ();
-      result = prime * result + ((enumerator == null) ? 0 : enumerator.hashCode ());
-      result = prime * result + ((separator == null) ? 0 : separator.hashCode ());
-      return result;
+      final int nPrime = 31;
+      int nResult = super.hashCode ();
+      nResult = nPrime * nResult + ((m_aEnumerator == null) ? 0 : m_aEnumerator.hashCode ());
+      nResult = nPrime * nResult + ((m_sSeparator == null) ? 0 : m_sSeparator.hashCode ());
+      return nResult;
     }
 
     @Override
-    public boolean equals (Object obj)
+    public boolean equals (final Object aObj)
     {
-      if (this == obj)
+      if (this == aObj)
         return true;
-      if (!super.equals (obj))
+      if (!super.equals (aObj))
         return false;
-      if (getClass () != obj.getClass ())
+      if (getClass () != aObj.getClass ())
         return false;
-      EnumerationCharacter other = (EnumerationCharacter) obj;
-      if (enumerator == null)
+      final EnumerationCharacter aOther = (EnumerationCharacter) aObj;
+      if (m_aEnumerator == null)
       {
-        if (other.enumerator != null)
+        if (aOther.m_aEnumerator != null)
           return false;
       }
       else
-        if (other.enumerator == null)
+        if (aOther.m_aEnumerator == null)
         {
           return false;
         }
         else
-          if (!enumerator.getClass ().equals (other.enumerator.getClass ()))
+          if (!m_aEnumerator.getClass ().equals (aOther.m_aEnumerator.getClass ()))
             return false;
-      if (separator == null)
+      if (m_sSeparator == null)
       {
-        if (other.separator != null)
+        if (aOther.m_sSeparator != null)
           return false;
       }
       else
-        if (!separator.equals (other.separator))
+        if (!m_sSeparator.equals (aOther.m_sSeparator))
           return false;
       return true;
     }
@@ -298,35 +302,35 @@ public class IndentCharacters
     private final static String TO_ESCAPE = "--";
 
     @Override
-    public ControlCharacter createControlCharacter (String text,
-                                                    Matcher matcher,
-                                                    final List <CharSequence> charactersSoFar)
+    public ControlCharacter createControlCharacter (final String sText,
+                                                    final Matcher aMatcher,
+                                                    final List <CharSequence> aCharactersSoFar)
     {
-      if ("!".equals (matcher.group (1)))
+      if ("!".equals (aMatcher.group (1)))
       {
         return UNINDENT_CHARACTER;
       }
 
-      if ("-".equals (matcher.group (3)))
+      if ("-".equals (aMatcher.group (3)))
       {
-        return new IndentCharacter (matcher.group (2), matcher.group (5), matcher.group (6));
+        return new IndentCharacter (aMatcher.group (2), aMatcher.group (5), aMatcher.group (6));
       }
 
-      if ("+".equals (matcher.group (8)))
+      if ("+".equals (aMatcher.group (8)))
       {
-        return new ListCharacter (matcher.group (7), matcher.group (11), matcher.group (12), matcher.group (10));
+        return new ListCharacter (aMatcher.group (7), aMatcher.group (11), aMatcher.group (12), aMatcher.group (10));
       }
 
-      if ("#".equals (matcher.group (14)))
+      if ("#".equals (aMatcher.group (14)))
       {
-        return new EnumerationCharacter (matcher.group (13),
-                                         matcher.group (18),
-                                         matcher.group (20),
-                                         matcher.group (16),
-                                         matcher.group (17));
+        return new EnumerationCharacter (aMatcher.group (13),
+                                         aMatcher.group (18),
+                                         aMatcher.group (20),
+                                         aMatcher.group (16),
+                                         aMatcher.group (17));
       }
 
-      throw new IllegalArgumentException ("unkown indentation " + text);
+      throw new IllegalArgumentException ("unkown indentation " + sText);
     }
 
     @Override
@@ -336,14 +340,14 @@ public class IndentCharacters
     }
 
     @Override
-    public String unescape (String text)
+    public String unescape (final String sText)
     {
-      Matcher matcher = UNESCAPE_PATTERN.matcher (text);
-      if (!matcher.find ())
+      final Matcher aMatcher = UNESCAPE_PATTERN.matcher (sText);
+      if (!aMatcher.find ())
       {
-        return text;
+        return sText;
       }
-      return matcher.group (1) + text.substring (matcher.end ());
+      return aMatcher.group (1) + sText.substring (aMatcher.end ());
     }
 
     @Override

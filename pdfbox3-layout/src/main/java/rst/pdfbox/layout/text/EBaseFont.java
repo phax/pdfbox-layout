@@ -36,34 +36,34 @@ public enum EBaseFont
              Standard14Fonts.FontName.HELVETICA_OBLIQUE,
              Standard14Fonts.FontName.HELVETICA_BOLD_OBLIQUE);
 
-  private final Standard14Fonts.FontName plainName;
-  private final Standard14Fonts.FontName boldName;
-  private final Standard14Fonts.FontName italicName;
-  private final Standard14Fonts.FontName boldItalicName;
+  private final Standard14Fonts.FontName m_ePlainName;
+  private final Standard14Fonts.FontName m_eBoldName;
+  private final Standard14Fonts.FontName m_eItalicName;
+  private final Standard14Fonts.FontName m_eBoldItalicName;
 
-  private PDFont plainFont;
-  private PDFont boldFont;
-  private PDFont italicFont;
-  private PDFont boldItalicFont;
+  private PDFont m_aPlainFont;
+  private PDFont m_aBoldFont;
+  private PDFont m_aItalicFont;
+  private PDFont m_aBoldItalicFont;
 
-  private EBaseFont (Standard14Fonts.FontName plain,
-                    Standard14Fonts.FontName bold,
-                    Standard14Fonts.FontName italic,
-                    Standard14Fonts.FontName boldItalic)
+  private EBaseFont (final Standard14Fonts.FontName ePlain,
+                     final Standard14Fonts.FontName eBold,
+                     final Standard14Fonts.FontName eItalic,
+                     final Standard14Fonts.FontName eBoldItalic)
   {
-    this.plainName = plain;
-    this.boldName = bold;
-    this.italicName = italic;
-    this.boldItalicName = boldItalic;
-    resetThis ();
+    this.m_ePlainName = ePlain;
+    this.m_eBoldName = eBold;
+    this.m_eItalicName = eItalic;
+    this.m_eBoldItalicName = eBoldItalic;
+    _resetThis ();
   }
 
-  private void resetThis ()
+  private void _resetThis ()
   {
-    this.plainFont = new PDType1Font (plainName);
-    this.boldFont = new PDType1Font (boldName);
-    this.italicFont = new PDType1Font (italicName);
-    this.boldItalicFont = new PDType1Font (boldItalicName);
+    this.m_aPlainFont = new PDType1Font (m_ePlainName);
+    this.m_aBoldFont = new PDType1Font (m_eBoldName);
+    this.m_aItalicFont = new PDType1Font (m_eItalicName);
+    this.m_aBoldItalicFont = new PDType1Font (m_eBoldItalicName);
   }
 
   /**
@@ -73,30 +73,30 @@ public enum EBaseFont
    */
   public static void reset ()
   {
-    for (EBaseFont bf : values ())
+    for (final EBaseFont eBf : values ())
     {
-      bf.resetThis ();
+      eBf._resetThis ();
     }
   }
 
   public PDFont getPlainFont ()
   {
-    return plainFont;
+    return m_aPlainFont;
   }
 
   public PDFont getBoldFont ()
   {
-    return boldFont;
+    return m_aBoldFont;
   }
 
   public PDFont getItalicFont ()
   {
-    return italicFont;
+    return m_aItalicFont;
   }
 
   public PDFont getBoldItalicFont ()
   {
-    return boldItalicFont;
+    return m_aBoldItalicFont;
   }
 
 }

@@ -4,16 +4,14 @@ import java.io.Closeable;
 import java.io.IOException;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 
 import rst.pdfbox.layout.elements.ControlElement;
 import rst.pdfbox.layout.elements.Document;
-import rst.pdfbox.layout.elements.IElement;
 import rst.pdfbox.layout.elements.EOrientation;
+import rst.pdfbox.layout.elements.IElement;
 import rst.pdfbox.layout.elements.PageFormat;
 import rst.pdfbox.layout.elements.PositionControl;
 import rst.pdfbox.layout.elements.PositionControl.MarkPosition;
@@ -28,60 +26,60 @@ import rst.pdfbox.layout.util.CompatibilityHelper;
 /**
  * The render context is a container providing all state of the current rendering process.
  */
-public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawListener
+public class RenderContext implements IRenderer, Closeable, IDrawContext, IDrawListener
 {
 
-  private final Document document;
-  private final PDDocument pdDocument;
-  private PDPage page;
-  private int pageIndex = 0;
-  private PDPageContentStream contentStream;
-  private Position currentPosition;
-  private Position markedPosition;
-  private Position maxPositionOnPage;
-  private Layout layout = new VerticalLayout ();
+  private final Document m_aDocument;
+  private final PDDocument m_aPdDocument;
+  private PDPage m_aPage;
+  private int m_nPageIndex = 0;
+  private PDPageContentStream m_aContentStream;
+  private Position m_aCurrentPosition;
+  private Position m_aMarkedPosition;
+  private Position m_aMaxPositionOnPage;
+  private ILayout m_aLayout = new VerticalLayout ();
 
-  private PageFormat nextPageFormat;
-  private PageFormat pageFormat;
+  private PageFormat m_aNextPageFormat;
+  private PageFormat m_aPageFormat;
 
-  private AnnotationDrawListener annotationDrawListener;
+  private final AnnotationDrawListener m_aAnnotationDrawListener;
 
   /**
    * Creates a render context.
-   * 
-   * @param document
+   *
+   * @param aDocument
    *        the document to render.
-   * @param pdDocument
+   * @param aPdDocument
    *        the underlying pdfbox document.
    * @throws IOException
    *         by pdfbox.
    */
-  public RenderContext (Document document, PDDocument pdDocument) throws IOException
+  public RenderContext (final Document aDocument, final PDDocument aPdDocument) throws IOException
   {
-    this.document = document;
-    this.pdDocument = pdDocument;
-    this.pageFormat = document.getPageFormat ();
-    this.annotationDrawListener = new AnnotationDrawListener (this);
+    this.m_aDocument = aDocument;
+    this.m_aPdDocument = aPdDocument;
+    this.m_aPageFormat = aDocument.getPageFormat ();
+    this.m_aAnnotationDrawListener = new AnnotationDrawListener (this);
     newPage ();
   }
 
   /**
-   * @return the current {@link Layout} used for rendering.
+   * @return the current {@link ILayout} used for rendering.
    */
-  public Layout getLayout ()
+  public ILayout getLayout ()
   {
-    return layout;
+    return m_aLayout;
   }
 
   /**
-   * Sets the current {@link Layout} used for rendering.
-   * 
-   * @param layout
+   * Sets the current {@link ILayout} used for rendering.
+   *
+   * @param aLayout
    *        the new layout.
    */
-  public void setLayout (Layout layout)
+  public void setLayout (final ILayout aLayout)
   {
-    this.layout = layout;
+    this.m_aLayout = aLayout;
     resetPositionToLeftEndOfPage ();
   }
 
@@ -108,21 +106,21 @@ public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawLi
     return getPageFormat ().getMediaBox ();
   }
 
-  public void setPageFormat (final PageFormat pageFormat)
+  public void setPageFormat (final PageFormat aPageFormat)
   {
-    if (pageFormat == null)
+    if (aPageFormat == null)
     {
-      this.pageFormat = document.getPageFormat ();
+      this.m_aPageFormat = m_aDocument.getPageFormat ();
     }
     else
     {
-      this.pageFormat = pageFormat;
+      this.m_aPageFormat = aPageFormat;
     }
   }
 
   public PageFormat getPageFormat ()
   {
-    return pageFormat;
+    return m_aPageFormat;
   }
 
   /**
@@ -148,7 +146,7 @@ public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawLi
    */
   public Position getCurrentPosition ()
   {
-    return currentPosition;
+    return m_aCurrentPosition;
   }
 
   /**
@@ -156,17 +154,17 @@ public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawLi
    */
   public Position getMarkedPosition ()
   {
-    return markedPosition;
+    return m_aMarkedPosition;
   }
 
-  protected void setMarkedPosition (Position markedPosition)
+  protected void setMarkedPosition (final Position aMarkedPosition)
   {
-    this.markedPosition = markedPosition;
+    this.m_aMarkedPosition = aMarkedPosition;
   }
 
   /**
    * Moves the {@link #getCurrentPosition() current position} relatively by the given offset.
-   * 
+   *
    * @param x
    *        to move horizontally.
    * @param y
@@ -174,7 +172,7 @@ public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawLi
    */
   public void movePositionBy (final float x, final float y)
   {
-    currentPosition = currentPosition.add (x, y);
+    m_aCurrentPosition = m_aCurrentPosition.add (x, y);
   }
 
   /**
@@ -182,7 +180,7 @@ public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawLi
    */
   public void resetPositionToUpperLeft ()
   {
-    currentPosition = getUpperLeft ();
+    m_aCurrentPosition = getUpperLeft ();
   }
 
   /**
@@ -190,7 +188,7 @@ public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawLi
    */
   public void resetPositionToLeft ()
   {
-    currentPosition = new Position (getUpperLeft ().getX (), currentPosition.getY ());
+    m_aCurrentPosition = new Position (getUpperLeft ().getX (), m_aCurrentPosition.getY ());
   }
 
   /**
@@ -199,7 +197,7 @@ public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawLi
    */
   protected void resetPositionToLeftEndOfPage ()
   {
-    currentPosition = new Position (getUpperLeft ().getX (), getMaxPositionOnPage ().getY ());
+    m_aCurrentPosition = new Position (getUpperLeft ().getX (), getMaxPositionOnPage ().getY ());
   }
 
   /**
@@ -219,7 +217,7 @@ public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawLi
    */
   public boolean isPageTilted ()
   {
-    return CompatibilityHelper.getPageRotation (page) == 90 || CompatibilityHelper.getPageRotation (page) == 270;
+    return CompatibilityHelper.getPageRotation (m_aPage) == 90 || CompatibilityHelper.getPageRotation (m_aPage) == 270;
   }
 
   /**
@@ -229,9 +227,9 @@ public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawLi
   {
     if (isPageTilted ())
     {
-      return page.getMediaBox ().getHeight ();
+      return m_aPage.getMediaBox ().getHeight ();
     }
-    return page.getMediaBox ().getWidth ();
+    return m_aPage.getMediaBox ().getWidth ();
   }
 
   /**
@@ -241,9 +239,9 @@ public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawLi
   {
     if (isPageTilted ())
     {
-      return page.getMediaBox ().getWidth ();
+      return m_aPage.getMediaBox ().getWidth ();
     }
-    return page.getMediaBox ().getHeight ();
+    return m_aPage.getMediaBox ().getHeight ();
   }
 
   /**
@@ -275,7 +273,7 @@ public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawLi
    */
   public Document getDocument ()
   {
-    return document;
+    return m_aDocument;
   }
 
   /**
@@ -284,13 +282,13 @@ public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawLi
   @Override
   public PDDocument getPdDocument ()
   {
-    return pdDocument;
+    return m_aPdDocument;
   }
 
   @Override
   public PDPage getCurrentPage ()
   {
-    return page;
+    return m_aPage;
   }
 
   @Override
@@ -313,7 +311,7 @@ public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawLi
    */
   public PDPageContentStream getContentStream ()
   {
-    return contentStream;
+    return m_aContentStream;
   }
 
   /**
@@ -321,75 +319,74 @@ public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawLi
    */
   public int getPageIndex ()
   {
-    return pageIndex;
+    return m_nPageIndex;
   }
 
   @Override
-  public boolean render (RenderContext renderContext, IElement element, ILayoutHint layoutHint) throws IOException
+  public boolean render (final RenderContext aRenderContext, final IElement aElement, final ILayoutHint aLayoutHint)
+                                                                                                                     throws IOException
   {
-    boolean success = getLayout ().render (renderContext, element, layoutHint);
-    if (success)
+    final boolean bSuccess = getLayout ().render (aRenderContext, aElement, aLayoutHint);
+    if (bSuccess)
     {
       return true;
     }
-    if (element == ControlElement.NEWPAGE)
+    if (aElement == ControlElement.NEWPAGE)
     {
       newPage ();
       return true;
     }
-    if (element instanceof PositionControl)
+    if (aElement instanceof PositionControl)
     {
-      return render ((PositionControl) element);
+      return render ((PositionControl) aElement);
     }
-    if (element instanceof PageFormat)
+    if (aElement instanceof PageFormat)
     {
-      nextPageFormat = (PageFormat) element;
+      m_aNextPageFormat = (PageFormat) aElement;
       return true;
     }
-    if (element instanceof Layout)
+    if (aElement instanceof ILayout)
     {
-      setLayout ((Layout) element);
+      setLayout ((ILayout) aElement);
       return true;
     }
     return false;
   }
 
-  protected boolean render (final PositionControl positionControl)
+  protected boolean render (final PositionControl aPositionControl)
   {
-    if (positionControl instanceof MarkPosition)
+    if (aPositionControl instanceof MarkPosition)
     {
       setMarkedPosition (getCurrentPosition ());
       return true;
     }
-    if (positionControl instanceof SetPosition)
+    if (aPositionControl instanceof final SetPosition aSetPosition)
     {
-      SetPosition setPosition = (SetPosition) positionControl;
-      Float x = setPosition.getX ();
-      if (x == PositionControl.MARKED_POSITION)
+      Float aX = aSetPosition.getX ();
+      if (aX == PositionControl.MARKED_POSITION)
       {
-        x = getMarkedPosition ().getX ();
+        aX = Float.valueOf (getMarkedPosition ().getX ());
       }
-      if (x == null)
+      if (aX == null)
       {
-        x = getCurrentPosition ().getX ();
+        aX = Float.valueOf (getCurrentPosition ().getX ());
       }
-      Float y = setPosition.getY ();
-      if (y == PositionControl.MARKED_POSITION)
+      Float aY = aSetPosition.getY ();
+      if (aY == PositionControl.MARKED_POSITION)
       {
-        y = getMarkedPosition ().getY ();
+        aY = Float.valueOf (getMarkedPosition ().getY ());
       }
-      if (y == null)
+      if (aY == null)
       {
-        y = getCurrentPosition ().getY ();
+        aY = Float.valueOf (getCurrentPosition ().getY ());
       }
-      Position newPosition = new Position (x, y);
-      currentPosition = newPosition;
+      final Position aNewPosition = new Position (aX.floatValue (), aY.floatValue ());
+      m_aCurrentPosition = aNewPosition;
       return true;
     }
-    if (positionControl instanceof MovePosition)
+    if (aPositionControl instanceof final MovePosition aMovePosition)
     {
-      MovePosition movePosition = (MovePosition) positionControl;
-      movePositionBy (movePosition.getX (), movePosition.getY ());
+      movePositionBy (aMovePosition.getX (), aMovePosition.getY ());
       return true;
     }
     return false;
@@ -397,7 +394,7 @@ public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawLi
 
   /**
    * Triggers a new page.
-   * 
+   *
    * @throws IOException
    *         by pdfbox
    */
@@ -405,64 +402,64 @@ public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawLi
   {
     if (closePage ())
     {
-      ++pageIndex;
+      ++m_nPageIndex;
     }
-    if (nextPageFormat != null)
+    if (m_aNextPageFormat != null)
     {
-      setPageFormat (nextPageFormat);
+      setPageFormat (m_aNextPageFormat);
     }
 
-    this.page = new PDPage (getPageFormat ().getMediaBox ());
-    this.pdDocument.addPage (page);
-    this.contentStream = CompatibilityHelper.createAppendablePDPageContentStream (pdDocument, page);
+    this.m_aPage = new PDPage (getPageFormat ().getMediaBox ());
+    this.m_aPdDocument.addPage (m_aPage);
+    this.m_aContentStream = CompatibilityHelper.createAppendablePDPageContentStream (m_aPdDocument, m_aPage);
 
     // fix orientation
     if (getPageOrientation () != getPageFormat ().getOrientation ())
     {
       if (isPageTilted ())
       {
-        page.setRotation (0);
+        m_aPage.setRotation (0);
       }
       else
       {
-        page.setRotation (90);
+        m_aPage.setRotation (90);
       }
     }
 
     if (isPageTilted ())
     {
-      CompatibilityHelper.transform (contentStream, 0, 1, -1, 0, getPageHeight (), 0);
+      CompatibilityHelper.transform (m_aContentStream, 0, 1, -1, 0, getPageHeight (), 0);
     }
 
     resetPositionToUpperLeft ();
     resetMaxPositionOnPage ();
-    document.beforePage (this);
-    annotationDrawListener.beforePage (this);
+    m_aDocument.beforePage (this);
+    m_aAnnotationDrawListener.beforePage (this);
   }
 
   /**
    * Closes the current page.
-   * 
+   *
    * @return <code>true</code> if the current page has not been closed before.
    * @throws IOException
    *         by pdfbox
    */
   public boolean closePage () throws IOException
   {
-    if (contentStream != null)
+    if (m_aContentStream != null)
     {
 
-      annotationDrawListener.afterPage (this);
-      document.afterPage (this);
+      m_aAnnotationDrawListener.afterPage (this);
+      m_aDocument.afterPage (this);
 
       if (getPageFormat ().getRotation () != 0)
       {
-        int currentRotation = CompatibilityHelper.getPageRotation (getCurrentPage ());
-        getCurrentPage ().setRotation (currentRotation + getPageFormat ().getRotation ());
+        final int nCurrentRotation = CompatibilityHelper.getPageRotation (getCurrentPage ());
+        getCurrentPage ().setRotation (nCurrentRotation + getPageFormat ().getRotation ());
       }
 
-      contentStream.close ();
-      contentStream = null;
+      m_aContentStream.close ();
+      m_aContentStream = null;
       return true;
     }
     return false;
@@ -472,27 +469,27 @@ public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawLi
   public void close () throws IOException
   {
     closePage ();
-    annotationDrawListener.afterRender ();
+    m_aAnnotationDrawListener.afterRender ();
   }
 
   @Override
-  public void drawn (Object drawnObject, Position upperLeft, float width, float height)
+  public void drawn (final Object aDrawnObject, final Position aUpperLeft, final float fWidth, final float fHeight)
   {
-    updateMaxPositionOnPage (upperLeft, width, height);
-    annotationDrawListener.drawn (drawnObject, upperLeft, width, height);
+    updateMaxPositionOnPage (aUpperLeft, fWidth, fHeight);
+    m_aAnnotationDrawListener.drawn (aDrawnObject, aUpperLeft, fWidth, fHeight);
   }
 
   /**
    * Updates the maximum right resp. bottom position on the page.
-   * 
-   * @param upperLeft
-   * @param width
-   * @param height
+   *
+   * @param aUpperLeft
+   * @param fWidth
+   * @param fHeight
    */
-  protected void updateMaxPositionOnPage (Position upperLeft, float width, float height)
+  protected void updateMaxPositionOnPage (final Position aUpperLeft, final float fWidth, final float fHeight)
   {
-    maxPositionOnPage = new Position (Math.max (maxPositionOnPage.getX (), upperLeft.getX () + width),
-                                      Math.min (maxPositionOnPage.getY (), upperLeft.getY () - height));
+    m_aMaxPositionOnPage = new Position (Math.max (m_aMaxPositionOnPage.getX (), aUpperLeft.getX () + fWidth),
+                                         Math.min (m_aMaxPositionOnPage.getY (), aUpperLeft.getY () - fHeight));
   }
 
   /**
@@ -500,7 +497,7 @@ public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawLi
    */
   protected void resetMaxPositionOnPage ()
   {
-    maxPositionOnPage = getUpperLeft ();
+    m_aMaxPositionOnPage = getUpperLeft ();
   }
 
   /**
@@ -508,7 +505,7 @@ public class RenderContext implements Renderer, Closeable, IDrawContext, IDrawLi
    */
   protected Position getMaxPositionOnPage ()
   {
-    return maxPositionOnPage;
+    return m_aMaxPositionOnPage;
   }
 
 }

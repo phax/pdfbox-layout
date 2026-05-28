@@ -11,175 +11,179 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 public class StyledText implements ITextFragment
 {
 
-  private final String text;
-  private final FontDescriptor fontDescriptor;
-  private final Color color;
-  private final float leftMargin;
-  private final float rightMargin;
-  private final float baselineOffset;
+  private final String m_sText;
+  private final FontDescriptor m_aFontDescriptor;
+  private final Color m_aColor;
+  private final float m_fLeftMargin;
+  private final float m_fRightMargin;
+  private final float m_fBaselineOffset;
 
   /**
    * The cached (calculated) width of the text.
    */
-  private Float width = null;
+  private Float m_aWidth = null;
 
   /**
    * Creates a styled text.
-   * 
-   * @param text
+   *
+   * @param sText
    *        the text to draw. Must not contain line feeds ('\n').
-   * @param size
+   * @param fSize
    *        the size of the font.
-   * @param font
+   * @param aFont
    *        the font to use.
    */
-  public StyledText (final String text, final float size, final PDFont font)
+  public StyledText (final String sText, final float fSize, final PDFont aFont)
   {
-    this (text, size, font, Color.black);
+    this (sText, fSize, aFont, Color.black);
   }
 
   /**
    * Creates a styled text.
-   * 
-   * @param text
+   *
+   * @param sText
    *        the text to draw. Must not contain line feeds ('\n').
-   * @param size
+   * @param fSize
    *        the size of the font.
-   * @param font
+   * @param aFont
    *        the font to use.
-   * @param color
+   * @param aColor
    *        the color to use.
    */
-  public StyledText (final String text, final float size, final PDFont font, final Color color)
+  public StyledText (final String sText, final float fSize, final PDFont aFont, final Color aColor)
   {
-    this (text, new FontDescriptor (font, size), color);
+    this (sText, new FontDescriptor (aFont, fSize), aColor);
   }
 
   /**
    * Creates a styled text.
-   * 
-   * @param text
+   *
+   * @param sText
    *        the text to draw. Must not contain line feeds ('\n').
-   * @param size
+   * @param fSize
    *        the size of the font.
-   * @param font
+   * @param aFont
    *        the font to use.
-   * @param color
+   * @param aColor
    *        the color to use.
-   * @param baselineOffset
+   * @param fBaselineOffset
    *        the offset of the baseline.
    */
-  public StyledText (final String text,
-                     final float size,
-                     final PDFont font,
-                     final Color color,
-                     final float baselineOffset)
+  public StyledText (final String sText,
+                     final float fSize,
+                     final PDFont aFont,
+                     final Color aColor,
+                     final float fBaselineOffset)
   {
-    this (text, new FontDescriptor (font, size), color, baselineOffset, 0, 0);
+    this (sText, new FontDescriptor (aFont, fSize), aColor, fBaselineOffset, 0, 0);
   }
 
   /**
    * Creates a styled text.
-   * 
-   * @param text
+   *
+   * @param sText
    *        the text to draw. Must not contain line feeds ('\n').
-   * @param fontDescriptor
+   * @param aFontDescriptor
    *        the font to use.
    */
-  public StyledText (final String text, final FontDescriptor fontDescriptor)
+  public StyledText (final String sText, final FontDescriptor aFontDescriptor)
   {
-    this (text, fontDescriptor, Color.black);
+    this (sText, aFontDescriptor, Color.black);
   }
 
   /**
    * Creates a styled text.
-   * 
-   * @param text
+   *
+   * @param sText
    *        the text to draw. Must not contain line feeds ('\n').
-   * @param fontDescriptor
+   * @param aFontDescriptor
    *        the font to use.
-   * @param color
+   * @param aColor
    *        the color to use.
    */
-  public StyledText (final String text, final FontDescriptor fontDescriptor, final Color color)
+  public StyledText (final String sText, final FontDescriptor aFontDescriptor, final Color aColor)
   {
-    this (text, fontDescriptor, color, 0, 0, 0);
+    this (sText, aFontDescriptor, aColor, 0, 0, 0);
   }
 
   /**
    * Creates a styled text.
-   * 
-   * @param text
+   *
+   * @param sText
    *        the text to draw. Must not contain line feeds ('\n').
-   * @param fontDescriptor
+   * @param aFontDescriptor
    *        the font to use.
-   * @param color
+   * @param aColor
    *        the color to use.
-   * @param baselineOffset
+   * @param fBaselineOffset
    *        the offset of the baseline.
-   * @param leftMargin
+   * @param fLeftMargin
    *        the margin left to the text.
-   * @param rightMargin
+   * @param fRightMargin
    *        the margin right to the text.
    */
-  public StyledText (final String text,
-                     final FontDescriptor fontDescriptor,
-                     final Color color,
-                     final float baselineOffset,
-                     final float leftMargin,
-                     final float rightMargin)
+  public StyledText (final String sText,
+                     final FontDescriptor aFontDescriptor,
+                     final Color aColor,
+                     final float fBaselineOffset,
+                     final float fLeftMargin,
+                     final float fRightMargin)
   {
-    if (text.contains ("\n"))
+    if (sText.contains ("\n"))
     {
       throw new IllegalArgumentException ("StyledText must not contain line breaks, use TextFragment.LINEBREAK for that");
     }
-    if (leftMargin < 0)
+    if (fLeftMargin < 0)
     {
       throw new IllegalArgumentException ("leftMargin must be >= 0");
     }
-    if (rightMargin < 0)
+    if (fRightMargin < 0)
     {
       throw new IllegalArgumentException ("rightMargin must be >= 0");
     }
-    this.text = text;
-    this.fontDescriptor = fontDescriptor;
-    this.color = color;
-    this.leftMargin = leftMargin;
-    this.rightMargin = rightMargin;
-    this.baselineOffset = baselineOffset;
+    this.m_sText = sText;
+    this.m_aFontDescriptor = aFontDescriptor;
+    this.m_aColor = aColor;
+    this.m_fLeftMargin = fLeftMargin;
+    this.m_fRightMargin = fRightMargin;
+    this.m_fBaselineOffset = fBaselineOffset;
   }
 
   /**
    * @return the text to draw.
    */
+  @Override
   public String getText ()
   {
-    return text;
+    return m_sText;
   }
 
   /**
    * @return the font to use to draw the text.
    */
+  @Override
   public FontDescriptor getFontDescriptor ()
   {
-    return fontDescriptor;
+    return m_aFontDescriptor;
   }
 
   @Override
   public float getWidth () throws IOException
   {
-    if (width == null)
+    if (m_aWidth == null)
     {
-      width = getFontDescriptor ().getSize () * getFontDescriptor ().getFont ().getStringWidth (getText ()) / 1000;
-      width += leftMargin;
-      width += rightMargin;
+      m_aWidth = Float.valueOf (getFontDescriptor ().getSize () *
+                                getFontDescriptor ().getFont ().getStringWidth (getText ()) /
+                                1000 +
+                                m_fLeftMargin +
+                                m_fRightMargin);
     }
-    return width;
+    return m_aWidth.floatValue ();
   }
 
   public float getWidthWithoutMargin () throws IOException
   {
-    return getWidth () - leftMargin - rightMargin;
+    return getWidth () - m_fLeftMargin - m_fRightMargin;
   }
 
   @Override
@@ -200,13 +204,13 @@ public class StyledText implements ITextFragment
 
   public float getBaselineOffset ()
   {
-    return baselineOffset;
+    return m_fBaselineOffset;
   }
 
   @Override
   public Color getColor ()
   {
-    return color;
+    return m_aColor;
   }
 
   /**
@@ -214,7 +218,7 @@ public class StyledText implements ITextFragment
    */
   public float getLeftMargin ()
   {
-    return leftMargin;
+    return m_fLeftMargin;
   }
 
   /**
@@ -222,7 +226,7 @@ public class StyledText implements ITextFragment
    */
   public float getRightMargin ()
   {
-    return rightMargin;
+    return m_fRightMargin;
   }
 
   /**
@@ -238,38 +242,38 @@ public class StyledText implements ITextFragment
    */
   public ITextSequence asSequence ()
   {
-    TextLine line = new TextLine ();
-    line.add (this);
-    return line;
+    final TextLine aLine = new TextLine ();
+    aLine.add (this);
+    return aLine;
   }
 
-  public StyledText inheritAttributes (String text)
+  public StyledText inheritAttributes (final String sText)
   {
-    return inheritAttributes (text, getLeftMargin (), getRightMargin ());
+    return inheritAttributes (sText, getLeftMargin (), getRightMargin ());
   }
 
-  public StyledText inheritAttributes (String text, float leftMargin, float rightMargin)
+  public StyledText inheritAttributes (final String sText, final float fLeftMargin, final float fRightMargin)
   {
-    return new StyledText (text, getFontDescriptor (), getColor (), getBaselineOffset (), leftMargin, rightMargin);
+    return new StyledText (sText, getFontDescriptor (), getColor (), getBaselineOffset (), fLeftMargin, fRightMargin);
   }
 
   @Override
   public String toString ()
   {
     return "StyledText [text=" +
-           text +
+           m_sText +
            ", fontDescriptor=" +
-           fontDescriptor +
+           m_aFontDescriptor +
            ", width=" +
-           width +
+           m_aWidth +
            ", color=" +
-           color +
+           m_aColor +
            ", leftMargin=" +
-           leftMargin +
+           m_fLeftMargin +
            ", rightMargin=" +
-           rightMargin +
+           m_fRightMargin +
            ", baselineOffset=" +
-           baselineOffset +
+           m_fBaselineOffset +
            "]";
   }
 

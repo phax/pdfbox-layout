@@ -11,25 +11,25 @@ public class FontDescriptor
   /**
    * the associated font.
    */
-  private final PDFont font;
+  private final PDFont m_aFont;
 
   /**
    * the font size.
    */
-  private final float size;
+  private final float m_fSize;
 
   /**
    * Creates the descriptor the the given font and size.
-   * 
-   * @param font
+   *
+   * @param aFont
    *        the font.
-   * @param size
+   * @param fSize
    *        the size.
    */
-  public FontDescriptor (final PDFont font, final float size)
+  public FontDescriptor (final PDFont aFont, final float fSize)
   {
-    this.font = font;
-    this.size = size;
+    this.m_aFont = aFont;
+    this.m_fSize = fSize;
   }
 
   /**
@@ -37,7 +37,7 @@ public class FontDescriptor
    */
   public PDFont getFont ()
   {
-    return font;
+    return m_aFont;
   }
 
   /**
@@ -45,54 +45,54 @@ public class FontDescriptor
    */
   public float getSize ()
   {
-    return size;
+    return m_fSize;
   }
 
   @Override
   public String toString ()
   {
-    return "FontDescriptor [font=" + font + ", size=" + size + "]";
+    return "FontDescriptor [font=" + m_aFont + ", size=" + m_fSize + "]";
   }
 
   @Override
   public int hashCode ()
   {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((font == null) ? 0 : font.hashCode ());
-    result = prime * result + Float.floatToIntBits (size);
-    return result;
+    final int nPrime = 31;
+    int nResult = 1;
+    nResult = nPrime * nResult + ((m_aFont == null) ? 0 : m_aFont.hashCode ());
+    nResult = nPrime * nResult + Float.floatToIntBits (m_fSize);
+    return nResult;
   }
 
   @Override
-  public boolean equals (final Object obj)
+  public boolean equals (final Object aObj)
   {
-    if (this == obj)
+    if (this == aObj)
     {
       return true;
     }
-    if (obj == null)
+    if (aObj == null)
     {
       return false;
     }
-    if (getClass () != obj.getClass ())
+    if (getClass () != aObj.getClass ())
     {
       return false;
     }
-    final FontDescriptor other = (FontDescriptor) obj;
-    if (font == null)
+    final FontDescriptor aOther = (FontDescriptor) aObj;
+    if (m_aFont == null)
     {
-      if (other.font != null)
+      if (aOther.m_aFont != null)
       {
         return false;
       }
     }
     else
-      if (!font.equals (other.font))
+      if (!m_aFont.equals (aOther.m_aFont))
       {
         return false;
       }
-    if (Float.floatToIntBits (size) != Float.floatToIntBits (other.size))
+    if (Float.floatToIntBits (m_fSize) != Float.floatToIntBits (aOther.m_fSize))
     {
       return false;
     }

@@ -1,11 +1,12 @@
+package rst.pdfbox.layout;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+
+import org.junit.Test;
 
 import rst.pdfbox.layout.elements.Document;
 import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.text.EBaseFont;
-import examples.AbstractExampleTest;
-import org.junit.Test;
 
 public class MultiplePagesTest extends AbstractExampleTest {
 

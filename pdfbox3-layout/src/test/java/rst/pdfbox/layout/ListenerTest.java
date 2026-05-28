@@ -1,22 +1,22 @@
+package rst.pdfbox.layout;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+import org.junit.Test;
 
 import rst.pdfbox.layout.elements.Document;
 import rst.pdfbox.layout.elements.Paragraph;
+import rst.pdfbox.layout.elements.render.IRenderListener;
 import rst.pdfbox.layout.elements.render.RenderContext;
-import rst.pdfbox.layout.elements.render.RenderListener;
 import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.EBaseFont;
 import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.TextFlow;
 import rst.pdfbox.layout.text.TextFlowUtil;
 import rst.pdfbox.layout.text.TextSequenceUtil;
-import examples.AbstractExampleTest;
-import org.junit.Test;
 
 public class ListenerTest extends AbstractExampleTest {
 
@@ -42,7 +42,7 @@ public class ListenerTest extends AbstractExampleTest {
 
 
 	Document document = new Document(40, 60, 40, 60);
-	document.addRenderListener(new RenderListener() {
+	document.addRenderListener(new IRenderListener() {
 
 	    @Override
 	    public void beforePage(RenderContext renderContext) {

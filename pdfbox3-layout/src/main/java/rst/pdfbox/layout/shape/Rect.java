@@ -3,8 +3,6 @@ package rst.pdfbox.layout.shape;
 import java.io.IOException;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 import rst.pdfbox.layout.text.Position;
@@ -16,13 +14,13 @@ public class Rect extends AbstractShape
 {
 
   @Override
-  public void add (PDDocument pdDocument,
-                   PDPageContentStream contentStream,
-                   Position upperLeft,
-                   float width,
-                   float height) throws IOException
+  public void add (final PDDocument aPdDocument,
+                   final PDPageContentStream aContentStream,
+                   final Position aUpperLeft,
+                   final float fWidth,
+                   final float fHeight) throws IOException
   {
-    contentStream.addRect (upperLeft.getX (), upperLeft.getY () - height, width, height);
+    aContentStream.addRect (aUpperLeft.getX (), aUpperLeft.getY () - fHeight, fWidth, fHeight);
   }
 
 }

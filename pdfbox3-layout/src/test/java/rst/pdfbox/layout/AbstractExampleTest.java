@@ -1,4 +1,4 @@
-package examples;
+package rst.pdfbox.layout;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -19,18 +19,17 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.junit.After;
 import org.junit.Before;
 
-import rst.pdfbox.layout.text.EBaseFont;
 import rst.pdfbox.layout.text.ControlFragment;
+import rst.pdfbox.layout.text.EBaseFont;
 import rst.pdfbox.layout.text.annotations.AnnotationCharacters;
 import rst.pdfbox.layout.text.annotations.AnnotationProcessorFactory;
 import rst.pdfbox.layout.util.CompatibilityHelper;
 import rst.pdfbox.layout.util.WordBreakerFactory;
 
 /**
- * Shared infrastructure for the example test classes. Each example creates a
- * PDF in the working directory and then calls {@link #verifyPdf()} which
- * compares it page-by-page against the reference under
- * {@code /examples/pdf/<lowercaseclassname>.pdf}.
+ * Shared infrastructure for the example test classes. Each example creates a PDF in the working
+ * directory and then calls {@link #verifyPdf()} which compares it page-by-page against the
+ * reference under {@code /examples/pdf/<lowercaseclassname>.pdf}.
  */
 public abstract class AbstractExampleTest
 {
@@ -72,9 +71,8 @@ public abstract class AbstractExampleTest
     }
   }
 
-  /**
-   * Compares the generated {@code <lowercase-classname>.pdf} against the
-   * checked-in reference.
+  /*
+   * Compares the generated {@code <lowercase-classname>.pdf} against the checked-in reference.
    */
   protected void verifyPdf () throws Exception
   {
@@ -103,8 +101,10 @@ public abstract class AbstractExampleTest
 
       if (currentDoc.getNumberOfPages () != oldDoc.getNumberOfPages ())
       {
-        throw new AssertionError ("expected " + oldDoc.getNumberOfPages () +
-                                  " pages, but is " + currentDoc.getNumberOfPages ());
+        throw new AssertionError ("expected " +
+                                  oldDoc.getNumberOfPages () +
+                                  " pages, but is " +
+                                  currentDoc.getNumberOfPages ());
       }
 
       for (int i = 0; i < oldDoc.getNumberOfPages (); i++)
@@ -115,7 +115,7 @@ public abstract class AbstractExampleTest
 
         final BufferedImage currentPageImg = toImage (currentDoc, i);
         final BufferedImage oldPageImg = toImage (oldDoc, i);
-        final BufferedImage diff = compareImage (currentPageImg, oldPageImg);
+        final BufferedImage diff = _compareImage (currentPageImg, oldPageImg);
         if (diff != null)
         {
           ImageIO.write (diff, "png", diffFile);
@@ -127,7 +127,7 @@ public abstract class AbstractExampleTest
     }
   }
 
-  public static BufferedImage compareImage (final BufferedImage img1, final BufferedImage img2) throws IOException
+  private static BufferedImage _compareImage (final BufferedImage img1, final BufferedImage img2)
   {
     final double colorDistanceTolerance = 0.08;
     final int w = img1.getWidth ();
@@ -141,7 +141,7 @@ public abstract class AbstractExampleTest
     {
       for (int i = 0; i < p1.length; i++)
       {
-        if (normalizedRgbDistance (p1[i], p2[i]) > colorDistanceTolerance)
+        if (_normalizedRgbDistance (p1[i], p2[i]) > colorDistanceTolerance)
         {
           foundDiff = true;
           p1[i] = Color.red.getRGB ();
@@ -156,14 +156,14 @@ public abstract class AbstractExampleTest
     return null;
   }
 
-  private static double normalizedRgbDistance (final int one, final int other)
+  private static double _normalizedRgbDistance (final int one, final int other)
   {
-    return normalizedDistance (new Color (one), new Color (other));
+    return _normalizedDistance (new Color (one), new Color (other));
   }
 
   private static final double MAX_VECTOR_LENGTH = Math.sqrt (3.0 * 255.0 * 255.0);
 
-  private static double normalizedDistance (final Color one, final Color other)
+  private static double _normalizedDistance (final Color one, final Color other)
   {
     final int distanceR = one.getRed () - other.getRed ();
     final int distanceG = one.getGreen () - other.getGreen ();

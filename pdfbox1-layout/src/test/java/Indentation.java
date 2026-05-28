@@ -5,8 +5,8 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import rst.pdfbox.layout.elements.Document;
 import rst.pdfbox.layout.elements.Paragraph;
-import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.BaseFont;
+import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.Indent;
 import rst.pdfbox.layout.text.SpaceUnit;
 import rst.pdfbox.layout.util.CompatibilityHelper;

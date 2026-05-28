@@ -17,24 +17,24 @@ public class WrappingNewLine extends NewLine
 
   /**
    * See {@link NewLine#NewLine(FontDescriptor)}.
-   * 
-   * @param fontDescriptor
+   *
+   * @param aFontDescriptor
    *        the font and size associated with this new line.
    */
-  public WrappingNewLine (FontDescriptor fontDescriptor)
+  public WrappingNewLine (final FontDescriptor aFontDescriptor)
   {
-    super (fontDescriptor);
+    super (aFontDescriptor);
   }
 
   /**
    * See {@link NewLine#NewLine(float)}.
-   * 
-   * @param fontSize
+   *
+   * @param fFontSize
    *        the font size, resp. the height of the new line.
    */
-  public WrappingNewLine (float fontSize)
+  public WrappingNewLine (final float fFontSize)
   {
-    super (fontSize);
+    super (fFontSize);
   }
 
 }

@@ -3,8 +3,6 @@ package rst.pdfbox.layout.text.annotations;
 import java.io.IOException;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.io.RandomAccessReadBuffer;
 
 import rst.pdfbox.layout.text.IDrawContext;
 import rst.pdfbox.layout.text.Position;
@@ -17,54 +15,54 @@ public interface AnnotationProcessor
 
   /**
    * Called if an annotated object has been drawn.
-   * 
-   * @param drawnObject
+   *
+   * @param aDrawnObject
    *        the drawn object.
-   * @param drawContext
+   * @param aDrawContext
    *        the drawing context.
-   * @param upperLeft
+   * @param aUpperLeft
    *        the upper left position the object has been drawn to.
-   * @param width
+   * @param fWidth
    *        the width of the drawn object.
-   * @param height
+   * @param fHeight
    *        the height of the drawn object.
    * @throws IOException
    *         by pdfbox.
    */
-  void annotatedObjectDrawn (final IAnnotated drawnObject,
-                             final IDrawContext drawContext,
-                             Position upperLeft,
-                             float width,
-                             float height) throws IOException;
+  void annotatedObjectDrawn (final IAnnotated aDrawnObject,
+                             final IDrawContext aDrawContext,
+                             Position aUpperLeft,
+                             float fWidth,
+                             float fHeight) throws IOException;
 
   /**
    * Called before a page is drawn.
-   * 
-   * @param drawContext
+   *
+   * @param aDrawContext
    *        the drawing context.
    * @throws IOException
    *         by pdfbox.
    */
-  void beforePage (final IDrawContext drawContext) throws IOException;
+  void beforePage (final IDrawContext aDrawContext) throws IOException;
 
   /**
    * Called after a page is drawn.
-   * 
-   * @param drawContext
+   *
+   * @param aDrawContext
    *        the drawing context.
    * @throws IOException
    *         by pdfbox.
    */
-  void afterPage (final IDrawContext drawContext) throws IOException;
+  void afterPage (final IDrawContext aDrawContext) throws IOException;
 
   /**
    * Called after all rendering has been performed.
-   * 
-   * @param document
+   *
+   * @param aDocument
    *        the document.
    * @throws IOException
    *         by pdfbox.
    */
-  void afterRender (final PDDocument document) throws IOException;
+  void afterRender (final PDDocument aDocument) throws IOException;
 
 }

@@ -18,9 +18,9 @@ import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
  */
 public class ControlFragment implements ITextFragment
 {
-  protected static FontDescriptor DEFAULT_FONT_DESCRIPTOR = newDefaultFontDescriptor ();
+  protected static FontDescriptor DEFAULT_FONT_DESCRIPTOR = _newDefaultFontDescriptor ();
 
-  private static FontDescriptor newDefaultFontDescriptor ()
+  private static FontDescriptor _newDefaultFontDescriptor ()
   {
     return new FontDescriptor (new PDType1Font (Standard14Fonts.FontName.HELVETICA), 11);
   }
@@ -32,32 +32,32 @@ public class ControlFragment implements ITextFragment
    */
   public static void reset ()
   {
-    DEFAULT_FONT_DESCRIPTOR = newDefaultFontDescriptor ();
+    DEFAULT_FONT_DESCRIPTOR = _newDefaultFontDescriptor ();
   }
 
-  private String name;
-  private final String text;
-  private final FontDescriptor fontDescriptor;
-  private final Color color;
+  private String m_sName;
+  private final String m_sText;
+  private final FontDescriptor m_aFontDescriptor;
+  private final Color m_aColor;
 
-  protected ControlFragment (final String text, final FontDescriptor fontDescriptor)
+  protected ControlFragment (final String sText, final FontDescriptor aFontDescriptor)
   {
-    this (null, text, fontDescriptor, Color.black);
+    this (null, sText, aFontDescriptor, Color.black);
   }
 
-  protected ControlFragment (final String name,
-                             final String text,
-                             final FontDescriptor fontDescriptor,
-                             final Color color)
+  protected ControlFragment (final String sName,
+                             final String sText,
+                             final FontDescriptor aFontDescriptor,
+                             final Color aColor)
   {
-    this.name = name;
-    if (this.name == null)
+    this.m_sName = sName;
+    if (this.m_sName == null)
     {
-      this.name = getClass ().getSimpleName ();
+      this.m_sName = getClass ().getSimpleName ();
     }
-    this.text = text;
-    this.fontDescriptor = fontDescriptor;
-    this.color = color;
+    this.m_sText = sText;
+    this.m_aFontDescriptor = aFontDescriptor;
+    this.m_aColor = aColor;
   }
 
   @Override
@@ -75,30 +75,30 @@ public class ControlFragment implements ITextFragment
   @Override
   public FontDescriptor getFontDescriptor ()
   {
-    return fontDescriptor;
+    return m_aFontDescriptor;
   }
 
   protected String getName ()
   {
-    return name;
+    return m_sName;
   }
 
   @Override
   public String getText ()
   {
-    return text;
+    return m_sText;
   }
 
   @Override
   public Color getColor ()
   {
-    return color;
+    return m_aColor;
   }
 
   @Override
   public String toString ()
   {
-    return "ControlFragment [" + name + "]";
+    return "ControlFragment [" + m_sName + "]";
   }
 
 }

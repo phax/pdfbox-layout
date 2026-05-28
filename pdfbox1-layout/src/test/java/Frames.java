@@ -4,16 +4,16 @@ import java.io.OutputStream;
 
 import rst.pdfbox.layout.elements.Document;
 import rst.pdfbox.layout.elements.Frame;
-import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.elements.PageFormat;
+import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
 import rst.pdfbox.layout.shape.Ellipse;
 import rst.pdfbox.layout.shape.Rect;
 import rst.pdfbox.layout.shape.RoundRect;
 import rst.pdfbox.layout.shape.Stroke;
-import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.BaseFont;
 import rst.pdfbox.layout.text.Constants;
+import rst.pdfbox.layout.text.EAlignment;
 
 public class Frames {
 

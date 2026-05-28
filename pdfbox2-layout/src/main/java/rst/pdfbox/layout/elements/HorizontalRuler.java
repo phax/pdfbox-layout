@@ -8,8 +8,8 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 import rst.pdfbox.layout.shape.Stroke;
 import rst.pdfbox.layout.text.IDrawListener;
-import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.IWidthRespecting;
+import rst.pdfbox.layout.text.Position;
 
 /**
  * A horizontal ruler that adjust its width to the given

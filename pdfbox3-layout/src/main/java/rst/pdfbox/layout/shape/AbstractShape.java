@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.io.IOException;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 import rst.pdfbox.layout.text.IDrawListener;
@@ -23,53 +21,53 @@ public abstract class AbstractShape implements Shape
 {
 
   @Override
-  public void draw (PDDocument pdDocument,
-                    PDPageContentStream contentStream,
-                    Position upperLeft,
-                    float width,
-                    float height,
-                    Color color,
-                    Stroke stroke,
-                    IDrawListener drawListener) throws IOException
+  public void draw (final PDDocument aPdDocument,
+                    final PDPageContentStream aContentStream,
+                    final Position aUpperLeft,
+                    final float fWidth,
+                    final float fHeight,
+                    final Color aColor,
+                    final Stroke aStroke,
+                    final IDrawListener aDrawListener) throws IOException
   {
-    add (pdDocument, contentStream, upperLeft, width, height);
+    add (aPdDocument, aContentStream, aUpperLeft, fWidth, fHeight);
 
-    if (stroke != null)
+    if (aStroke != null)
     {
-      stroke.applyTo (contentStream);
+      aStroke.applyTo (aContentStream);
     }
-    if (color != null)
+    if (aColor != null)
     {
-      contentStream.setStrokingColor (color);
+      aContentStream.setStrokingColor (aColor);
     }
-    contentStream.stroke ();
+    aContentStream.stroke ();
 
-    if (drawListener != null)
+    if (aDrawListener != null)
     {
-      drawListener.drawn (this, upperLeft, width, height);
+      aDrawListener.drawn (this, aUpperLeft, fWidth, fHeight);
     }
   }
 
   @Override
-  public void fill (PDDocument pdDocument,
-                    PDPageContentStream contentStream,
-                    Position upperLeft,
-                    float width,
-                    float height,
-                    Color color,
-                    IDrawListener drawListener) throws IOException
+  public void fill (final PDDocument aPdDocument,
+                    final PDPageContentStream aContentStream,
+                    final Position aUpperLeft,
+                    final float fWidth,
+                    final float fHeight,
+                    final Color aColor,
+                    final IDrawListener aDrawListener) throws IOException
   {
-    add (pdDocument, contentStream, upperLeft, width, height);
+    add (aPdDocument, aContentStream, aUpperLeft, fWidth, fHeight);
 
-    if (color != null)
+    if (aColor != null)
     {
-      contentStream.setNonStrokingColor (color);
+      aContentStream.setNonStrokingColor (aColor);
     }
-    CompatibilityHelper.fillNonZero (contentStream);
+    CompatibilityHelper.fillNonZero (aContentStream);
 
-    if (drawListener != null)
+    if (aDrawListener != null)
     {
-      drawListener.drawn (this, upperLeft, width, height);
+      aDrawListener.drawn (this, aUpperLeft, fWidth, fHeight);
     }
   }
 

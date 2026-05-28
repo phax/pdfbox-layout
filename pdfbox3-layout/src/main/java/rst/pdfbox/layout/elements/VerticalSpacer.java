@@ -11,20 +11,20 @@ import rst.pdfbox.layout.text.Position;
 /**
  * A drawable element that occupies some vertical space without any graphical representation.
  */
-public class VerticalSpacer implements Drawable, IElement, IDividable
+public class VerticalSpacer implements IDrawable3, IElement, IDividable
 {
 
-  private float height;
+  private final float m_fHeight;
 
   /**
    * Creates a vertical space with the given height.
-   * 
-   * @param height
+   *
+   * @param fHeight
    *        the height of the space.
    */
-  public VerticalSpacer (float height)
+  public VerticalSpacer (final float fHeight)
   {
-    this.height = height;
+    this.m_fHeight = fHeight;
   }
 
   @Override
@@ -36,7 +36,7 @@ public class VerticalSpacer implements Drawable, IElement, IDividable
   @Override
   public float getHeight () throws IOException
   {
-    return height;
+    return m_fHeight;
   }
 
   @Override
@@ -46,25 +46,25 @@ public class VerticalSpacer implements Drawable, IElement, IDividable
   }
 
   @Override
-  public void draw (PDDocument pdDocument,
-                    PDPageContentStream contentStream,
-                    Position upperLeft,
-                    IDrawListener drawListener) throws IOException
+  public void draw (final PDDocument aPdDocument,
+                    final PDPageContentStream aContentStream,
+                    final Position aUpperLeft,
+                    final IDrawListener aDrawListener) throws IOException
   {
-    if (drawListener != null)
+    if (aDrawListener != null)
     {
-      drawListener.drawn (this, upperLeft, getWidth (), getHeight ());
+      aDrawListener.drawn (this, aUpperLeft, getWidth (), getHeight ());
     }
   }
 
   @Override
-  public Divided divide (float remainingHeight, final float pageHeight) throws IOException
+  public Divided divide (final float fRemainingHeight, final float fPageHeight) throws IOException
   {
-    return new Divided (new VerticalSpacer (remainingHeight), new VerticalSpacer (getHeight () - remainingHeight));
+    return new Divided (new VerticalSpacer (fRemainingHeight), new VerticalSpacer (getHeight () - fRemainingHeight));
   }
 
   @Override
-  public Drawable removeLeadingEmptyVerticalSpace ()
+  public IDrawable3 removeLeadingEmptyVerticalSpace ()
   {
     return this;
   }

@@ -11,13 +11,13 @@ import rst.pdfbox.layout.text.Constants;
 public class PageFormat implements IElement
 {
 
-  private final float marginLeft;
-  private final float marginRight;
-  private final float marginTop;
-  private final float marginBottom;
-  private final PDRectangle mediaBox;
-  private final EOrientation orientation;
-  private final int rotation;
+  private final float m_fMarginLeft;
+  private final float m_fMarginRight;
+  private final float m_fMarginTop;
+  private final float m_fMarginBottom;
+  private final PDRectangle m_aMediaBox;
+  private final EOrientation m_eOrientation;
+  private final int m_nRotation;
 
   /**
    * Creates a PageFormat with A4 portrait without margins.
@@ -29,89 +29,89 @@ public class PageFormat implements IElement
 
   /**
    * Creates a PageFormat with a given size and orientation portrait.
-   * 
-   * @param mediaBox
+   *
+   * @param aMediaBox
    *        the size.
    */
-  public PageFormat (final PDRectangle mediaBox)
+  public PageFormat (final PDRectangle aMediaBox)
   {
-    this (mediaBox, EOrientation.Portrait);
+    this (aMediaBox, EOrientation.Portrait);
   }
 
   /**
    * Creates a PageFormat with a given size and orientation.
-   * 
-   * @param mediaBox
+   *
+   * @param aMediaBox
    *        the size.
-   * @param orientation
+   * @param eOrientation
    *        the orientation.
    */
-  public PageFormat (final PDRectangle mediaBox, final EOrientation orientation)
+  public PageFormat (final PDRectangle aMediaBox, final EOrientation eOrientation)
   {
-    this (mediaBox, orientation, 0, 0, 0, 0);
+    this (aMediaBox, eOrientation, 0, 0, 0, 0);
   }
 
   /**
    * Creates a Document based on the given media box and margins. By default, a
    * {@link VerticalLayout} is used.
-   * 
-   * @param mediaBox
+   *
+   * @param aMediaBox
    *        the media box to use.
-   * @param orientation
+   * @param eOrientation
    *        the orientation to use.
-   * @param marginLeft
+   * @param fMarginLeft
    *        the left margin
-   * @param marginRight
+   * @param fMarginRight
    *        the right margin
-   * @param marginTop
+   * @param fMarginTop
    *        the top margin
-   * @param marginBottom
+   * @param fMarginBottom
    *        the bottom margin
    */
-  public PageFormat (PDRectangle mediaBox,
-                     EOrientation orientation,
-                     float marginLeft,
-                     float marginRight,
-                     float marginTop,
-                     float marginBottom)
+  public PageFormat (final PDRectangle aMediaBox,
+                     final EOrientation eOrientation,
+                     final float fMarginLeft,
+                     final float fMarginRight,
+                     final float fMarginTop,
+                     final float fMarginBottom)
   {
-    this (mediaBox, orientation, 0, marginLeft, marginRight, marginTop, marginBottom);
+    this (aMediaBox, eOrientation, 0, fMarginLeft, fMarginRight, fMarginTop, fMarginBottom);
   }
 
   /**
    * Creates a Document based on the given media box and margins. By default, a
    * {@link VerticalLayout} is used.
-   * 
-   * @param mediaBox
+   *
+   * @param aMediaBox
    *        the media box to use.
-   * @param orientation
+   * @param eOrientation
    *        the orientation to use.
-   * @param rotation
+   * @param nRotation
    *        the rotation to apply to the page after rendering.
-   * @param marginLeft
+   * @param fMarginLeft
    *        the left margin
-   * @param marginRight
+   * @param fMarginRight
    *        the right margin
-   * @param marginTop
+   * @param fMarginTop
    *        the top margin
-   * @param marginBottom
+   * @param fMarginBottom
    *        the bottom margin
    */
-  public PageFormat (PDRectangle mediaBox,
-                     EOrientation orientation,
-                     int rotation,
-                     float marginLeft,
-                     float marginRight,
-                     float marginTop,
-                     float marginBottom)
+  public PageFormat (final PDRectangle aMediaBox,
+                     final EOrientation eOrientation,
+                     final int nRotation,
+                     final float fMarginLeft,
+                     final float fMarginRight,
+                     final float fMarginTop,
+                     final float fMarginBottom)
   {
-    this.mediaBox = mediaBox;
-    this.orientation = orientation;
-    this.rotation = rotation;
-    this.marginLeft = marginLeft;
-    this.marginRight = marginRight;
-    this.marginTop = marginTop;
-    this.marginBottom = marginBottom;
+    this.m_aMediaBox = aMediaBox;
+    this.m_eOrientation = eOrientation;
+    this.m_nRotation = nRotation;
+    this.m_fMarginLeft = fMarginLeft;
+    this.m_fMarginRight = fMarginRight;
+    this.m_fMarginTop = fMarginTop;
+    this.m_fMarginBottom = fMarginBottom;
   }
 
   /**
@@ -119,9 +119,9 @@ public class PageFormat implements IElement
    */
   public EOrientation getOrientation ()
   {
-    if (orientation != null)
+    if (m_eOrientation != null)
     {
-      return orientation;
+      return m_eOrientation;
     }
     if (getMediaBox ().getWidth () > getMediaBox ().getHeight ())
     {
@@ -135,7 +135,7 @@ public class PageFormat implements IElement
    */
   public int getRotation ()
   {
-    return rotation;
+    return m_nRotation;
   }
 
   /**
@@ -143,7 +143,7 @@ public class PageFormat implements IElement
    */
   public float getMarginLeft ()
   {
-    return marginLeft;
+    return m_fMarginLeft;
   }
 
   /**
@@ -151,7 +151,7 @@ public class PageFormat implements IElement
    */
   public float getMarginRight ()
   {
-    return marginRight;
+    return m_fMarginRight;
   }
 
   /**
@@ -159,7 +159,7 @@ public class PageFormat implements IElement
    */
   public float getMarginTop ()
   {
-    return marginTop;
+    return m_fMarginTop;
   }
 
   /**
@@ -167,7 +167,7 @@ public class PageFormat implements IElement
    */
   public float getMarginBottom ()
   {
-    return marginBottom;
+    return m_fMarginBottom;
   }
 
   /**
@@ -175,7 +175,7 @@ public class PageFormat implements IElement
    */
   public PDRectangle getMediaBox ()
   {
-    return mediaBox;
+    return m_aMediaBox;
   }
 
   /**
@@ -188,247 +188,250 @@ public class PageFormat implements IElement
 
   public static class PageFormatBuilder
   {
-    private float marginLeft;
-    private float marginRight;
-    private float marginTop;
-    private float marginBottom;
-    private PDRectangle mediaBox = Constants.A4;
-    private EOrientation orientation;
-    private int rotation;
+    private float m_fMarginLeft;
+    private float m_fMarginRight;
+    private float m_fMarginTop;
+    private float m_fMarginBottom;
+    private PDRectangle m_aMediaBox = Constants.A4;
+    private EOrientation m_eOrientation;
+    private int m_nRotation;
 
     protected PageFormatBuilder ()
     {}
 
     /**
      * Actually builds the PageFormat.
-     * 
+     *
      * @return the resulting PageFormat.
      */
     public PageFormat build ()
     {
-      return new PageFormat (mediaBox, orientation, rotation, marginLeft, marginRight, marginTop, marginBottom);
+      return new PageFormat (m_aMediaBox, m_eOrientation, m_nRotation, m_fMarginLeft, m_fMarginRight, m_fMarginTop, m_fMarginBottom);
     }
 
     /**
      * Sets the left margin.
-     * 
-     * @param marginLeft
+     *
+     * @param fMarginLeft
      *        the left margin to use.
      * @return the builder.
      */
-    public PageFormatBuilder marginLeft (float marginLeft)
+    public PageFormatBuilder marginLeft (final float fMarginLeft)
     {
-      this.marginLeft = marginLeft;
+      this.m_fMarginLeft = fMarginLeft;
       return this;
     }
 
     /**
      * Sets the right margin.
-     * 
-     * @param marginRight
+     *
+     * @param fMarginRight
      *        the right margin to use.
      * @return the builder.
      */
-    public PageFormatBuilder marginRight (float marginRight)
+    public PageFormatBuilder marginRight (final float fMarginRight)
     {
-      this.marginRight = marginRight;
+      this.m_fMarginRight = fMarginRight;
       return this;
     }
 
     /**
      * Sets the top margin.
-     * 
-     * @param marginTop
+     *
+     * @param fMarginTop
      *        the top margin to use.
      * @return the builder.
      */
-    public PageFormatBuilder marginTop (float marginTop)
+    public PageFormatBuilder marginTop (final float fMarginTop)
     {
-      this.marginTop = marginTop;
+      this.m_fMarginTop = fMarginTop;
       return this;
     }
 
     /**
      * Sets the bottom margin.
-     * 
-     * @param marginBottom
+     *
+     * @param fMarginBottom
      *        the bottom margin to use.
      * @return the builder.
      */
-    public PageFormatBuilder marginBottom (float marginBottom)
+    public PageFormatBuilder marginBottom (final float fMarginBottom)
     {
-      this.marginBottom = marginBottom;
+      this.m_fMarginBottom = fMarginBottom;
       return this;
     }
 
     /**
      * Sets the margins.
-     * 
-     * @param marginLeft
+     *
+     * @param fMarginLeft
      *        the left margin to use.
-     * @param marginRight
+     * @param fMarginRight
      *        the right margin to use.
-     * @param marginTop
+     * @param fMarginTop
      *        the top margin to use.
-     * @param marginBottom
+     * @param fMarginBottom
      *        the bottom margin to use.
      * @return the builder.
      */
-    public PageFormatBuilder margins (float marginLeft, float marginRight, float marginTop, float marginBottom)
+    public PageFormatBuilder margins (final float fMarginLeft,
+                                      final float fMarginRight,
+                                      final float fMarginTop,
+                                      final float fMarginBottom)
     {
-      this.marginLeft = marginLeft;
-      this.marginRight = marginRight;
-      this.marginTop = marginTop;
-      this.marginBottom = marginBottom;
+      this.m_fMarginLeft = fMarginLeft;
+      this.m_fMarginRight = fMarginRight;
+      this.m_fMarginTop = fMarginTop;
+      this.m_fMarginBottom = fMarginBottom;
       return this;
     }
 
     /**
      * Sets the media box to the given size.
-     * 
-     * @param mediaBox
+     *
+     * @param aMediaBox
      *        the media box to use.
      * @return the builder.
      */
-    public PageFormatBuilder mediaBox (PDRectangle mediaBox)
+    public PageFormatBuilder mediaBox (final PDRectangle aMediaBox)
     {
-      this.mediaBox = mediaBox;
+      this.m_aMediaBox = aMediaBox;
       return this;
     }
 
     /**
      * Sets the media box to size {@link Constants#A0}.
-     * 
+     *
      * @return the builder.
      */
     public PageFormatBuilder A0 ()
     {
-      this.mediaBox = Constants.A0;
+      this.m_aMediaBox = Constants.A0;
       return this;
     }
 
     /**
      * Sets the media box to size {@link Constants#A1}.
-     * 
+     *
      * @return the builder.
      */
     public PageFormatBuilder A1 ()
     {
-      this.mediaBox = Constants.A1;
+      this.m_aMediaBox = Constants.A1;
       return this;
     }
 
     /**
      * Sets the media box to size {@link Constants#A2}.
-     * 
+     *
      * @return the builder.
      */
     public PageFormatBuilder A2 ()
     {
-      this.mediaBox = Constants.A2;
+      this.m_aMediaBox = Constants.A2;
       return this;
     }
 
     /**
      * Sets the media box to size {@link Constants#A3}.
-     * 
+     *
      * @return the builder.
      */
     public PageFormatBuilder A3 ()
     {
-      this.mediaBox = Constants.A3;
+      this.m_aMediaBox = Constants.A3;
       return this;
     }
 
     /**
      * Sets the media box to size {@link Constants#A4}.
-     * 
+     *
      * @return the builder.
      */
     public PageFormatBuilder A4 ()
     {
-      this.mediaBox = Constants.A4;
+      this.m_aMediaBox = Constants.A4;
       return this;
     }
 
     /**
      * Sets the media box to size {@link Constants#A5}.
-     * 
+     *
      * @return the builder.
      */
     public PageFormatBuilder A5 ()
     {
-      this.mediaBox = Constants.A5;
+      this.m_aMediaBox = Constants.A5;
       return this;
     }
 
     /**
      * Sets the media box to size {@link Constants#A6}.
-     * 
+     *
      * @return the builder.
      */
     public PageFormatBuilder A6 ()
     {
-      this.mediaBox = Constants.A6;
+      this.m_aMediaBox = Constants.A6;
       return this;
     }
 
     /**
      * Sets the media box to size {@link Constants#Letter}.
-     * 
+     *
      * @return the builder.
      */
     public PageFormatBuilder letter ()
     {
-      this.mediaBox = Constants.Letter;
+      this.m_aMediaBox = Constants.Letter;
       return this;
     }
 
     /**
      * Sets the orientation to the given one.
-     * 
-     * @param orientation
+     *
+     * @param eOrientation
      *        the orientation to use.
      * @return the builder.
      */
-    public PageFormatBuilder orientation (EOrientation orientation)
+    public PageFormatBuilder orientation (final EOrientation eOrientation)
     {
-      this.orientation = orientation;
+      this.m_eOrientation = eOrientation;
       return this;
     }
 
     /**
      * Sets the orientation to {@link EOrientation#Portrait}.
-     * 
+     *
      * @return the builder.
      */
     public PageFormatBuilder portrait ()
     {
-      this.orientation = EOrientation.Portrait;
+      this.m_eOrientation = EOrientation.Portrait;
       return this;
     }
 
     /**
      * Sets the orientation to {@link EOrientation#Landscape}.
-     * 
+     *
      * @return the builder.
      */
     public PageFormatBuilder landscape ()
     {
-      this.orientation = EOrientation.Landscape;
+      this.m_eOrientation = EOrientation.Landscape;
       return this;
     }
 
     /**
      * Sets the rotation to apply to the page after rendering.
-     * 
-     * @param angle
+     *
+     * @param nAngle
      *        the angle to rotate.
      * @return the builder.
      */
-    public PageFormatBuilder rotation (int angle)
+    public PageFormatBuilder rotation (final int nAngle)
     {
-      this.rotation = angle;
+      this.m_nRotation = nAngle;
       return this;
     }
   }

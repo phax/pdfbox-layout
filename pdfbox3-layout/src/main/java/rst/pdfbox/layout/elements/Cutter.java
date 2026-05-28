@@ -12,42 +12,42 @@ import rst.pdfbox.layout.text.Position;
  * A cutter transforms any Drawable element into a {@link IDividable}. It simply <em>cuts</em> the
  * drawable vertically into pieces matching the target height.
  */
-public class Cutter implements IDividable, Drawable
+public class Cutter implements IDividable, IDrawable3
 {
 
-  private final Drawable undividable;
-  private final float viewPortY;
-  private final float viewPortHeight;
+  private final IDrawable3 m_aUndividable;
+  private final float m_fViewPortY;
+  private final float m_fViewPortHeight;
 
-  public Cutter (Drawable undividableElement) throws IOException
+  public Cutter (final IDrawable3 aUndividableElement) throws IOException
   {
-    this (undividableElement, 0, undividableElement.getHeight ());
+    this (aUndividableElement, 0, aUndividableElement.getHeight ());
   }
 
-  protected Cutter (Drawable undividable, float viewPortY, float viewPortHeight)
+  protected Cutter (final IDrawable3 aUndividable, final float fViewPortY, final float fViewPortHeight)
   {
-    this.undividable = undividable;
-    this.viewPortY = viewPortY;
-    this.viewPortHeight = viewPortHeight;
+    this.m_aUndividable = aUndividable;
+    this.m_fViewPortY = fViewPortY;
+    this.m_fViewPortHeight = fViewPortHeight;
   }
 
   @Override
-  public Divided divide (float remainingHeight, final float pageHeight)
+  public Divided divide (final float fRemainingHeight, final float fPageHeight)
   {
-    return new Divided (new Cutter (undividable, viewPortY, remainingHeight),
-                        new Cutter (undividable, viewPortY - remainingHeight, viewPortHeight - remainingHeight));
+    return new Divided (new Cutter (m_aUndividable, m_fViewPortY, fRemainingHeight),
+                        new Cutter (m_aUndividable, m_fViewPortY - fRemainingHeight, m_fViewPortHeight - fRemainingHeight));
   }
 
   @Override
   public float getWidth () throws IOException
   {
-    return undividable.getWidth ();
+    return m_aUndividable.getWidth ();
   }
 
   @Override
   public float getHeight () throws IOException
   {
-    return viewPortHeight;
+    return m_fViewPortHeight;
   }
 
   @Override
@@ -57,19 +57,19 @@ public class Cutter implements IDividable, Drawable
   }
 
   @Override
-  public void draw (PDDocument pdDocument,
-                    PDPageContentStream contentStream,
-                    Position upperLeft,
-                    IDrawListener drawListener) throws IOException
+  public void draw (final PDDocument aPdDocument,
+                    final PDPageContentStream aContentStream,
+                    final Position aUpperLeft,
+                    final IDrawListener aDrawListener) throws IOException
   {
-    Position viewPortOrigin = upperLeft.add (0, -viewPortY);
-    undividable.draw (pdDocument, contentStream, viewPortOrigin, drawListener);
+    final Position aViewPortOrigin = aUpperLeft.add (0, -m_fViewPortY);
+    m_aUndividable.draw (aPdDocument, aContentStream, aViewPortOrigin, aDrawListener);
   }
 
   @Override
-  public Drawable removeLeadingEmptyVerticalSpace () throws IOException
+  public IDrawable3 removeLeadingEmptyVerticalSpace () throws IOException
   {
-    return new Cutter (undividable.removeLeadingEmptyVerticalSpace ());
+    return new Cutter (m_aUndividable.removeLeadingEmptyVerticalSpace ());
   }
 
 }

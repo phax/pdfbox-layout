@@ -7,10 +7,10 @@ import org.apache.pdfbox.pdmodel.PDPage;
 
 import rst.pdfbox.layout.elements.render.RenderContext;
 import rst.pdfbox.layout.elements.render.RenderListener;
-import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.DrawContext;
-import rst.pdfbox.layout.text.IDrawListener;
 import rst.pdfbox.layout.text.DrawableText;
+import rst.pdfbox.layout.text.EAlignment;
+import rst.pdfbox.layout.text.IDrawListener;
 import rst.pdfbox.layout.text.Position;
 
 /**

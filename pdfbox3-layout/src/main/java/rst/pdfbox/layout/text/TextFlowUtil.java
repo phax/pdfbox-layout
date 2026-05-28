@@ -20,421 +20,422 @@ import rst.pdfbox.layout.text.ControlCharacters.MetricsControlCharacter;
 import rst.pdfbox.layout.text.ControlCharacters.NewLineControlCharacter;
 import rst.pdfbox.layout.text.IndentCharacters.IndentCharacter;
 import rst.pdfbox.layout.text.annotations.AnnotatedStyledText;
-import rst.pdfbox.layout.text.annotations.IAnnotation;
 import rst.pdfbox.layout.text.annotations.AnnotationCharacters;
 import rst.pdfbox.layout.text.annotations.AnnotationCharacters.AbstractAnnotationControlCharacter;
 import rst.pdfbox.layout.text.annotations.AnnotationCharacters.IAnnotationControlCharacterFactory;
+import rst.pdfbox.layout.text.annotations.IAnnotation;
 
 public class TextFlowUtil
 {
 
   /**
    * Creates a text flow from the given text. The text may contain line breaks.
-   * 
-   * @param text
+   *
+   * @param sText
    *        the text
-   * @param fontSize
+   * @param fFontSize
    *        the font size to use.
-   * @param font
+   * @param aFont
    *        the font to use.
    * @return the created text flow.
    * @throws IOException
    *         by pdfbox
    */
-  public static TextFlow createTextFlow (final String text, final float fontSize, final PDFont font) throws IOException
+  public static TextFlow createTextFlow (final String sText, final float fFontSize, final PDFont aFont)
+                                                                                                        throws IOException
   {
-    final Iterable <CharSequence> parts = fromPlainText (text);
-    return createTextFlow (parts, fontSize, font, font, font, font);
+    final Iterable <CharSequence> aParts = fromPlainText (sText);
+    return createTextFlow (aParts, fFontSize, aFont, aFont, aFont, aFont);
   }
 
   /**
    * Convenience alternative to
    * {@link #createTextFlowFromMarkup(String, float, PDFont, PDFont, PDFont, PDFont)} which allows
    * to specifies the fonts to use by using the {@link EBaseFont} enum.
-   * 
-   * @param markup
+   *
+   * @param sMarkup
    *        the markup text.
-   * @param fontSize
+   * @param fFontSize
    *        the font size to use.
-   * @param baseFont
+   * @param eBaseFont
    *        the base font describing the bundle of plain/blold/italic/bold-italic fonts.
    * @return the created text flow.
    * @throws IOException
    *         by pdfbox
    */
-  public static TextFlow createTextFlowFromMarkup (final String markup, final float fontSize, final EBaseFont baseFont)
-                                                                                                                       throws IOException
+  public static TextFlow createTextFlowFromMarkup (final String sMarkup,
+                                                   final float fFontSize,
+                                                   final EBaseFont eBaseFont) throws IOException
   {
-    return createTextFlowFromMarkup (markup,
-                                     fontSize,
-                                     baseFont.getPlainFont (),
-                                     baseFont.getBoldFont (),
-                                     baseFont.getItalicFont (),
-                                     baseFont.getBoldItalicFont ());
+    return createTextFlowFromMarkup (sMarkup,
+                                     fFontSize,
+                                     eBaseFont.getPlainFont (),
+                                     eBaseFont.getBoldFont (),
+                                     eBaseFont.getItalicFont (),
+                                     eBaseFont.getBoldItalicFont ());
   }
 
   /**
    * Creates a text flow from the given text. The text may contain line breaks, and also supports
    * some markup for creating bold and italic fonts. The following raw text
-   * 
+   *
    * <pre>
    * Markup supports *bold*, _italic_, and *even _mixed* markup_.
    * </pre>
-   * 
+   *
    * is rendered like this:
-   * 
+   *
    * <pre>
    * Markup supports <b>bold</b>, <em>italic</em>, and <b>even <em>mixed</em></b><em> markup</em>.
    * </pre>
-   * 
+   *
    * Use backslash to escape special characters '*', '_' and '\' itself:
-   * 
+   *
    * <pre>
    * Escape \* with \\\* and \_ with \\\_ in markup.
    * </pre>
-   * 
+   *
    * is rendered like this:
-   * 
+   *
    * <pre>
    * Escape * with \* and _ with \_ in markup.
    * </pre>
-   * 
-   * @param markup
+   *
+   * @param sMarkup
    *        the markup text.
-   * @param fontSize
+   * @param fFontSize
    *        the font size to use.
-   * @param plainFont
+   * @param aPlainFont
    *        the plain font.
-   * @param boldFont
+   * @param aBoldFont
    *        the bold font.
-   * @param italicFont
+   * @param aItalicFont
    *        the italic font.
-   * @param boldItalicFont
+   * @param aBoldItalicFont
    *        the bold-italic font.
    * @return the created text flow.
    * @throws IOException
    *         by pdfbox
    */
-  public static TextFlow createTextFlowFromMarkup (final String markup,
-                                                   final float fontSize,
-                                                   final PDFont plainFont,
-                                                   final PDFont boldFont,
-                                                   final PDFont italicFont,
-                                                   final PDFont boldItalicFont) throws IOException
+  public static TextFlow createTextFlowFromMarkup (final String sMarkup,
+                                                   final float fFontSize,
+                                                   final PDFont aPlainFont,
+                                                   final PDFont aBoldFont,
+                                                   final PDFont aItalicFont,
+                                                   final PDFont aBoldItalicFont) throws IOException
   {
-    final Iterable <CharSequence> parts = fromMarkup (markup);
-    return createTextFlow (parts, fontSize, plainFont, boldFont, italicFont, boldItalicFont);
+    final Iterable <CharSequence> aParts = fromMarkup (sMarkup);
+    return createTextFlow (aParts, fFontSize, aPlainFont, aBoldFont, aItalicFont, aBoldItalicFont);
   }
 
   /**
    * Actually creates the text flow from the given (markup) text.
-   * 
-   * @param parts
+   *
+   * @param aParts
    *        the parts to create the text flow from.
-   * @param fontSize
+   * @param fFontSize
    *        the font size to use.
-   * @param plainFont
+   * @param aPlainFont
    *        the plain font.
-   * @param boldFont
+   * @param aBoldFont
    *        the bold font.
-   * @param italicFont
+   * @param aItalicFont
    *        the italic font.
-   * @param boldItalicFont
+   * @param aBoldItalicFont
    *        the bold-italic font.
    * @return the created text flow.
    * @throws IOException
    *         by pdfbox
    */
-  protected static TextFlow createTextFlow (final Iterable <CharSequence> parts,
-                                            final float fontSize,
-                                            final PDFont plainFont,
-                                            final PDFont boldFont,
-                                            final PDFont italicFont,
-                                            final PDFont boldItalicFont) throws IOException
+  protected static TextFlow createTextFlow (final Iterable <CharSequence> aParts,
+                                            final float fFontSize,
+                                            final PDFont aPlainFont,
+                                            final PDFont aBoldFont,
+                                            final PDFont aItalicFont,
+                                            final PDFont aBoldItalicFont) throws IOException
   {
-    final TextFlow result = new TextFlow ();
-    boolean bold = false;
-    boolean italic = false;
-    Color color = Color.black;
-    MetricsControlCharacter metricsControl = null;
-    Map <Class <? extends IAnnotation>, IAnnotation> annotationMap = new HashMap <Class <? extends IAnnotation>, IAnnotation> ();
-    Stack <IndentCharacter> indentStack = new Stack <IndentCharacter> ();
-    for (final CharSequence fragment : parts)
+    final TextFlow aResult = new TextFlow ();
+    boolean bBold = false;
+    boolean bItalic = false;
+    Color aColor = Color.black;
+    MetricsControlCharacter aMetricsControl = null;
+    final Map <Class <? extends IAnnotation>, IAnnotation> aAnnotationMap = new HashMap <> ();
+    final Stack <IndentCharacter> aIndentStack = new Stack <> ();
+    for (final CharSequence aFragment : aParts)
     {
 
-      if (fragment instanceof ControlCharacter)
+      if (aFragment instanceof ControlCharacter)
       {
-        if (fragment instanceof NewLineControlCharacter)
+        if (aFragment instanceof NewLineControlCharacter)
         {
-          result.add (new NewLine (fontSize));
+          aResult.add (new NewLine (fFontSize));
         }
-        if (fragment instanceof BoldControlCharacter)
+        if (aFragment instanceof BoldControlCharacter)
         {
-          bold = !bold;
+          bBold = !bBold;
         }
-        if (fragment instanceof ItalicControlCharacter)
+        if (aFragment instanceof ItalicControlCharacter)
         {
-          italic = !italic;
+          bItalic = !bItalic;
         }
-        if (fragment instanceof ColorControlCharacter)
+        if (aFragment instanceof ColorControlCharacter)
         {
-          color = ((ColorControlCharacter) fragment).getColor ();
+          aColor = ((ColorControlCharacter) aFragment).getColor ();
         }
-        if (fragment instanceof AbstractAnnotationControlCharacter)
+        if (aFragment instanceof AbstractAnnotationControlCharacter)
         {
-          AbstractAnnotationControlCharacter <?> annotationControlCharacter = (AbstractAnnotationControlCharacter <?>) fragment;
-          if (annotationMap.containsKey (annotationControlCharacter.getAnnotationType ()))
+          final AbstractAnnotationControlCharacter <?> aAnnotationControlCharacter = (AbstractAnnotationControlCharacter <?>) aFragment;
+          if (aAnnotationMap.containsKey (aAnnotationControlCharacter.getAnnotationType ()))
           {
-            annotationMap.remove (annotationControlCharacter.getAnnotationType ());
+            aAnnotationMap.remove (aAnnotationControlCharacter.getAnnotationType ());
           }
           else
           {
-            annotationMap.put (annotationControlCharacter.getAnnotationType (),
-                               annotationControlCharacter.getAnnotation ());
+            aAnnotationMap.put (aAnnotationControlCharacter.getAnnotationType (),
+                                aAnnotationControlCharacter.getAnnotation ());
           }
         }
-        if (fragment instanceof MetricsControlCharacter)
+        if (aFragment instanceof MetricsControlCharacter)
         {
-          if (metricsControl != null && metricsControl.toString ().equals (fragment.toString ()))
+          if (aMetricsControl != null && aMetricsControl.toString ().equals (aFragment.toString ()))
           {
             // end marker
-            metricsControl = null;
+            aMetricsControl = null;
           }
           else
           {
-            metricsControl = (MetricsControlCharacter) fragment;
+            aMetricsControl = (MetricsControlCharacter) aFragment;
           }
         }
-        if (fragment instanceof IndentCharacter)
+        if (aFragment instanceof IndentCharacter aCurrentIndent)
         {
-          IndentCharacter currentIndent = (IndentCharacter) fragment;
-          if (currentIndent.getLevel () == 0)
+          if (aCurrentIndent.getLevel () == 0)
           {
             // indentation of 0 resets indent
-            indentStack.clear ();
-            result.add (Indent.UNINDENT);
+            aIndentStack.clear ();
+            aResult.add (Indent.UNINDENT);
             continue;
           }
-          else
+          IndentCharacter aLast = null;
+          while (!aIndentStack.isEmpty () &&
+                 aIndentStack.peek () != null &&
+                 aCurrentIndent.getLevel () <= aIndentStack.peek ().getLevel ())
           {
-            IndentCharacter last = null;
-            while (!indentStack.isEmpty () &&
-                   indentStack.peek () != null &&
-                   currentIndent.getLevel () <= indentStack.peek ().getLevel ())
-            {
-              last = indentStack.pop ();
-            }
-            if (last != null && last.equals (currentIndent))
-            {
-              currentIndent = last;
-            }
-            indentStack.push (currentIndent);
-            result.add (currentIndent.createNewIndent (fontSize, plainFont, color));
+            aLast = aIndentStack.pop ();
           }
+          if (aLast != null && aLast.equals (aCurrentIndent))
+          {
+            aCurrentIndent = aLast;
+          }
+          aIndentStack.push (aCurrentIndent);
+          aResult.add (aCurrentIndent.createNewIndent (fFontSize, aPlainFont, aColor));
         }
       }
       else
       {
-        PDFont font = getFont (bold, italic, plainFont, boldFont, italicFont, boldItalicFont);
-        float baselineOffset = 0;
-        float currentFontSize = fontSize;
-        if (metricsControl != null)
+        final PDFont aFont = getFont (bBold, bItalic, aPlainFont, aBoldFont, aItalicFont, aBoldItalicFont);
+        float fBaselineOffset = 0;
+        float fCurrentFontSize = fFontSize;
+        if (aMetricsControl != null)
         {
-          baselineOffset = metricsControl.getBaselineOffsetScale () * fontSize;
-          currentFontSize *= metricsControl.getFontScale ();
+          fBaselineOffset = aMetricsControl.getBaselineOffsetScale () * fFontSize;
+          fCurrentFontSize *= aMetricsControl.getFontScale ();
         }
-        if (annotationMap.isEmpty ())
+        if (aAnnotationMap.isEmpty ())
         {
-          StyledText styledText = new StyledText (fragment.toString (), currentFontSize, font, color, baselineOffset);
-          result.add (styledText);
+          final StyledText aStyledText = new StyledText (aFragment.toString (),
+                                                         fCurrentFontSize,
+                                                         aFont,
+                                                         aColor,
+                                                         fBaselineOffset);
+          aResult.add (aStyledText);
         }
         else
         {
-          AnnotatedStyledText styledText = new AnnotatedStyledText (fragment.toString (),
-                                                                    currentFontSize,
-                                                                    font,
-                                                                    color,
-                                                                    baselineOffset,
-                                                                    annotationMap.values ());
-          result.add (styledText);
+          final AnnotatedStyledText aStyledText = new AnnotatedStyledText (aFragment.toString (),
+                                                                           fCurrentFontSize,
+                                                                           aFont,
+                                                                           aColor,
+                                                                           fBaselineOffset,
+                                                                           aAnnotationMap.values ());
+          aResult.add (aStyledText);
         }
       }
     }
-    return result;
+    return aResult;
   }
 
-  protected static PDFont getFont (boolean bold,
-                                   boolean italic,
-                                   final PDFont plainFont,
-                                   final PDFont boldFont,
-                                   final PDFont italicFont,
-                                   final PDFont boldItalicFont)
+  protected static PDFont getFont (final boolean bBold,
+                                   final boolean bItalic,
+                                   final PDFont aPlainFont,
+                                   final PDFont aBoldFont,
+                                   final PDFont aItalicFont,
+                                   final PDFont aBoldItalicFont)
   {
-    PDFont font = plainFont;
-    if (bold && !italic)
+    PDFont aFont = aPlainFont;
+    if (bBold && !bItalic)
     {
-      font = boldFont;
+      aFont = aBoldFont;
     }
     else
-      if (!bold && italic)
+      if (!bBold && bItalic)
       {
-        font = italicFont;
+        aFont = aItalicFont;
       }
       else
-        if (bold && italic)
+        if (bBold && bItalic)
         {
-          font = boldItalicFont;
+          aFont = aBoldItalicFont;
         }
-    return font;
+    return aFont;
   }
 
   /**
    * Creates a char sequence where new-line is replaced by the corresponding
    * {@link ControlCharacter}.
-   * 
-   * @param text
+   *
+   * @param aText
    *        the original text.
    * @return the create char sequence.
    */
-  public static Iterable <CharSequence> fromPlainText (final CharSequence text)
+  public static Iterable <CharSequence> fromPlainText (final CharSequence aText)
   {
-    return fromPlainText (Collections.singleton (text));
+    return fromPlainText (Collections.singleton (aText));
   }
 
   /**
    * Creates a char sequence where new-line is replaced by the corresponding
    * {@link ControlCharacter}.
-   * 
-   * @param text
+   *
+   * @param aText
    *        the original text.
    * @return the create char sequence.
    */
-  public static Iterable <CharSequence> fromPlainText (final Iterable <CharSequence> text)
+  public static Iterable <CharSequence> fromPlainText (final Iterable <CharSequence> aText)
   {
-    Iterable <CharSequence> result = splitByControlCharacter (ControlCharacters.NEWLINE_FACTORY, text);
-    result = unescapeBackslash (result);
-    return result;
+    Iterable <CharSequence> aResult = splitByControlCharacter (ControlCharacters.NEWLINE_FACTORY, aText);
+    aResult = _unescapeBackslash (aResult);
+    return aResult;
   }
 
   /**
    * Creates a char sequence where new-line, asterisk and underscore are replaced by their
    * corresponding {@link ControlCharacter}.
-   * 
-   * @param markup
+   *
+   * @param aMarkup
    *        the markup.
    * @return the create char sequence.
    */
-  public static Iterable <CharSequence> fromMarkup (final CharSequence markup)
+  public static Iterable <CharSequence> fromMarkup (final CharSequence aMarkup)
   {
-    return fromMarkup (Collections.singleton (markup));
+    return fromMarkup (Collections.singleton (aMarkup));
   }
 
   /**
    * Creates a char sequence where new-line, asterisk and underscore are replaced by their
    * corresponding {@link ControlCharacter}.
-   * 
-   * @param markup
+   *
+   * @param aMarkup
    *        the markup.
    * @return the create char sequence.
    */
-  public static Iterable <CharSequence> fromMarkup (final Iterable <CharSequence> markup)
+  public static Iterable <CharSequence> fromMarkup (final Iterable <CharSequence> aMarkup)
   {
-    Iterable <CharSequence> text = markup;
-    text = splitByControlCharacter (ControlCharacters.NEWLINE_FACTORY, text);
-    text = splitByControlCharacter (ControlCharacters.METRICS_FACTORY, text);
-    text = splitByControlCharacter (ControlCharacters.BOLD_FACTORY, text);
-    text = splitByControlCharacter (ControlCharacters.ITALIC_FACTORY, text);
-    text = splitByControlCharacter (ControlCharacters.COLOR_FACTORY, text);
+    Iterable <CharSequence> aText = aMarkup;
+    aText = splitByControlCharacter (ControlCharacters.NEWLINE_FACTORY, aText);
+    aText = splitByControlCharacter (ControlCharacters.METRICS_FACTORY, aText);
+    aText = splitByControlCharacter (ControlCharacters.BOLD_FACTORY, aText);
+    aText = splitByControlCharacter (ControlCharacters.ITALIC_FACTORY, aText);
+    aText = splitByControlCharacter (ControlCharacters.COLOR_FACTORY, aText);
 
-    for (IAnnotationControlCharacterFactory <?> annotationControlCharacterFactory : AnnotationCharacters.getFactories ())
+    for (final IAnnotationControlCharacterFactory <?> aAnnotationControlCharacterFactory : AnnotationCharacters.getFactories ())
     {
-      text = splitByControlCharacter (annotationControlCharacterFactory, text);
+      aText = splitByControlCharacter (aAnnotationControlCharacterFactory, aText);
     }
 
-    text = splitByControlCharacter (IndentCharacters.INDENT_FACTORY, text);
+    aText = splitByControlCharacter (IndentCharacters.INDENT_FACTORY, aText);
 
-    text = unescapeBackslash (text);
+    aText = _unescapeBackslash (aText);
 
-    return text;
+    return aText;
   }
 
   /**
    * Splits the sequence by the given control character and replaces its markup representation by
    * the {@link ControlCharacter}.
-   * 
-   * @param controlCharacterFactory
+   *
+   * @param aControlCharacterFactory
    *        the control character to split by.
-   * @param markup
+   * @param aMarkup
    *        the markup to split.
    * @return the splitted and replaced sequence.
    */
-  protected static Iterable <CharSequence> splitByControlCharacter (IControlCharacterFactory controlCharacterFactory,
-                                                                    final Iterable <CharSequence> markup)
+  protected static Iterable <CharSequence> splitByControlCharacter (final IControlCharacterFactory aControlCharacterFactory,
+                                                                    final Iterable <CharSequence> aMarkup)
   {
-    List <CharSequence> result = new ArrayList <CharSequence> ();
-    boolean beginOfLine = true;
-    for (CharSequence current : markup)
+    final List <CharSequence> aResult = new ArrayList <> ();
+    boolean bBeginOfLine = true;
+    for (final CharSequence aCurrent : aMarkup)
     {
-      if (current instanceof String)
+      if (aCurrent instanceof final String sString)
       {
-        String string = (String) current;
-        int begin = 0;
+        int nBegin = 0;
 
-        if (!controlCharacterFactory.patternMatchesBeginOfLine () || beginOfLine)
+        if (!aControlCharacterFactory.patternMatchesBeginOfLine () || bBeginOfLine)
         {
-          Matcher matcher = controlCharacterFactory.getPattern ().matcher (string);
-          while (matcher.find ())
+          final Matcher aMatcher = aControlCharacterFactory.getPattern ().matcher (sString);
+          while (aMatcher.find ())
           {
-            String part = string.substring (begin, matcher.start ());
-            begin = matcher.end ();
+            final String sPart = sString.substring (nBegin, aMatcher.start ());
+            nBegin = aMatcher.end ();
 
-            if (!part.isEmpty ())
+            if (!sPart.isEmpty ())
             {
-              String unescaped = controlCharacterFactory.unescape (part);
-              result.add (unescaped);
+              final String sUnescaped = aControlCharacterFactory.unescape (sPart);
+              aResult.add (sUnescaped);
             }
 
-            result.add (controlCharacterFactory.createControlCharacter (string, matcher, result));
+            aResult.add (aControlCharacterFactory.createControlCharacter (sString, aMatcher, aResult));
           }
         }
 
-        if (begin < string.length ())
+        if (nBegin < sString.length ())
         {
-          String part = string.substring (begin);
-          String unescaped = controlCharacterFactory.unescape (part);
-          result.add (unescaped);
+          final String sPart = sString.substring (nBegin);
+          final String sUnescaped = aControlCharacterFactory.unescape (sPart);
+          aResult.add (sUnescaped);
         }
 
-        beginOfLine = false;
+        bBeginOfLine = false;
       }
       else
       {
-        if (current instanceof NewLineControlCharacter)
+        if (aCurrent instanceof NewLineControlCharacter)
         {
-          beginOfLine = true;
+          bBeginOfLine = true;
         }
-        result.add (current);
+        aResult.add (aCurrent);
       }
 
     }
-    return result;
+    return aResult;
   }
 
-  private static Iterable <CharSequence> unescapeBackslash (final Iterable <CharSequence> chars)
+  private static Iterable <CharSequence> _unescapeBackslash (final Iterable <CharSequence> aChars)
   {
-    List <CharSequence> result = new ArrayList <CharSequence> ();
-    for (CharSequence current : chars)
+    final List <CharSequence> aResult = new ArrayList <> ();
+    for (final CharSequence aCurrent : aChars)
     {
-      if (current instanceof String)
+      if (aCurrent instanceof String)
       {
-        result.add (ControlCharacters.unescapeBackslash ((String) current));
+        aResult.add (ControlCharacters.unescapeBackslash ((String) aCurrent));
       }
       else
       {
-        result.add (current);
+        aResult.add (aCurrent);
       }
     }
-    return result;
+    return aResult;
   }
 
 }

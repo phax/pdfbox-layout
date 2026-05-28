@@ -18,14 +18,14 @@ import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.text.BaseFont;
 import rst.pdfbox.layout.text.DrawContext;
 import rst.pdfbox.layout.text.Position;
-import rst.pdfbox.layout.text.annotations.IAnnotated;
 import rst.pdfbox.layout.text.annotations.AnnotatedStyledText;
-import rst.pdfbox.layout.text.annotations.IAnnotation;
 import rst.pdfbox.layout.text.annotations.AnnotationCharacters;
 import rst.pdfbox.layout.text.annotations.AnnotationCharacters.AbstractAnnotationControlCharacter;
 import rst.pdfbox.layout.text.annotations.AnnotationCharacters.IAnnotationControlCharacterFactory;
 import rst.pdfbox.layout.text.annotations.AnnotationProcessor;
 import rst.pdfbox.layout.text.annotations.AnnotationProcessorFactory;
+import rst.pdfbox.layout.text.annotations.IAnnotated;
+import rst.pdfbox.layout.text.annotations.IAnnotation;
 import rst.pdfbox.layout.util.CompatibilityHelper;
 
 public class CustomAnnotation {

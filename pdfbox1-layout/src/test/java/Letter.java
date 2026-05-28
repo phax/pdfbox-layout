@@ -9,8 +9,8 @@ import rst.pdfbox.layout.elements.ImageElement;
 import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.elements.VerticalSpacer;
 import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
-import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.BaseFont;
+import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.Position;
 
 public class Letter {

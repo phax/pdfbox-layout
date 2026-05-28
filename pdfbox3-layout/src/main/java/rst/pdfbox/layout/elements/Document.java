@@ -14,18 +14,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 
-import rst.pdfbox.layout.elements.render.Layout;
+import rst.pdfbox.layout.elements.render.ILayout;
 import rst.pdfbox.layout.elements.render.ILayoutHint;
+import rst.pdfbox.layout.elements.render.IRenderListener;
+import rst.pdfbox.layout.elements.render.IRenderer;
 import rst.pdfbox.layout.elements.render.RenderContext;
-import rst.pdfbox.layout.elements.render.RenderListener;
-import rst.pdfbox.layout.elements.render.Renderer;
 import rst.pdfbox.layout.elements.render.VerticalLayout;
 import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
 
 /**
  * The central class for creating a document.
  */
-public class Document implements RenderListener
+public class Document implements IRenderListener
 {
 
   /**
@@ -33,12 +33,12 @@ public class Document implements RenderListener
    */
   public final static PageFormat DEFAULT_PAGE_FORMAT = new PageFormat ();
 
-  private final List <Entry <IElement, ILayoutHint>> elements = new ArrayList <> ();
-  private final List <Renderer> customRenderer = new CopyOnWriteArrayList <Renderer> ();
-  private final List <RenderListener> renderListener = new CopyOnWriteArrayList <RenderListener> ();
+  private final List <Entry <IElement, ILayoutHint>> m_aElements = new ArrayList <> ();
+  private final List <IRenderer> m_aCustomRenderer = new CopyOnWriteArrayList <> ();
+  private final List <IRenderListener> m_aRenderListener = new CopyOnWriteArrayList <> ();
 
-  private PDDocument pdDocument;
-  private PageFormat pageFormat;
+  private PDDocument m_aPdDocument;
+  private final PageFormat m_aPageFormat;
 
   /**
    * Creates a Document using the {@link #DEFAULT_PAGE_FORMAT}.
@@ -51,106 +51,110 @@ public class Document implements RenderListener
   /**
    * Creates a Document in A4 with orientation portrait and the given margins. By default, a
    * {@link VerticalLayout} is used.
-   * 
-   * @param marginLeft
+   *
+   * @param fMarginLeft
    *        the left margin
-   * @param marginRight
+   * @param fMarginRight
    *        the right margin
-   * @param marginTop
+   * @param fMarginTop
    *        the top margin
-   * @param marginBottom
+   * @param fMarginBottom
    *        the bottom margin
    */
-  public Document (float marginLeft, float marginRight, float marginTop, float marginBottom)
+  public Document (final float fMarginLeft, final float fMarginRight, final float fMarginTop, final float fMarginBottom)
   {
-    this (PageFormat.with ().margins (marginLeft, marginRight, marginTop, marginBottom).build ());
+    this (PageFormat.with ().margins (fMarginLeft, fMarginRight, fMarginTop, fMarginBottom).build ());
   }
 
   /**
    * Creates a Document based on the given media box. By default, a {@link VerticalLayout} is used.
-   * 
-   * @param mediaBox
+   *
+   * @param aMediaBox
    *        the media box to use.
    * @deprecated use {@link #Document(PageFormat)} instead.
    */
   @Deprecated
-  public Document (PDRectangle mediaBox)
+  public Document (final PDRectangle aMediaBox)
   {
-    this (mediaBox, 0, 0, 0, 0);
+    this (aMediaBox, 0, 0, 0, 0);
   }
 
   /**
    * Creates a Document based on the given media box and margins. By default, a
    * {@link VerticalLayout} is used.
-   * 
-   * @param mediaBox
+   *
+   * @param aMediaBox
    *        the media box to use.
-   * @param marginLeft
+   * @param fMarginLeft
    *        the left margin
-   * @param marginRight
+   * @param fMarginRight
    *        the right margin
-   * @param marginTop
+   * @param fMarginTop
    *        the top margin
-   * @param marginBottom
+   * @param fMarginBottom
    *        the bottom margin
    * @deprecated use {@link #Document(PageFormat)} instead.
    */
   @Deprecated
-  public Document (PDRectangle mediaBox, float marginLeft, float marginRight, float marginTop, float marginBottom)
+  public Document (final PDRectangle aMediaBox,
+                   final float fMarginLeft,
+                   final float fMarginRight,
+                   final float fMarginTop,
+                   final float fMarginBottom)
   {
-    this (new PageFormat (mediaBox, EOrientation.Portrait, marginLeft, marginRight, marginTop, marginBottom));
+    this (new PageFormat (aMediaBox, EOrientation.Portrait, fMarginLeft, fMarginRight, fMarginTop, fMarginBottom));
   }
 
   /**
    * Creates a Document based on the given page format. By default, a {@link VerticalLayout} is
    * used.
-   * 
-   * @param pageFormat
+   *
+   * @param aPageFormat
    *        the page format box to use.
    */
-  public Document (final PageFormat pageFormat)
+  public Document (final PageFormat aPageFormat)
   {
-    this.pageFormat = pageFormat;
+    this.m_aPageFormat = aPageFormat;
   }
 
   /**
    * Adds an element to the document using a {@link VerticalLayoutHint}.
-   * 
-   * @param element
+   *
+   * @param aElement
    *        the element to add
    */
-  public void add (final IElement element)
+  public void add (final IElement aElement)
   {
-    add (element, new VerticalLayoutHint ());
+    add (aElement, new VerticalLayoutHint ());
   }
 
   /**
    * Adds an element with the given layout hint.
-   * 
-   * @param element
+   *
+   * @param aElement
    *        the element to add
-   * @param layoutHint
-   *        the hint for the {@link Layout}.
+   * @param aLayoutHint
+   *        the hint for the {@link ILayout}.
    */
-  public void add (final IElement element, final ILayoutHint layoutHint)
+  public void add (final IElement aElement, final ILayoutHint aLayoutHint)
   {
-    elements.add (createEntry (element, layoutHint));
+    m_aElements.add (_createEntry (aElement, aLayoutHint));
   }
 
-  private Entry <IElement, ILayoutHint> createEntry (final IElement element, final ILayoutHint layoutHint)
+  private Entry <IElement, ILayoutHint> _createEntry (final IElement aElement, final ILayoutHint aLayoutHint)
   {
-    return new SimpleEntry <IElement, ILayoutHint> (element, layoutHint);
+    return new SimpleEntry <> (aElement, aLayoutHint);
   }
 
   /**
    * Removes the given element.
-   * 
-   * @param element
+   *
+   * @param aElement
    *        the element to remove.
    */
-  public void remove (final IElement element)
+  public void remove (final IElement aElement)
   {
-    elements.remove (element);
+    m_aElements.removeIf (x -> x.getKey ().equals (aElement));
   }
 
   /**
@@ -158,7 +162,7 @@ public class Document implements RenderListener
    */
   public PageFormat getPageFormat ()
   {
-    return pageFormat;
+    return m_aPageFormat;
   }
 
   /**
@@ -241,16 +245,16 @@ public class Document implements RenderListener
    * Returns the {@link PDDocument} to be created by method {@link #render()}. Beware that this
    * PDDocument is released after rendering. This means each rendering process creates a new
    * PDDocument.
-   * 
+   *
    * @return the PDDocument to be used on the next call to {@link #render()}.
    */
   public PDDocument getPDDocument ()
   {
-    if (pdDocument == null)
+    if (m_aPdDocument == null)
     {
-      pdDocument = new PDDocument ();
+      m_aPdDocument = new PDDocument ();
     }
-    return pdDocument;
+    return m_aPdDocument;
   }
 
   /**
@@ -258,164 +262,164 @@ public class Document implements RenderListener
    */
   protected void resetPDDocument ()
   {
-    this.pdDocument = null;
+    this.m_aPdDocument = null;
   }
 
   /**
-   * Adds a (custom) {@link Renderer} that may handle the rendering of an element. All renderers
+   * Adds a (custom) {@link IRenderer} that may handle the rendering of an element. All renderers
    * will be asked to render the current element in the order they have been added. If no renderer
    * is capable, the default renderer will be asked.
-   * 
-   * @param renderer
+   *
+   * @param aRenderer
    *        the renderer to add.
    */
-  public void addRenderer (final Renderer renderer)
+  public void addRenderer (final IRenderer aRenderer)
   {
-    if (renderer != null)
+    if (aRenderer != null)
     {
-      customRenderer.add (renderer);
+      m_aCustomRenderer.add (aRenderer);
     }
   }
 
   /**
-   * Removes a {@link Renderer} .
-   * 
-   * @param renderer
+   * Removes a {@link IRenderer} .
+   *
+   * @param aRenderer
    *        the renderer to remove.
    */
-  public void removeRenderer (final Renderer renderer)
+  public void removeRenderer (final IRenderer aRenderer)
   {
-    customRenderer.remove (renderer);
+    m_aCustomRenderer.remove (aRenderer);
   }
 
   /**
    * Renders all elements and returns the resulting {@link PDDocument}.
-   * 
+   *
    * @return the resulting {@link PDDocument}
    * @throws IOException
    *         by pdfbox
    */
   public PDDocument render () throws IOException
   {
-    PDDocument document = getPDDocument ();
-    RenderContext renderContext = new RenderContext (this, document);
-    for (Entry <IElement, ILayoutHint> entry : elements)
+    final PDDocument aDocument = getPDDocument ();
+    final RenderContext aRenderContext = new RenderContext (this, aDocument);
+    for (final Entry <IElement, ILayoutHint> aEntry : m_aElements)
     {
-      IElement element = entry.getKey ();
-      ILayoutHint layoutHint = entry.getValue ();
-      boolean success = false;
+      final IElement aElement = aEntry.getKey ();
+      final ILayoutHint aLayoutHint = aEntry.getValue ();
+      boolean bSuccess = false;
 
       // first ask custom renderer to render the element
-      Iterator <Renderer> customRendererIterator = customRenderer.iterator ();
-      while (!success && customRendererIterator.hasNext ())
+      final Iterator <IRenderer> aCustomRendererIterator = m_aCustomRenderer.iterator ();
+      while (!bSuccess && aCustomRendererIterator.hasNext ())
       {
-        success = customRendererIterator.next ().render (renderContext, element, layoutHint);
+        bSuccess = aCustomRendererIterator.next ().render (aRenderContext, aElement, aLayoutHint);
       }
 
       // if none of them felt responsible, let the default renderer do the job.
-      if (!success)
+      if (!bSuccess)
       {
-        success = renderContext.render (renderContext, element, layoutHint);
+        bSuccess = aRenderContext.render (aRenderContext, aElement, aLayoutHint);
       }
 
-      if (!success)
+      if (!bSuccess)
       {
         throw new IllegalArgumentException ("neither layout " +
-                                            renderContext.getLayout () +
+                                            aRenderContext.getLayout () +
                                             " nor the render context knows what to do with " +
-                                            element);
+                                            aElement);
 
       }
     }
-    renderContext.close ();
+    aRenderContext.close ();
 
     resetPDDocument ();
-    return document;
+    return aDocument;
   }
 
   /**
    * {@link #render() Renders} the document and saves it to the given file.
-   * 
-   * @param file
+   *
+   * @param aFile
    *        the file to save to.
    * @throws IOException
    *         by pdfbox
    */
-  public void save (final File file) throws IOException
+  public void save (final File aFile) throws IOException
   {
-    try (OutputStream out = new FileOutputStream (file))
+    try (final OutputStream aOut = new FileOutputStream (aFile))
     {
-      save (out);
+      save (aOut);
     }
   }
 
   /**
    * {@link #render() Renders} the document and saves it to the given output stream.
-   * 
-   * @param output
+   *
+   * @param aOutput
    *        the stream to save to.
    * @throws IOException
    *         by pdfbox
    */
-  public void save (final OutputStream output) throws IOException
+  public void save (final OutputStream aOutput) throws IOException
   {
-    try (PDDocument document = render ())
+    try (final PDDocument aDocument = render ())
     {
       try
       {
-        document.save (output);
+        aDocument.save (aOutput);
       }
-      catch (IOException ioe)
+      catch (final IOException ioe)
       {
         throw ioe;
       }
-      catch (Exception e)
+      catch (final Exception ex)
       {
-        throw new IOException (e);
+        throw new IOException (ex);
       }
     }
   }
 
   /**
-   * Adds a {@link RenderListener} that will be notified during {@link #render() rendering}.
-   * 
-   * @param listener
+   * Adds a {@link IRenderListener} that will be notified during {@link #render() rendering}.
+   *
+   * @param aListener
    *        the listener to add.
    */
-  public void addRenderListener (final RenderListener listener)
+  public void addRenderListener (final IRenderListener aListener)
   {
-    if (listener != null)
+    if (aListener != null)
     {
-      renderListener.add (listener);
+      m_aRenderListener.add (aListener);
     }
   }
 
   /**
-   * Removes a {@link RenderListener} .
-   * 
-   * @param listener
+   * Removes a {@link IRenderListener} .
+   *
+   * @param aListener
    *        the listener to remove.
    */
-  public void removeRenderListener (final RenderListener listener)
+  public void removeRenderListener (final IRenderListener aListener)
   {
-    renderListener.remove (listener);
+    m_aRenderListener.remove (aListener);
   }
 
   @Override
-  public void beforePage (final RenderContext renderContext) throws IOException
+  public void beforePage (final RenderContext aRenderContext) throws IOException
   {
-    for (RenderListener listener : renderListener)
+    for (final IRenderListener aListener : m_aRenderListener)
     {
-      listener.beforePage (renderContext);
+      aListener.beforePage (aRenderContext);
     }
   }
 
   @Override
-  public void afterPage (final RenderContext renderContext) throws IOException
+  public void afterPage (final RenderContext aRenderContext) throws IOException
   {
-    for (RenderListener listener : renderListener)
+    for (final IRenderListener aListener : m_aRenderListener)
     {
-      listener.afterPage (renderContext);
+      aListener.afterPage (aRenderContext);
     }
   }
 

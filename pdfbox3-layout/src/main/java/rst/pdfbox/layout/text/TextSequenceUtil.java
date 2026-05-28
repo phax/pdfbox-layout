@@ -19,229 +19,227 @@ public class TextSequenceUtil
 
   /**
    * Dissects the given sequence into {@link TextLine}s.
-   * 
-   * @param text
+   *
+   * @param aText
    *        the text to extract the lines from.
    * @return the list of text lines.
    * @throws IOException
    *         by pdfbox
    */
-  public static List <TextLine> getLines (final ITextSequence text) throws IOException
+  public static List <TextLine> getLines (final ITextSequence aText) throws IOException
   {
-    final List <TextLine> result = new ArrayList <TextLine> ();
+    final List <TextLine> aResult = new ArrayList <> ();
 
-    TextLine line = new TextLine ();
-    for (ITextFragment fragment : text)
+    TextLine aLine = new TextLine ();
+    for (final ITextFragment aFragment : aText)
     {
-      if (fragment instanceof NewLine)
+      if (aFragment instanceof NewLine)
       {
-        line.setNewLine ((NewLine) fragment);
-        result.add (line);
-        line = new TextLine ();
+        aLine.setNewLine ((NewLine) aFragment);
+        aResult.add (aLine);
+        aLine = new TextLine ();
       }
       else
-        if (fragment instanceof ReplacedWhitespace)
+        if (aFragment instanceof ReplacedWhitespace)
         {
           // ignore replaced whitespace
         }
         else
         {
-          line.add ((StyledText) fragment);
+          aLine.add ((StyledText) aFragment);
         }
     }
-    if (!line.isEmpty ())
+    if (!aLine.isEmpty ())
     {
-      result.add (line);
+      aResult.add (aLine);
     }
-    return result;
+    return aResult;
   }
 
   /**
    * Word-wraps and divides the given text sequence.
-   * 
-   * @param text
+   *
+   * @param aText
    *        the text to divide.
-   * @param maxWidth
+   * @param fMaxWidth
    *        the max width used for word-wrapping.
-   * @param maxHeight
+   * @param fMaxHeight
    *        the max height for divide.
    * @return the Divided element containing the parts.
    * @throws IOException
    *         by pdfbox
    */
-  public static Divided divide (final ITextSequence text, final float maxWidth, final float maxHeight) throws IOException
+  public static Divided divide (final ITextSequence aText, final float fMaxWidth, final float fMaxHeight)
+                                                                                                          throws IOException
   {
-    TextFlow wrapped = wordWrap (text, maxWidth);
-    List <TextLine> lines = getLines (wrapped);
+    final TextFlow aWrapped = wordWrap (aText, fMaxWidth);
+    final List <TextLine> aLines = getLines (aWrapped);
 
-    Paragraph first = new Paragraph ();
-    Paragraph tail = new Paragraph ();
-    if (text instanceof TextFlow)
+    final Paragraph aFirst = new Paragraph ();
+    final Paragraph aTail = new Paragraph ();
+    if (aText instanceof final TextFlow aFlow)
     {
-      TextFlow flow = (TextFlow) text;
-      first.setMaxWidth (flow.getMaxWidth ());
-      first.setLineSpacing (flow.getLineSpacing ());
-      tail.setMaxWidth (flow.getMaxWidth ());
-      tail.setLineSpacing (flow.getLineSpacing ());
+      aFirst.setMaxWidth (aFlow.getMaxWidth ());
+      aFirst.setLineSpacing (aFlow.getLineSpacing ());
+      aTail.setMaxWidth (aFlow.getMaxWidth ());
+      aTail.setLineSpacing (aFlow.getLineSpacing ());
     }
-    if (text instanceof Paragraph)
+    if (aText instanceof final Paragraph aParagraph)
     {
-      Paragraph paragraph = (Paragraph) text;
-      first.setAlignment (paragraph.getAlignment ());
-      first.setApplyLineSpacingToFirstLine (paragraph.isApplyLineSpacingToFirstLine ());
-      tail.setAlignment (paragraph.getAlignment ());
-      tail.setApplyLineSpacingToFirstLine (paragraph.isApplyLineSpacingToFirstLine ());
+      aFirst.setAlignment (aParagraph.getAlignment ());
+      aFirst.setApplyLineSpacingToFirstLine (aParagraph.isApplyLineSpacingToFirstLine ());
+      aTail.setAlignment (aParagraph.getAlignment ());
+      aTail.setApplyLineSpacingToFirstLine (aParagraph.isApplyLineSpacingToFirstLine ());
     }
 
-    int index = 0;
+    int nIndex = 0;
     do
     {
-      TextLine line = lines.get (index);
-      first.add (line);
-      ++index;
-    } while (index < lines.size () && first.getHeight () < maxHeight);
+      final TextLine aLine = aLines.get (nIndex);
+      aFirst.add (aLine);
+      ++nIndex;
+    } while (nIndex < aLines.size () && aFirst.getHeight () < fMaxHeight);
 
-    if (first.getHeight () > maxHeight)
+    if (aFirst.getHeight () > fMaxHeight)
     {
       // remove last line
-      --index;
-      TextLine line = lines.get (index);
+      --nIndex;
+      final TextLine aLine = aLines.get (nIndex);
       for (@SuppressWarnings ("unused")
-      ITextFragment textFragment : line)
+      final ITextFragment aTextFragment : aLine)
       {
-        first.removeLast ();
+        aFirst.removeLast ();
       }
     }
 
-    for (int i = index; i < lines.size (); ++i)
+    for (int i = nIndex; i < aLines.size (); ++i)
     {
-      tail.add (lines.get (i));
+      aTail.add (aLines.get (i));
     }
-    return new Divided (first, tail);
+    return new Divided (aFirst, aTail);
   }
 
   /**
    * Word-wraps the given text sequence in order to fit the max width.
    *
-   * @param text
+   * @param aText
    *        the text to word-wrap.
-   * @param maxWidth
+   * @param fMaxWidth
    *        the max width to fit.
    * @return the word-wrapped text.
    * @throws IOException
    *         by pdfbox
    */
-  public static TextFlow wordWrap (final ITextSequence text, final float maxWidth) throws IOException
+  public static TextFlow wordWrap (final ITextSequence aText, final float fMaxWidth) throws IOException
   {
-    float indentation = 0;
-    TextFlow result = new TextFlow ();
-    float lineLength = indentation;
-    boolean isWrappedLine = false;
-    for (ITextFragment fragment : text)
+    float fIndentation = 0;
+    final TextFlow aResult = new TextFlow ();
+    float fLineLength = fIndentation;
+    boolean bIsWrappedLine = false;
+    for (final ITextFragment aFragment : aText)
     {
-      if (fragment instanceof NewLine)
+      if (aFragment instanceof NewLine)
       {
-        isWrappedLine = fragment instanceof WrappingNewLine;
-        result.add (fragment);
-        lineLength = indentation;
-        if (indentation > 0)
+        bIsWrappedLine = aFragment instanceof WrappingNewLine;
+        aResult.add (aFragment);
+        fLineLength = fIndentation;
+        if (fIndentation > 0)
         {
-          result.add (new Indent (indentation).toStyledText ());
+          aResult.add (new Indent (fIndentation).toStyledText ());
         }
       }
       else
-        if (fragment instanceof Indent)
+        if (aFragment instanceof Indent)
         {
-          if (indentation > 0)
+          if (fIndentation > 0)
           {
             // reset indentation
-            result.removeLast ();
-            indentation = 0;
+            aResult.removeLast ();
+            fIndentation = 0;
           }
-          indentation = fragment.getWidth ();
-          lineLength = fragment.getWidth ();
-          result.add (((Indent) fragment).toStyledText ());
+          fIndentation = aFragment.getWidth ();
+          fLineLength = aFragment.getWidth ();
+          aResult.add (((Indent) aFragment).toStyledText ());
         }
         else
         {
-          TextFlow words = splitWords (fragment);
-          for (ITextFragment word : words)
+          final TextFlow aWords = splitWords (aFragment);
+          for (final ITextFragment aWord : aWords)
           {
-            WordWrapContext context = new WordWrapContext (word, lineLength, indentation, isWrappedLine);
+            WordWrapContext aContext = new WordWrapContext (aWord, fLineLength, fIndentation, bIsWrappedLine);
             do
             {
-              context = wordWrap (context, maxWidth, result);
-            } while (context.isMoreToWrap ());
+              aContext = _wordWrap (aContext, fMaxWidth, aResult);
+            } while (aContext.isMoreToWrap ());
 
-            indentation = context.getIndentation ();
-            lineLength = context.getLineLength ();
-            isWrappedLine = context.isWrappedLine ();
+            fIndentation = aContext.getIndentation ();
+            fLineLength = aContext.getLineLength ();
+            bIsWrappedLine = aContext.isWrappedLine ();
           }
         }
     }
-    return result;
+    return aResult;
   }
 
-  private static WordWrapContext wordWrap (final WordWrapContext context, final float maxWidth, final TextFlow result)
-                                                                                                                       throws IOException
+  private static WordWrapContext _wordWrap (final WordWrapContext aContext,
+                                            final float fMaxWidth,
+                                            final TextFlow aResult) throws IOException
   {
-    ITextFragment word = context.getWord ();
-    ITextFragment moreToWrap = null;
-    float indentation = context.getIndentation ();
-    float lineLength = context.getLineLength ();
-    boolean isWrappedLine = context.isWrappedLine ();
+    ITextFragment aWord = aContext.getWord ();
+    ITextFragment aMoreToWrap = null;
+    final float fIndentation = aContext.getIndentation ();
+    float fLineLength = aContext.getLineLength ();
+    boolean bIsWrappedLine = aContext.isWrappedLine ();
 
-    if (isWrappedLine && lineLength == indentation)
+    if (bIsWrappedLine && fLineLength == fIndentation)
     {
       // start of line, replace leading blanks if
-      ITextFragment [] replaceLeadingBlanks = replaceLeadingBlanks (word);
-      word = replaceLeadingBlanks[0];
-      if (replaceLeadingBlanks.length > 1)
+      final ITextFragment [] aReplaceLeadingBlanks = _replaceLeadingBlanks (aWord);
+      aWord = aReplaceLeadingBlanks[0];
+      if (aReplaceLeadingBlanks.length > 1)
       {
-        result.add (replaceLeadingBlanks[1]);
+        aResult.add (aReplaceLeadingBlanks[1]);
       }
     }
 
-    FontDescriptor fontDescriptor = word.getFontDescriptor ();
-    float length = word.getWidth ();
+    FontDescriptor aFontDescriptor = aWord.getFontDescriptor ();
+    float fLength = aWord.getWidth ();
 
-    if (maxWidth > 0 && lineLength + length > maxWidth)
+    if (fMaxWidth > 0 && fLineLength + fLength > fMaxWidth)
     {
       // word exceeds max width, so create new line
 
       // break hard, if the text does not fit in a full (next) line
-      boolean breakHard = indentation + length > maxWidth;
+      final boolean bBreakHard = fIndentation + fLength > fMaxWidth;
 
-      Pair <ITextFragment> brokenWord = breakWord (word,
-                                                  length,
-                                                  maxWidth - lineLength,
-                                                  maxWidth - indentation,
-                                                  breakHard);
-      if (brokenWord != null)
+      final Pair <ITextFragment> aBrokenWord = _breakWord (aWord,
+                                                           fMaxWidth - fLineLength,
+                                                           bBreakHard);
+      if (aBrokenWord != null)
       {
         // word is broken
-        word = brokenWord.getFirst ();
-        length = word.getWidth ();
-        moreToWrap = brokenWord.getSecond ();
+        aWord = aBrokenWord.getFirst ();
+        fLength = aWord.getWidth ();
+        aMoreToWrap = aBrokenWord.getSecond ();
 
-        result.add (word);
-        if (length > 0)
+        aResult.add (aWord);
+        if (fLength > 0)
         {
-          lineLength += length;
+          fLineLength += fLength;
         }
 
       }
       else
       {
-        if (lineLength == indentation)
+        if (fLineLength == fIndentation)
         {
           // Begin of line and word could now be broke...
           // Well, so we have to use it as it is,
           // it won't get any better in the next line
-          result.add (word);
-          if (length > 0)
+          aResult.add (aWord);
+          if (fLength > 0)
           {
-            lineLength += length;
+            fLineLength += fLength;
           }
 
         }
@@ -249,466 +247,460 @@ public class TextSequenceUtil
         {
           // give it another try in a new line, there
           // will be more space.
-          moreToWrap = word;
-          if (result.getLast () != null)
+          aMoreToWrap = aWord;
+          if (aResult.getLast () != null)
           {
             // since the current word is not used, take
             // font descriptor of last line. Otherwise
             // the line break might be to high
-            fontDescriptor = result.getLast ().getFontDescriptor ();
+            aFontDescriptor = aResult.getLast ().getFontDescriptor ();
           }
         }
       }
 
       // wrap line only if not empty
-      if (lineLength > indentation)
+      if (fLineLength > fIndentation)
       {
         // and terminate it with a new line
-        result.add (new WrappingNewLine (fontDescriptor));
-        isWrappedLine = true;
-        if (indentation > 0)
+        aResult.add (new WrappingNewLine (aFontDescriptor));
+        bIsWrappedLine = true;
+        if (fIndentation > 0)
         {
-          result.add (new Indent (indentation).toStyledText ());
+          aResult.add (new Indent (fIndentation).toStyledText ());
         }
-        lineLength = indentation;
+        fLineLength = fIndentation;
       }
 
     }
     else
     {
       // word fits, so just add it
-      result.add (word);
-      if (length > 0)
+      aResult.add (aWord);
+      if (fLength > 0)
       {
-        lineLength += length;
+        fLineLength += fLength;
       }
     }
 
-    return new WordWrapContext (moreToWrap, lineLength, indentation, isWrappedLine);
+    return new WordWrapContext (aMoreToWrap, fLineLength, fIndentation, bIsWrappedLine);
   }
 
   /**
    * Replaces leading whitespace by {@link ReplacedWhitespace}.
-   * 
-   * @param word
+   *
+   * @param aWord
    *        the fragment to replace
    * @return
    */
-  private static ITextFragment [] replaceLeadingBlanks (final ITextFragment word)
+  private static ITextFragment [] _replaceLeadingBlanks (final ITextFragment aWord)
   {
-    String text = word.getText ();
-    int splitIndex = 0;
-    while (splitIndex < text.length () && Character.isWhitespace (text.charAt (splitIndex)))
+    final String sText = aWord.getText ();
+    int nSplitIndex = 0;
+    while (nSplitIndex < sText.length () && Character.isWhitespace (sText.charAt (nSplitIndex)))
     {
-      ++splitIndex;
+      ++nSplitIndex;
     }
 
-    if (splitIndex == 0)
+    if (nSplitIndex == 0)
     {
-      return new ITextFragment [] { word };
+      return new ITextFragment [] { aWord };
+    }
+    final ReplacedWhitespace aWhitespace = new ReplacedWhitespace (sText.substring (0, nSplitIndex),
+                                                                   aWord.getFontDescriptor ());
+    StyledText aNewWord = null;
+    if (aWord instanceof StyledText)
+    {
+      aNewWord = ((StyledText) aWord).inheritAttributes (sText.substring (nSplitIndex));
     }
     else
     {
-      ReplacedWhitespace whitespace = new ReplacedWhitespace (text.substring (0, splitIndex),
-                                                              word.getFontDescriptor ());
-      StyledText newWord = null;
-      if (word instanceof StyledText)
-      {
-        newWord = ((StyledText) word).inheritAttributes (text.substring (splitIndex));
-      }
-      else
-      {
-        newWord = new StyledText (text.substring (splitIndex), word.getFontDescriptor (), word.getColor ());
-      }
-      return new ITextFragment [] { newWord, whitespace };
+      aNewWord = new StyledText (sText.substring (nSplitIndex), aWord.getFontDescriptor (), aWord.getColor ());
     }
+    return new ITextFragment [] { aNewWord, aWhitespace };
   }
 
   /**
    * De-wraps the given text, means any new lines introduced by wrapping will be removed. Also all
    * whitespace removed by wrapping are re-introduced.
-   * 
-   * @param text
+   *
+   * @param aText
    *        the text to de-wrap.
    * @return the de-wrapped text.
    * @throws IOException
    *         by PDFBox
    */
-  public static TextFlow deWrap (final ITextSequence text) throws IOException
+  public static TextFlow deWrap (final ITextSequence aText) throws IOException
   {
-    TextFlow result = new TextFlow ();
-    for (ITextFragment fragment : text)
+    final TextFlow aResult = new TextFlow ();
+    for (final ITextFragment aFragment : aText)
     {
-      if (fragment instanceof WrappingNewLine)
+      if (aFragment instanceof WrappingNewLine)
       {
         // skip
       }
       else
-        if (fragment instanceof ReplacedWhitespace)
+        if (aFragment instanceof ReplacedWhitespace)
         {
-          result.add (((ReplacedWhitespace) fragment).toReplacedFragment ());
+          aResult.add (((ReplacedWhitespace) aFragment).toReplacedFragment ());
         }
         else
         {
-          result.add (fragment);
+          aResult.add (aFragment);
         }
     }
 
-    if (text instanceof TextFlow)
+    if (aText instanceof TextFlow)
     {
-      result.setLineSpacing (((TextFlow) text).getLineSpacing ());
+      aResult.setLineSpacing (((TextFlow) aText).getLineSpacing ());
     }
-    return result;
+    return aResult;
   }
 
   /**
    * Convencience function that {@link #wordWrap(ITextSequence, float) word-wraps} into
    * {@link #getLines(ITextSequence)}.
-   * 
-   * @param text
+   *
+   * @param aText
    *        the text to word-wrap.
-   * @param maxWidth
+   * @param fMaxWidth
    *        the max width to fit.
    * @return the word-wrapped text lines.
    * @throws IOException
    *         by pdfbox
    */
-  public static List <TextLine> wordWrapToLines (final ITextSequence text, final float maxWidth) throws IOException
+  public static List <TextLine> wordWrapToLines (final ITextSequence aText, final float fMaxWidth) throws IOException
   {
-    TextFlow wrapped = wordWrap (text, maxWidth);
-    List <TextLine> lines = getLines (wrapped);
-    return lines;
+    final TextFlow aWrapped = wordWrap (aText, fMaxWidth);
+    final List <TextLine> aLines = getLines (aWrapped);
+    return aLines;
   }
 
   /**
    * Splits the fragment into words.
-   * 
-   * @param text
+   *
+   * @param aText
    *        the text to split.
    * @return the words as a text flow.
    */
-  public static TextFlow splitWords (final ITextFragment text)
+  public static TextFlow splitWords (final ITextFragment aText)
   {
-    TextFlow result = new TextFlow ();
-    if (text instanceof NewLine)
+    final TextFlow aResult = new TextFlow ();
+    if (aText instanceof NewLine)
     {
-      result.add (text);
+      aResult.add (aText);
     }
     else
     {
-      float leftMargin = 0;
-      float rightMargin = 0;
-      if (text instanceof StyledText && ((StyledText) text).hasMargin ())
+      float fLeftMargin = 0;
+      float fRightMargin = 0;
+      if (aText instanceof StyledText && ((StyledText) aText).hasMargin ())
       {
-        leftMargin = ((StyledText) text).getLeftMargin ();
-        rightMargin = ((StyledText) text).getRightMargin ();
+        fLeftMargin = ((StyledText) aText).getLeftMargin ();
+        fRightMargin = ((StyledText) aText).getRightMargin ();
       }
 
-      String [] words = text.getText ().split (" ", -1);
-      for (int index = 0; index < words.length; ++index)
+      final String [] aWords = aText.getText ().split (" ", -1);
+      for (int nIndex = 0; nIndex < aWords.length; ++nIndex)
       {
-        String newWord = index == 0 ? words[index] : " " + words[index];
+        final String sNewWord = nIndex == 0 ? aWords[nIndex] : " " + aWords[nIndex];
 
-        float currentLeftMargin = 0;
-        float currentRightMargin = 0;
-        if (index == 0)
+        float fCurrentLeftMargin = 0;
+        float fCurrentRightMargin = 0;
+        if (nIndex == 0)
         {
-          currentLeftMargin = leftMargin;
+          fCurrentLeftMargin = fLeftMargin;
         }
-        if (index == words.length - 1)
+        if (nIndex == aWords.length - 1)
         {
-          currentRightMargin = rightMargin;
+          fCurrentRightMargin = fRightMargin;
         }
-        ITextFragment derived = deriveFromExisting (text, newWord, currentLeftMargin, currentRightMargin);
-        result.add (derived);
+        final ITextFragment aDerived = deriveFromExisting (aText, sNewWord, fCurrentLeftMargin, fCurrentRightMargin);
+        aResult.add (aDerived);
       }
     }
-    return result;
+    return aResult;
   }
 
   /**
    * Derive a new TextFragment from an existing one, means use attributes like font, color etc.
-   * 
-   * @param toDeriveFrom
+   *
+   * @param aToDeriveFrom
    *        the fragment to derive from.
-   * @param text
+   * @param sText
    *        the new text.
-   * @param leftMargin
+   * @param fLeftMargin
    *        the new left margin.
-   * @param rightMargin
+   * @param fRightMargin
    *        the new right margin.
    * @return the derived text fragment.
    */
-  protected static ITextFragment deriveFromExisting (final ITextFragment toDeriveFrom,
-                                                    final String text,
-                                                    final float leftMargin,
-                                                    final float rightMargin)
+  protected static ITextFragment deriveFromExisting (final ITextFragment aToDeriveFrom,
+                                                     final String sText,
+                                                     final float fLeftMargin,
+                                                     final float fRightMargin)
   {
-    if (toDeriveFrom instanceof StyledText)
+    if (aToDeriveFrom instanceof StyledText)
     {
-      return ((StyledText) toDeriveFrom).inheritAttributes (text, leftMargin, rightMargin);
+      return ((StyledText) aToDeriveFrom).inheritAttributes (sText, fLeftMargin, fRightMargin);
     }
-    return new StyledText (text,
-                           toDeriveFrom.getFontDescriptor (),
-                           toDeriveFrom.getColor (),
+    return new StyledText (sText,
+                           aToDeriveFrom.getFontDescriptor (),
+                           aToDeriveFrom.getColor (),
                            0,
-                           leftMargin,
-                           rightMargin);
+                           fLeftMargin,
+                           fRightMargin);
   }
 
-  private static Pair <ITextFragment> breakWord (ITextFragment word,
-                                                float wordWidth,
-                                                final float remainingLineWidth,
-                                                float maxWidth,
-                                                boolean breakHard) throws IOException
+  private static Pair <ITextFragment> _breakWord (final ITextFragment aWord,
+                                                  final float fRemainingLineWidth,
+                                                  final boolean bBreakHard) throws IOException
   {
-    float leftMargin = 0;
-    float rightMargin = 0;
-    if (word instanceof StyledText)
+    float fLeftMargin = 0;
+    float fRightMargin = 0;
+    if (aWord instanceof final StyledText aStyledText)
     {
-      StyledText styledText = (StyledText) word;
-      leftMargin = styledText.getLeftMargin ();
-      rightMargin = styledText.getRightMargin ();
+      fLeftMargin = aStyledText.getLeftMargin ();
+      fRightMargin = aStyledText.getRightMargin ();
     }
 
-    Pair <String> brokenWord = WordBreakerFactory.getWorkBreaker ()
-                                                 .breakWord (word.getText (),
-                                                             word.getFontDescriptor (),
-                                                             remainingLineWidth - leftMargin,
-                                                             breakHard);
-    if (brokenWord == null)
+    final Pair <String> aBrokenWord = WordBreakerFactory.getWorkBreaker ()
+                                                        .breakWord (aWord.getText (),
+                                                                    aWord.getFontDescriptor (),
+                                                                    fRemainingLineWidth - fLeftMargin,
+                                                                    bBreakHard);
+    if (aBrokenWord == null)
     {
       return null;
     }
 
     // break at calculated index
-    ITextFragment head = deriveFromExisting (word, brokenWord.getFirst (), leftMargin, 0);
-    ITextFragment tail = deriveFromExisting (word, brokenWord.getSecond (), 0, rightMargin);
+    final ITextFragment aHead = deriveFromExisting (aWord, aBrokenWord.getFirst (), fLeftMargin, 0);
+    final ITextFragment aTail = deriveFromExisting (aWord, aBrokenWord.getSecond (), 0, fRightMargin);
 
-    return new Pair <ITextFragment> (head, tail);
+    return new Pair <> (aHead, aTail);
   }
 
   /**
    * Returns the width of the character <code>M</code> in the given font.
-   * 
-   * @param fontDescriptor
+   *
+   * @param aFontDescriptor
    *        font and size.
    * @return the width of <code>M</code>.
    * @throws IOException
    *         by pdfbox
    */
-  public static float getEmWidth (final FontDescriptor fontDescriptor) throws IOException
+  public static float getEmWidth (final FontDescriptor aFontDescriptor) throws IOException
   {
-    return getStringWidth ("M", fontDescriptor);
+    return getStringWidth ("M", aFontDescriptor);
   }
 
   /**
    * Returns the width of the given text in the given font.
-   * 
-   * @param text
+   *
+   * @param sText
    *        the text to measure.
-   * @param fontDescriptor
+   * @param aFontDescriptor
    *        font and size.
    * @return the width of given text.
    * @throws IOException
    *         by pdfbox
    */
-  public static float getStringWidth (final String text, final FontDescriptor fontDescriptor) throws IOException
+  public static float getStringWidth (final String sText, final FontDescriptor aFontDescriptor) throws IOException
   {
-    return fontDescriptor.getSize () * fontDescriptor.getFont ().getStringWidth (text) / 1000;
+    return aFontDescriptor.getSize () * aFontDescriptor.getFont ().getStringWidth (sText) / 1000;
   }
 
   /**
    * Draws the given text sequence to the PDPageContentStream at the given position.
-   * 
-   * @param text
+   *
+   * @param aText
    *        the text to draw.
-   * @param contentStream
+   * @param aContentStream
    *        the stream to draw to
-   * @param upperLeft
+   * @param aUpperLeft
    *        the position of the start of the first line.
-   * @param drawListener
+   * @param aDrawListener
    *        the listener to {@link IDrawListener#drawn(Object, Position, float, float) notify} on
    *        drawn objects.
-   * @param alignment
+   * @param eAlignment
    *        how to align the text lines.
-   * @param maxWidth
+   * @param fMaxWidth
    *        if &gt; 0, the text may be word-wrapped to match the width.
-   * @param lineSpacing
+   * @param fLineSpacing
    *        the line spacing factor.
-   * @param applyLineSpacingToFirstLine
+   * @param bApplyLineSpacingToFirstLine
    *        indicates if the line spacing should be applied to the first line also. Makes sense in
    *        most cases to do so.
    * @throws IOException
    *         by pdfbox
    */
-  public static void drawText (ITextSequence text,
-                               PDPageContentStream contentStream,
-                               Position upperLeft,
-                               IDrawListener drawListener,
-                               EAlignment alignment,
-                               float maxWidth,
-                               final float lineSpacing,
-                               final boolean applyLineSpacingToFirstLine) throws IOException
+  public static void drawText (final ITextSequence aText,
+                               final PDPageContentStream aContentStream,
+                               final Position aUpperLeft,
+                               final IDrawListener aDrawListener,
+                               final EAlignment eAlignment,
+                               final float fMaxWidth,
+                               final float fLineSpacing,
+                               final boolean bApplyLineSpacingToFirstLine) throws IOException
   {
-    List <TextLine> lines = wordWrapToLines (text, maxWidth);
-    float maxLineWidth = Math.max (maxWidth, getMaxWidth (lines));
-    Position position = upperLeft;
-    float lastLineHeight = 0;
-    for (int i = 0; i < lines.size (); i++)
+    final List <TextLine> aLines = wordWrapToLines (aText, fMaxWidth);
+    final float fMaxLineWidth = Math.max (fMaxWidth, getMaxWidth (aLines));
+    Position aPosition = aUpperLeft;
+    float fLastLineHeight = 0;
+    for (int i = 0; i < aLines.size (); i++)
     {
-      boolean applyLineSpacing = i > 0 || applyLineSpacingToFirstLine;
-      TextLine textLine = lines.get (i);
-      float currentLineHeight = textLine.getHeight ();
-      float lead = lastLineHeight;
-      if (applyLineSpacing)
+      final boolean bApplyLineSpacing = i > 0 || bApplyLineSpacingToFirstLine;
+      final TextLine aTextLine = aLines.get (i);
+      final float fCurrentLineHeight = aTextLine.getHeight ();
+      float fLead = fLastLineHeight;
+      if (bApplyLineSpacing)
       {
-        lead += (currentLineHeight * (lineSpacing - 1));
+        fLead += (fCurrentLineHeight * (fLineSpacing - 1));
       }
-      lastLineHeight = currentLineHeight;
-      position = position.add (0, -lead);
-      textLine.drawAligned (contentStream, position, alignment, maxLineWidth, drawListener);
+      fLastLineHeight = fCurrentLineHeight;
+      aPosition = aPosition.add (0, -fLead);
+      aTextLine.drawAligned (aContentStream, aPosition, eAlignment, fMaxLineWidth, aDrawListener);
     }
   }
 
   /**
    * Gets the (left) offset of the line with respect to the target width and alignment.
-   * 
-   * @param textLine
+   *
+   * @param aTextLine
    *        the text
-   * @param targetWidth
+   * @param fTargetWidth
    *        the target width
-   * @param alignment
+   * @param eAlignment
    *        the alignment of the line.
    * @return the left offset.
    * @throws IOException
    *         by pdfbox
    */
-  public static float getOffset (final ITextSequence textLine, final float targetWidth, final EAlignment alignment)
-                                                                                                                  throws IOException
+  public static float getOffset (final ITextSequence aTextLine, final float fTargetWidth, final EAlignment eAlignment)
+                                                                                                                       throws IOException
   {
-    switch (alignment)
+    return switch (eAlignment)
     {
-      case Right:
-        return targetWidth - textLine.getWidth ();
-      case Center:
-        return (targetWidth - textLine.getWidth ()) / 2f;
-      default:
-        return 0;
-    }
+      case Right -> fTargetWidth - aTextLine.getWidth ();
+      case Center -> (fTargetWidth - aTextLine.getWidth ()) / 2f;
+      default -> 0;
+    };
   }
 
   /**
    * Calculates the max width of all text lines.
-   * 
-   * @param lines
+   *
+   * @param aLines
    *        the lines for which to calculate the max width.
    * @return the max width of the lines.
    * @throws IOException
    *         by pdfbox.
    */
-  public static float getMaxWidth (final Iterable <TextLine> lines) throws IOException
+  public static float getMaxWidth (final Iterable <TextLine> aLines) throws IOException
   {
-    float max = 0;
-    for (TextLine line : lines)
+    float fMax = 0;
+    for (final TextLine aLine : aLines)
     {
-      max = Math.max (max, line.getWidth ());
+      fMax = Math.max (fMax, aLine.getWidth ());
     }
-    return max;
+    return fMax;
   }
 
   /**
    * Calculates the width of the text
-   * 
-   * @param textSequence
+   *
+   * @param aTextSequence
    *        the text.
-   * @param maxWidth
+   * @param fMaxWidth
    *        if &gt; 0, the text may be word-wrapped to match the width.
    * @return the width of the text.
    * @throws IOException
    *         by pdfbox.
    */
-  public static float getWidth (final ITextSequence textSequence, final float maxWidth) throws IOException
+  public static float getWidth (final ITextSequence aTextSequence, final float fMaxWidth) throws IOException
   {
-    List <TextLine> lines = wordWrapToLines (textSequence, maxWidth);
-    float max = 0;
-    for (TextLine line : lines)
+    final List <TextLine> aLines = wordWrapToLines (aTextSequence, fMaxWidth);
+    float fMax = 0;
+    for (final TextLine aLine : aLines)
     {
-      max = Math.max (max, line.getWidth ());
+      fMax = Math.max (fMax, aLine.getWidth ());
     }
-    return max;
+    return fMax;
   }
 
   /**
    * Calculates the height of the text
-   * 
-   * @param textSequence
+   *
+   * @param aTextSequence
    *        the text.
-   * @param maxWidth
+   * @param fMaxWidth
    *        if &gt; 0, the text may be word-wrapped to match the width.
-   * @param lineSpacing
+   * @param fLineSpacing
    *        the line spacing factor.
-   * @param applyLineSpacingToFirstLine
+   * @param bApplyLineSpacingToFirstLine
    *        indicates if the line spacing should be applied to the first line also. Makes sense in
    *        most cases to do so.
    * @return the height of the text.
    * @throws IOException
    *         by pdfbox
    */
-  public static float getHeight (final ITextSequence textSequence,
-                                 final float maxWidth,
-                                 final float lineSpacing,
-                                 final boolean applyLineSpacingToFirstLine) throws IOException
+  public static float getHeight (final ITextSequence aTextSequence,
+                                 final float fMaxWidth,
+                                 final float fLineSpacing,
+                                 final boolean bApplyLineSpacingToFirstLine) throws IOException
   {
-    List <TextLine> lines = wordWrapToLines (textSequence, maxWidth);
-    float sum = 0;
-    for (int i = 0; i < lines.size (); i++)
+    final List <TextLine> aLines = wordWrapToLines (aTextSequence, fMaxWidth);
+    float fSum = 0;
+    for (int i = 0; i < aLines.size (); i++)
     {
-      boolean applyLineSpacing = i > 0 || applyLineSpacingToFirstLine;
-      TextLine line = lines.get (i);
-      float lineHeight = line.getHeight ();
-      if (applyLineSpacing)
+      final boolean bApplyLineSpacing = i > 0 || bApplyLineSpacingToFirstLine;
+      final TextLine aLine = aLines.get (i);
+      float fLineHeight = aLine.getHeight ();
+      if (bApplyLineSpacing)
       {
-        lineHeight *= lineSpacing;
+        fLineHeight *= fLineSpacing;
       }
-      sum += lineHeight;
+      fSum += fLineHeight;
     }
-    return sum;
+    return fSum;
   }
 
   private static class WordWrapContext
   {
-    private ITextFragment word;
-    private float lineLength;
-    private float indentation;
-    boolean isWrappedLine;
+    private final ITextFragment m_aWord;
+    private final float m_fLineLength;
+    private final float m_fIndentation;
+    private final boolean m_bIsWrappedLine;
 
-    public WordWrapContext (ITextFragment word, float lineLength, float indentation, boolean isWrappedLine)
+    public WordWrapContext (final ITextFragment aWord,
+                            final float fLineLength,
+                            final float fIndentation,
+                            final boolean bIsWrappedLine)
     {
-      this.word = word;
-      this.lineLength = lineLength;
-      this.indentation = indentation;
-      this.isWrappedLine = isWrappedLine;
+      this.m_aWord = aWord;
+      this.m_fLineLength = fLineLength;
+      this.m_fIndentation = fIndentation;
+      this.m_bIsWrappedLine = bIsWrappedLine;
     }
 
     public ITextFragment getWord ()
     {
-      return word;
+      return m_aWord;
     }
 
     public float getLineLength ()
     {
-      return lineLength;
+      return m_fLineLength;
     }
 
     public float getIndentation ()
     {
-      return indentation;
+      return m_fIndentation;
     }
 
     public boolean isWrappedLine ()
     {
-      return isWrappedLine;
+      return m_bIsWrappedLine;
     }
 
     public boolean isMoreToWrap ()

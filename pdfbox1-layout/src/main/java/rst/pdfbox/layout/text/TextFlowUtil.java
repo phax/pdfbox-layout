@@ -20,10 +20,10 @@ import rst.pdfbox.layout.text.ControlCharacters.MetricsControlCharacter;
 import rst.pdfbox.layout.text.ControlCharacters.NewLineControlCharacter;
 import rst.pdfbox.layout.text.IndentCharacters.IndentCharacter;
 import rst.pdfbox.layout.text.annotations.AnnotatedStyledText;
-import rst.pdfbox.layout.text.annotations.IAnnotation;
 import rst.pdfbox.layout.text.annotations.AnnotationCharacters;
 import rst.pdfbox.layout.text.annotations.AnnotationCharacters.AbstractAnnotationControlCharacter;
 import rst.pdfbox.layout.text.annotations.AnnotationCharacters.IAnnotationControlCharacterFactory;
+import rst.pdfbox.layout.text.annotations.IAnnotation;
 
 public class TextFlowUtil {
 

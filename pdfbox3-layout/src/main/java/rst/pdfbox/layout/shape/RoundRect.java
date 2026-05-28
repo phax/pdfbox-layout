@@ -3,8 +3,6 @@ package rst.pdfbox.layout.shape;
 import java.io.IOException;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 import rst.pdfbox.layout.text.Position;
@@ -18,48 +16,48 @@ public class RoundRect extends AbstractShape
 
   private final static float BEZ = 0.551915024494f;
 
-  private final float cornerRadiusX;
-  private final float cornerRadiusY;
+  private final float m_fCornerRadiusX;
+  private final float m_fCornerRadiusY;
 
   /**
    * Creates a rounded rect with equal radiuss for both x-axis and y-axis (quarter of a circle).
-   * 
-   * @param cornerRadius
+   *
+   * @param fCornerRadius
    *        the radius of the corner circle.
    */
-  public RoundRect (float cornerRadius)
+  public RoundRect (final float fCornerRadius)
   {
-    this (cornerRadius, cornerRadius);
+    this (fCornerRadius, fCornerRadius);
   }
 
   /**
    * Creates a rounded rect with potentially different radiuss for both x-axis and y-axis (quarter
    * of an ellipse).
-   * 
-   * @param cornerRadiusX
+   *
+   * @param fCornerRadiusX
    *        the radius in x-direction of the corner ellipse.
-   * @param cornerRadiusY
+   * @param fCornerRadiusY
    *        the radius in y-direction of the corner ellipse.
    */
-  public RoundRect (float cornerRadiusX, float cornerRadiusY)
+  public RoundRect (final float fCornerRadiusX, final float fCornerRadiusY)
   {
-    this.cornerRadiusX = cornerRadiusX;
-    this.cornerRadiusY = cornerRadiusY;
+    this.m_fCornerRadiusX = fCornerRadiusX;
+    this.m_fCornerRadiusY = fCornerRadiusY;
   }
 
   @Override
-  public void add (PDDocument pdDocument,
-                   PDPageContentStream contentStream,
-                   Position upperLeft,
-                   float width,
-                   float height) throws IOException
+  public void add (final PDDocument aPdDocument,
+                   final PDPageContentStream aContentStream,
+                   final Position aUpperLeft,
+                   final float fWidth,
+                   final float fHeight) throws IOException
   {
-    addRoundRect (contentStream, upperLeft, width, height, cornerRadiusX, cornerRadiusY);
+    addRoundRect (aContentStream, aUpperLeft, fWidth, fHeight, m_fCornerRadiusX, m_fCornerRadiusY);
   }
 
   /**
    * create points clockwise starting in upper left corner
-   * 
+   *
    * <pre>
    *     a          b
    *      ----------
@@ -71,80 +69,80 @@ public class RoundRect extends AbstractShape
    *      ----------
    *     f          e
    * </pre>
-   * 
-   * @param contentStream
+   *
+   * @param aContentStream
    *        the content stream.
-   * @param upperLeft
+   * @param aUpperLeft
    *        the upper left point
-   * @param width
+   * @param fWidth
    *        the width
-   * @param height
+   * @param fHeight
    *        the height
-   * @param cornerRadiusX
+   * @param fCornerRadiusX
    *        the corner radius in x direction
-   * @param cornerRadiusY
+   * @param fCornerRadiusY
    *        the corner radius in y direction
    * @throws IOException
    *         by pdfbox
    */
-  protected void addRoundRect (PDPageContentStream contentStream,
-                               Position upperLeft,
-                               float width,
-                               float height,
-                               float cornerRadiusX,
-                               float cornerRadiusY) throws IOException
+  protected void addRoundRect (final PDPageContentStream aContentStream,
+                               final Position aUpperLeft,
+                               final float fWidth,
+                               final float fHeight,
+                               final float fCornerRadiusX,
+                               final float fCornerRadiusY) throws IOException
   {
-    float nettoWidth = width - 2 * cornerRadiusX;
-    float nettoHeight = height - 2 * cornerRadiusY;
+    final float fNettoWidth = fWidth - 2 * fCornerRadiusX;
+    final float fNettoHeight = fHeight - 2 * fCornerRadiusY;
 
     // top line
-    Position a = new Position (upperLeft.getX () + cornerRadiusX, upperLeft.getY ());
-    Position b = new Position (a.getX () + nettoWidth, a.getY ());
+    final Position a = new Position (aUpperLeft.getX () + fCornerRadiusX, aUpperLeft.getY ());
+    final Position b = new Position (a.getX () + fNettoWidth, a.getY ());
     // right line
-    Position c = new Position (upperLeft.getX () + width, upperLeft.getY () - cornerRadiusY);
-    Position d = new Position (c.getX (), c.getY () - nettoHeight);
+    final Position c = new Position (aUpperLeft.getX () + fWidth, aUpperLeft.getY () - fCornerRadiusY);
+    final Position d = new Position (c.getX (), c.getY () - fNettoHeight);
     // bottom line
-    Position e = new Position (upperLeft.getX () + width - cornerRadiusX, upperLeft.getY () - height);
-    Position f = new Position (e.getX () - nettoWidth, e.getY ());
+    final Position e = new Position (aUpperLeft.getX () + fWidth - fCornerRadiusX, aUpperLeft.getY () - fHeight);
+    final Position f = new Position (e.getX () - fNettoWidth, e.getY ());
     // left line
-    Position g = new Position (upperLeft.getX (), upperLeft.getY () - height + cornerRadiusY);
-    Position h = new Position (g.getX (), upperLeft.getY () - cornerRadiusY);
+    final Position g = new Position (aUpperLeft.getX (), aUpperLeft.getY () - fHeight + fCornerRadiusY);
+    final Position h = new Position (g.getX (), aUpperLeft.getY () - fCornerRadiusY);
 
-    float bezX = cornerRadiusX * BEZ;
-    float bezY = cornerRadiusY * BEZ;
+    final float fBezX = fCornerRadiusX * BEZ;
+    final float fBezY = fCornerRadiusY * BEZ;
 
-    contentStream.moveTo (a.getX (), a.getY ());
-    addLine (contentStream, a.getX (), a.getY (), b.getX (), b.getY ());
-    CompatibilityHelper.curveTo (contentStream,
-                                 b.getX () + bezX,
+    aContentStream.moveTo (a.getX (), a.getY ());
+    _addLine (aContentStream, a.getX (), a.getY (), b.getX (), b.getY ());
+    CompatibilityHelper.curveTo (aContentStream,
+                                 b.getX () + fBezX,
                                  b.getY (),
                                  c.getX (),
-                                 c.getY () + bezY,
+                                 c.getY () + fBezY,
                                  c.getX (),
                                  c.getY ());
     // contentStream.addLine(c.getX(), c.getY(), d.getX(), d.getY());
-    addLine (contentStream, c.getX (), c.getY (), d.getX (), d.getY ());
-    CompatibilityHelper.curveTo (contentStream,
+    _addLine (aContentStream, c.getX (), c.getY (), d.getX (), d.getY ());
+    CompatibilityHelper.curveTo (aContentStream,
                                  d.getX (),
-                                 d.getY () - bezY,
-                                 e.getX () + bezX,
+                                 d.getY () - fBezY,
+                                 e.getX () + fBezX,
                                  e.getY (),
                                  e.getX (),
                                  e.getY ());
     // contentStream.addLine(e.getX(), e.getY(), f.getX(), f.getY());
-    addLine (contentStream, e.getX (), e.getY (), f.getX (), f.getY ());
-    CompatibilityHelper.curveTo (contentStream,
-                                 f.getX () - bezX,
+    _addLine (aContentStream, e.getX (), e.getY (), f.getX (), f.getY ());
+    CompatibilityHelper.curveTo (aContentStream,
+                                 f.getX () - fBezX,
                                  f.getY (),
                                  g.getX (),
-                                 g.getY () - bezY,
+                                 g.getY () - fBezY,
                                  g.getX (),
                                  g.getY ());
-    addLine (contentStream, g.getX (), g.getY (), h.getX (), h.getY ());
-    CompatibilityHelper.curveTo (contentStream,
+    _addLine (aContentStream, g.getX (), g.getY (), h.getX (), h.getY ());
+    CompatibilityHelper.curveTo (aContentStream,
                                  h.getX (),
-                                 h.getY () + bezY,
-                                 a.getX () - bezX,
+                                 h.getY () + fBezY,
+                                 a.getX () - fBezX,
                                  a.getY (),
                                  a.getX (),
                                  a.getY ());
@@ -154,12 +152,15 @@ public class RoundRect extends AbstractShape
    * Using lines won't give us a continuing path, which looks silly on fill. So we are approximating
    * lines with bezier curves... is there no better way?
    */
-  private void addLine (final PDPageContentStream contentStream, float x1, float y1, float x2, float y2)
-                                                                                                         throws IOException
+  private void _addLine (final PDPageContentStream aContentStream,
+                         final float x1,
+                         final float y1,
+                         final float x2,
+                         final float y2) throws IOException
   {
-    float xMid = (x1 + x2) / 2f;
-    float yMid = (y1 + y2) / 2f;
-    CompatibilityHelper.curveTo1 (contentStream, xMid, yMid, x2, y2);
+    final float fXMid = (x1 + x2) / 2f;
+    final float fYMid = (y1 + y2) / 2f;
+    CompatibilityHelper.curveTo1 (aContentStream, fXMid, fYMid, x2, y2);
   }
 
 }

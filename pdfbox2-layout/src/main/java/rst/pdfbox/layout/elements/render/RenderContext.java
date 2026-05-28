@@ -5,13 +5,13 @@ import java.io.IOException;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 
 import rst.pdfbox.layout.elements.ControlElement;
 import rst.pdfbox.layout.elements.Document;
-import rst.pdfbox.layout.elements.IElement;
 import rst.pdfbox.layout.elements.EOrientation;
+import rst.pdfbox.layout.elements.IElement;
 import rst.pdfbox.layout.elements.PageFormat;
 import rst.pdfbox.layout.elements.PositionControl;
 import rst.pdfbox.layout.elements.PositionControl.MarkPosition;

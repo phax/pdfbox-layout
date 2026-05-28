@@ -3,7 +3,7 @@ package rst.pdfbox.layout.elements.render;
 import java.io.IOException;
 
 import rst.pdfbox.layout.elements.ControlElement;
-import rst.pdfbox.layout.elements.Drawable;
+import rst.pdfbox.layout.elements.IDrawable3;
 import rst.pdfbox.layout.elements.IElement;
 
 /**
@@ -19,83 +19,86 @@ public class ColumnLayout extends VerticalLayout
    */
   public final static ControlElement NEWCOLUMN = new ControlElement ("NEWCOLUMN");
 
-  private final int columnCount;
-  private float columnSpacing;
-  private int columnIndex = 0;
-  private Float offsetY = null;
+  private final int m_nColumnCount;
+  private final float m_fColumnSpacing;
+  private int m_nColumnIndex = 0;
+  private Float m_aOffsetY;
 
-  public ColumnLayout (int columnCount)
+  public ColumnLayout (final int nColumnCount)
   {
-    this (columnCount, 0);
+    this (nColumnCount, 0);
   }
 
-  public ColumnLayout (int columnCount, float columnSpacing)
+  public ColumnLayout (final int nColumnCount, final float fColumnSpacing)
   {
-    this.columnCount = columnCount;
-    this.columnSpacing = columnSpacing;
+    this.m_nColumnCount = nColumnCount;
+    this.m_fColumnSpacing = fColumnSpacing;
   }
 
   @Override
-  protected float getTargetWidth (final RenderContext renderContext)
+  protected float getTargetWidth (final RenderContext aRenderContext)
   {
-    return (renderContext.getWidth () - ((columnCount - 1) * columnSpacing)) / columnCount;
+    return (aRenderContext.getWidth () - ((m_nColumnCount - 1) * m_fColumnSpacing)) / m_nColumnCount;
   }
 
   /**
    * Flips to the next column
    */
   @Override
-  protected void turnPage (final RenderContext renderContext) throws IOException
+  protected void turnPage (final RenderContext aRenderContext) throws IOException
   {
-    if (++columnIndex >= columnCount)
+    if (++m_nColumnIndex >= m_nColumnCount)
     {
-      renderContext.newPage ();
-      columnIndex = 0;
-      offsetY = 0f;
+      aRenderContext.newPage ();
+      m_nColumnIndex = 0;
+      m_aOffsetY = Float.valueOf (0f);
     }
     else
     {
-      float nextColumnX = (getTargetWidth (renderContext) + columnSpacing) * columnIndex;
-      renderContext.resetPositionToUpperLeft ();
-      renderContext.movePositionBy (nextColumnX, -offsetY);
+      final float fNextColumnX = (getTargetWidth (aRenderContext) + m_fColumnSpacing) * m_nColumnIndex;
+      aRenderContext.resetPositionToUpperLeft ();
+      aRenderContext.movePositionBy (fNextColumnX, -m_aOffsetY.floatValue ());
     }
   }
 
   @Override
-  public boolean render (RenderContext renderContext, IElement element, ILayoutHint layoutHint) throws IOException
+  public boolean render (final RenderContext aRenderContext, final IElement aElement, final ILayoutHint aLayoutHint)
+                                                                                                                     throws IOException
   {
-    if (element == ControlElement.NEWPAGE)
+    if (aElement == ControlElement.NEWPAGE)
     {
-      renderContext.newPage ();
+      aRenderContext.newPage ();
       return true;
     }
-    if (element == NEWCOLUMN)
+    if (aElement == NEWCOLUMN)
     {
-      turnPage (renderContext);
+      turnPage (aRenderContext);
       return true;
     }
-    return super.render (renderContext, element, layoutHint);
+    return super.render (aRenderContext, aElement, aLayoutHint);
   }
 
   @Override
-  public void render (RenderContext renderContext, Drawable drawable, ILayoutHint layoutHint) throws IOException
+  public void render (final RenderContext aRenderContext, final IDrawable3 aDrawable, final ILayoutHint aLayoutHint)
+                                                                                                                     throws IOException
   {
-    if (offsetY == null)
+    if (m_aOffsetY == null)
     {
-      offsetY = renderContext.getUpperLeft ().getY () - renderContext.getCurrentPosition ().getY ();
+      m_aOffsetY = Float.valueOf (aRenderContext.getUpperLeft ().getY () -
+                                  aRenderContext.getCurrentPosition ().getY ());
     }
-    super.render (renderContext, drawable, layoutHint);
+    super.render (aRenderContext, aDrawable, aLayoutHint);
   }
 
   @Override
-  protected boolean isPositionTopOfPage (final RenderContext renderContext)
+  protected boolean isPositionTopOfPage (final RenderContext aRenderContext)
   {
-    float topPosition = renderContext.getUpperLeft ().getY ();
-    if (offsetY != null)
+    float fTopPosition = aRenderContext.getUpperLeft ().getY ();
+    if (m_aOffsetY != null)
     {
-      topPosition -= offsetY;
+      fTopPosition -= m_aOffsetY.floatValue ();
     }
-    return renderContext.getCurrentPosition ().getY () == topPosition;
+    return aRenderContext.getCurrentPosition ().getY () == fTopPosition;
   }
 
 }

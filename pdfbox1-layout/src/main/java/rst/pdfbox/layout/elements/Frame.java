@@ -1,11 +1,10 @@
 package rst.pdfbox.layout.elements;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import java.awt.Color;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
@@ -14,8 +13,8 @@ import rst.pdfbox.layout.shape.Rect;
 import rst.pdfbox.layout.shape.Shape;
 import rst.pdfbox.layout.shape.Stroke;
 import rst.pdfbox.layout.text.IDrawListener;
-import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.IWidthRespecting;
+import rst.pdfbox.layout.text.Position;
 
 /**
  * The frame is a container for a {@link Drawable}, that allows to add margin,

@@ -20,16 +20,16 @@ public class Stroke
     RoundCap (1),
     Square (2);
 
-    private final int value;
+    private final int m_nValue;
 
-    private CapStyle (final int value)
+    private CapStyle (final int nValue)
     {
-      this.value = value;
+      this.m_nValue = nValue;
     }
 
     public int value ()
     {
-      return value;
+      return m_nValue;
     }
   }
 
@@ -43,16 +43,16 @@ public class Stroke
     Round (1),
     Bevel (2);
 
-    private final int value;
+    private final int m_nValue;
 
-    private JoinStyle (final int value)
+    private JoinStyle (final int nValue)
     {
-      this.value = value;
+      this.m_nValue = nValue;
     }
 
     public int value ()
     {
-      return value;
+      return m_nValue;
     }
   }
 
@@ -62,75 +62,75 @@ public class Stroke
   public static class DashPattern
   {
 
-    private final float [] pattern;
-    private final float phase;
+    private final float [] m_aPattern;
+    private final float m_fPhase;
 
     /**
      * Creates a pattern with equal on and off length, starting with phase 0.
-     * 
-     * @param onOff
+     *
+     * @param fOnOff
      *        the length of the on/off part.
      */
-    public DashPattern (float onOff)
+    public DashPattern (final float fOnOff)
     {
-      this (onOff, onOff, 0f);
+      this (fOnOff, fOnOff, 0f);
     }
 
     /**
      * Creates a pattern with different on and off length, starting with phase 0.
-     * 
-     * @param on
+     *
+     * @param fOn
      *        the length of the off part.
-     * @param off
+     * @param fOff
      *        the length of the off part.
      */
-    public DashPattern (float on, float off)
+    public DashPattern (final float fOn, final float fOff)
     {
-      this (on, off, 0f);
+      this (fOn, fOff, 0f);
     }
 
     /**
      * Creates a pattern with different on and off length, starting with the given phase .
-     * 
-     * @param on
+     *
+     * @param fOn
      *        the length of the off part.
-     * @param off
+     * @param fOff
      *        the length of the off part.
-     * @param phase
+     * @param fPhase
      *        the phase to start the pattern with.
      */
-    public DashPattern (float on, float off, float phase)
+    public DashPattern (final float fOn, final float fOff, final float fPhase)
     {
-      this.pattern = new float [] { on, off };
-      this.phase = phase;
+      this.m_aPattern = new float [] { fOn, fOff };
+      this.m_fPhase = fPhase;
     }
 
     public float getOn ()
     {
-      return pattern[0];
+      return m_aPattern[0];
     }
 
     public float getOff ()
     {
-      return pattern[1];
+      return m_aPattern[1];
     }
 
     public float [] getPattern ()
     {
-      return pattern;
+      return m_aPattern;
     }
 
     public float getPhase ()
     {
-      return phase;
+      return m_fPhase;
     }
 
   }
 
-  private final CapStyle capStyle;
-  private final JoinStyle joinStyle;
-  private final DashPattern dashPattern;
-  private final float lineWidth;
+  private final CapStyle m_eCapStyle;
+  private final JoinStyle m_eJoinStyle;
+  private final DashPattern m_aDashPattern;
+  private final float m_fLineWidth;
 
   /**
    * Creates a Stroke with line width 1, cap style {@link CapStyle#Cap}, join style
@@ -144,83 +144,86 @@ public class Stroke
   /**
    * Creates a Stroke with the given line width, cap style {@link CapStyle#Cap}, join style
    * {@link JoinStyle#Miter}, and no dash pattern.
-   * 
-   * @param lineWidth
+   *
+   * @param fLineWidth
    *        the line width.
    */
-  public Stroke (float lineWidth)
+  public Stroke (final float fLineWidth)
   {
-    this (CapStyle.Cap, JoinStyle.Miter, null, lineWidth);
+    this (CapStyle.Cap, JoinStyle.Miter, null, fLineWidth);
   }
 
   /**
    * Creates a stroke with the given attributes.
-   * 
-   * @param capStyle
+   *
+   * @param eCapStyle
    *        the cap style.
-   * @param joinStyle
+   * @param eJoinStyle
    *        the join style.
-   * @param dashPattern
+   * @param aDashPattern
    *        the dash pattern.
-   * @param lineWidth
+   * @param fLineWidth
    *        the line width.
    */
-  public Stroke (CapStyle capStyle, JoinStyle joinStyle, DashPattern dashPattern, float lineWidth)
+  public Stroke (final CapStyle eCapStyle,
+                 final JoinStyle eJoinStyle,
+                 final DashPattern aDashPattern,
+                 final float fLineWidth)
   {
-    this.capStyle = capStyle;
-    this.joinStyle = joinStyle;
-    this.dashPattern = dashPattern;
-    this.lineWidth = lineWidth;
+    this.m_eCapStyle = eCapStyle;
+    this.m_eJoinStyle = eJoinStyle;
+    this.m_aDashPattern = aDashPattern;
+    this.m_fLineWidth = fLineWidth;
   }
 
   public CapStyle getCapStyle ()
   {
-    return capStyle;
+    return m_eCapStyle;
   }
 
   public JoinStyle getJoinStyle ()
   {
-    return joinStyle;
+    return m_eJoinStyle;
   }
 
   public DashPattern getDashPattern ()
   {
-    return dashPattern;
+    return m_aDashPattern;
   }
 
   public float getLineWidth ()
   {
-    return lineWidth;
+    return m_fLineWidth;
   }
 
   /**
    * Applies this stroke to the given content stream.
-   * 
-   * @param contentStream
+   *
+   * @param aContentStream
    *        the content stream to apply this stroke to.
    * @throws IOException
    *         by PDFBox.
    */
-  public void applyTo (final PDPageContentStream contentStream) throws IOException
+  public void applyTo (final PDPageContentStream aContentStream) throws IOException
   {
     if (getCapStyle () != null)
     {
-      contentStream.setLineCapStyle (getCapStyle ().value ());
+      aContentStream.setLineCapStyle (getCapStyle ().value ());
     }
     if (getJoinStyle () != null)
     {
-      contentStream.setLineJoinStyle (getJoinStyle ().value ());
+      aContentStream.setLineJoinStyle (getJoinStyle ().value ());
     }
     if (getDashPattern () != null)
     {
-      contentStream.setLineDashPattern (getDashPattern ().getPattern (), getDashPattern ().getPhase ());
+      aContentStream.setLineDashPattern (getDashPattern ().getPattern (), getDashPattern ().getPhase ());
     }
-    contentStream.setLineWidth (getLineWidth ());
+    aContentStream.setLineWidth (getLineWidth ());
   }
 
   /**
    * Creates a stroke builder providing a fluent interface for creating a stroke.
-   * 
+   *
    * @return a stroke builder.
    */
   public static StrokeBuilder builder ()
@@ -233,38 +236,38 @@ public class Stroke
    */
   public static class StrokeBuilder
   {
-    private CapStyle capStyle = CapStyle.Cap;
-    private JoinStyle joinStyle = JoinStyle.Miter;
-    private DashPattern dashPattern;
-    float lineWidth = 1f;
+    private CapStyle m_eCapStyle = CapStyle.Cap;
+    private JoinStyle m_eJoinStyle = JoinStyle.Miter;
+    private DashPattern m_aDashPattern;
+    private float m_fLineWidth = 1f;
 
-    public StrokeBuilder capStyle (CapStyle capStyle)
+    public StrokeBuilder capStyle (final CapStyle eCapStyle)
     {
-      this.capStyle = capStyle;
+      this.m_eCapStyle = eCapStyle;
       return this;
     }
 
-    public StrokeBuilder joinStyle (JoinStyle joinStyle)
+    public StrokeBuilder joinStyle (final JoinStyle eJoinStyle)
     {
-      this.joinStyle = joinStyle;
+      this.m_eJoinStyle = eJoinStyle;
       return this;
     }
 
-    public StrokeBuilder dashPattern (DashPattern dashPattern)
+    public StrokeBuilder dashPattern (final DashPattern aDashPattern)
     {
-      this.dashPattern = dashPattern;
+      this.m_aDashPattern = aDashPattern;
       return this;
     }
 
-    public StrokeBuilder lineWidth (float lineWidth)
+    public StrokeBuilder lineWidth (final float fLineWidth)
     {
-      this.lineWidth = lineWidth;
+      this.m_fLineWidth = fLineWidth;
       return this;
     }
 
     public Stroke build ()
     {
-      return new Stroke (capStyle, joinStyle, dashPattern, lineWidth);
+      return new Stroke (m_eCapStyle, m_eJoinStyle, m_aDashPattern, m_fLineWidth);
     }
   }
 }

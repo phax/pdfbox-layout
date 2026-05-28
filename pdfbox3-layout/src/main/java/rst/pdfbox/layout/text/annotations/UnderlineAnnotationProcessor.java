@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 import rst.pdfbox.layout.shape.Stroke;
@@ -23,89 +21,89 @@ import rst.pdfbox.layout.text.annotations.Annotations.UnderlineAnnotation;
 public class UnderlineAnnotationProcessor implements AnnotationProcessor
 {
 
-  private List <Line> linesOnPage = new ArrayList <Line> ();
+  private final List <Line> m_aLinesOnPage = new ArrayList <> ();
 
   @Override
-  public void annotatedObjectDrawn (IAnnotated drawnObject,
-                                    IDrawContext drawContext,
-                                    Position upperLeft,
-                                    float width,
-                                    float height) throws IOException
+  public void annotatedObjectDrawn (final IAnnotated aDrawnObject,
+                                    final IDrawContext aDrawContext,
+                                    final Position aUpperLeft,
+                                    final float fWidth,
+                                    final float fHeight) throws IOException
   {
-    if (!(drawnObject instanceof StyledText))
+    if (!(aDrawnObject instanceof final StyledText aDrawnText))
     {
       return;
     }
 
-    StyledText drawnText = (StyledText) drawnObject;
-    for (UnderlineAnnotation underlineAnnotation : drawnObject.getAnnotationsOfType (UnderlineAnnotation.class))
+    for (final UnderlineAnnotation aUnderlineAnnotation : aDrawnObject.getAnnotationsOfType (UnderlineAnnotation.class))
     {
-      float fontSize = drawnText.getFontDescriptor ().getSize ();
-      float ascent = fontSize * drawnText.getFontDescriptor ().getFont ().getFontDescriptor ().getAscent () / 1000;
+      final float fFontSize = aDrawnText.getFontDescriptor ().getSize ();
+      final float fAscent = fFontSize *
+                            aDrawnText.getFontDescriptor ().getFont ().getFontDescriptor ().getAscent () /
+                            1000;
 
-      float baselineOffset = fontSize * underlineAnnotation.getBaselineOffsetScale ();
-      float thickness = (0.01f + fontSize * 0.05f) * underlineAnnotation.getLineWeight ();
+      final float fBaselineOffset = fFontSize * aUnderlineAnnotation.getBaselineOffsetScale ();
+      final float fThickness = (0.01f + fFontSize * 0.05f) * aUnderlineAnnotation.getLineWeight ();
 
-      Position start = new Position (upperLeft.getX (), upperLeft.getY () - ascent + baselineOffset);
-      Position end = new Position (start.getX () + width, start.getY ());
-      Stroke stroke = Stroke.builder ().lineWidth (thickness).build ();
-      Line line = new Line (start, end, stroke, drawnText.getColor ());
-      linesOnPage.add (line);
+      final Position aStart = new Position (aUpperLeft.getX (), aUpperLeft.getY () - fAscent + fBaselineOffset);
+      final Position aEnd = new Position (aStart.getX () + fWidth, aStart.getY ());
+      final Stroke aStroke = Stroke.builder ().lineWidth (fThickness).build ();
+      final Line aLine = new Line (aStart, aEnd, aStroke, aDrawnText.getColor ());
+      m_aLinesOnPage.add (aLine);
     }
   }
 
   @Override
-  public void beforePage (IDrawContext drawContext) throws IOException
+  public void beforePage (final IDrawContext aDrawContext) throws IOException
   {
-    linesOnPage.clear ();
+    m_aLinesOnPage.clear ();
   }
 
   @Override
-  public void afterPage (IDrawContext drawContext) throws IOException
+  public void afterPage (final IDrawContext aDrawContext) throws IOException
   {
-    for (Line line : linesOnPage)
+    for (final Line aLine : m_aLinesOnPage)
     {
-      line.draw (drawContext.getCurrentPageContentStream ());
+      aLine.draw (aDrawContext.getCurrentPageContentStream ());
     }
-    linesOnPage.clear ();
+    m_aLinesOnPage.clear ();
   }
 
   @Override
-  public void afterRender (PDDocument document) throws IOException
+  public void afterRender (final PDDocument aDocument) throws IOException
   {
-    linesOnPage.clear ();
+    m_aLinesOnPage.clear ();
   }
 
   private static class Line
   {
 
-    private Position start;
-    private Position end;
-    private Stroke stroke;
-    private Color color;
+    private final Position m_aStart;
+    private final Position m_aEnd;
+    private final Stroke m_aStroke;
+    private final Color m_aColor;
 
-    public Line (Position start, Position end, Stroke stroke, Color color)
+    public Line (final Position aStart, final Position aEnd, final Stroke aStroke, final Color aColor)
     {
-      super ();
-      this.start = start;
-      this.end = end;
-      this.stroke = stroke;
-      this.color = color;
+      this.m_aStart = aStart;
+      this.m_aEnd = aEnd;
+      this.m_aStroke = aStroke;
+      this.m_aColor = aColor;
     }
 
-    public void draw (PDPageContentStream contentStream) throws IOException
+    public void draw (final PDPageContentStream aContentStream) throws IOException
     {
-      if (color != null)
+      if (m_aColor != null)
       {
-        contentStream.setStrokingColor (color);
+        aContentStream.setStrokingColor (m_aColor);
       }
-      if (stroke != null)
+      if (m_aStroke != null)
       {
-        stroke.applyTo (contentStream);
+        m_aStroke.applyTo (aContentStream);
       }
-      contentStream.moveTo (start.getX (), start.getY ());
-      contentStream.lineTo (end.getX (), end.getY ());
-      contentStream.stroke ();
+      aContentStream.moveTo (m_aStart.getX (), m_aStart.getY ());
+      aContentStream.lineTo (m_aEnd.getX (), m_aEnd.getY ());
+      aContentStream.stroke ();
     }
 
   }

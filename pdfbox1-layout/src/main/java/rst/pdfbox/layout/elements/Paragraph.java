@@ -7,10 +7,10 @@ import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 
 import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.IDrawListener;
+import rst.pdfbox.layout.text.IWidthRespecting;
 import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.TextFlow;
 import rst.pdfbox.layout.text.TextSequenceUtil;
-import rst.pdfbox.layout.text.IWidthRespecting;
 
 /**
  * A paragraph is used as a container for {@link TextFlow text} that is drawn as

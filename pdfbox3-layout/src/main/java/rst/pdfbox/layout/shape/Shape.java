@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.io.IOException;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 import rst.pdfbox.layout.text.IDrawListener;
@@ -25,82 +23,85 @@ public interface Shape
 
   /**
    * Draws (strokes) the shape.
-   * 
-   * @param pdDocument
+   *
+   * @param aPdDocument
    *        the underlying pdfbox document.
-   * @param contentStream
+   * @param aContentStream
    *        the stream to draw to.
-   * @param upperLeft
+   * @param aUpperLeft
    *        the upper left position to start drawing.
-   * @param width
+   * @param fWidth
    *        the width of the bounding box.
-   * @param height
+   * @param fHeight
    *        the height of the bounding box.
-   * @param color
+   * @param aColor
    *        the color to use.
-   * @param stroke
+   * @param aStroke
    *        the stroke to use.
-   * @param drawListener
+   * @param aDrawListener
    *        the listener to {@link IDrawListener#drawn(Object, Position, float, float) notify} on
    *        drawn objects.
    * @throws IOException
    *         by pdfbox
    */
-  void draw (PDDocument pdDocument,
-             PDPageContentStream contentStream,
-             Position upperLeft,
-             float width,
-             float height,
-             Color color,
-             Stroke stroke,
-             IDrawListener drawListener) throws IOException;
+  void draw (PDDocument aPdDocument,
+             PDPageContentStream aContentStream,
+             Position aUpperLeft,
+             float fWidth,
+             float fHeight,
+             Color aColor,
+             Stroke aStroke,
+             IDrawListener aDrawListener) throws IOException;
 
   /**
    * Fills the shape.
-   * 
-   * @param pdDocument
+   *
+   * @param aPdDocument
    *        the underlying pdfbox document.
-   * @param contentStream
+   * @param aContentStream
    *        the stream to draw to.
-   * @param upperLeft
+   * @param aUpperLeft
    *        the upper left position to start drawing.
-   * @param width
+   * @param fWidth
    *        the width of the bounding box.
-   * @param height
+   * @param fHeight
    *        the height of the bounding box.
-   * @param color
+   * @param aColor
    *        the color to use.
-   * @param drawListener
+   * @param aDrawListener
    *        the listener to {@link IDrawListener#drawn(Object, Position, float, float) notify} on
    *        drawn objects.
    * @throws IOException
    *         by pdfbox
    */
-  void fill (PDDocument pdDocument,
-             PDPageContentStream contentStream,
-             Position upperLeft,
-             float width,
-             float height,
-             Color color,
-             IDrawListener drawListener) throws IOException;
+  void fill (PDDocument aPdDocument,
+             PDPageContentStream aContentStream,
+             Position aUpperLeft,
+             float fWidth,
+             float fHeight,
+             Color aColor,
+             IDrawListener aDrawListener) throws IOException;
 
   /**
    * Adds (the path of) the shape without drawing anything.
-   * 
-   * @param pdDocument
+   *
+   * @param aPdDocument
    *        the underlying pdfbox document.
-   * @param contentStream
+   * @param aContentStream
    *        the stream to draw to.
-   * @param upperLeft
+   * @param aUpperLeft
    *        the upper left position to start drawing.
-   * @param width
+   * @param fWidth
    *        the width of the bounding box.
-   * @param height
+   * @param fHeight
    *        the height of the bounding box.
    * @throws IOException
    *         by pdfbox
    */
-  void add (PDDocument pdDocument, PDPageContentStream contentStream, Position upperLeft, float width, float height)
-                                                                                                                     throws IOException;
+  void add (PDDocument aPdDocument,
+            PDPageContentStream aContentStream,
+            Position aUpperLeft,
+            float fWidth,
+            float fHeight) throws IOException;
 
 }

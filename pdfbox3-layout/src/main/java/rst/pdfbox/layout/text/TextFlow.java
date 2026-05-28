@@ -44,115 +44,119 @@ public class TextFlow implements ITextSequence, IWidthRespecting
   private static final String HEIGHT = "height";
   private static final String WIDTH = "width";
 
-  private final Map <String, Object> cache = new HashMap <> ();
+  private final Map <String, Object> m_aCache = new HashMap <> ();
 
-  private final List <ITextFragment> text = new ArrayList <> ();
-  private float lineSpacing = DEFAULT_LINE_SPACING;
-  private float maxWidth = -1;
-  private boolean applyLineSpacingToFirstLine = true;
+  private final List <ITextFragment> m_aText = new ArrayList <> ();
+  private float m_fLineSpacing = DEFAULT_LINE_SPACING;
+  private float m_fMaxWidth = -1;
+  private boolean m_bApplyLineSpacingToFirstLine = true;
 
-  private void clearCache ()
+  private void _clearCache ()
   {
-    cache.clear ();
+    m_aCache.clear ();
   }
 
-  private void setCachedValue (final String key, final Object value)
+  private void _setCachedValue (final String sKey, final Object aValue)
   {
-    cache.put (key, value);
+    m_aCache.put (sKey, aValue);
   }
 
-  @SuppressWarnings ("unchecked")
-  private <T> T getCachedValue (final String key, final Class <T> type)
+  private <T> T _getCachedValue (final String sKey, final Class <T> aType)
   {
-    return (T) cache.get (key);
+    return aType.cast (m_aCache.get (sKey));
   }
 
   /**
    * Adds some text associated with the font to draw. The text may contain line breaks ('\n').
    *
-   * @param text
+   * @param sText
    *        the text to add.
-   * @param fontSize
+   * @param fFontSize
    *        the size of the font.
-   * @param font
+   * @param aFont
    *        the font to use to draw the text.
    * @throws IOException
    *         by PDFBox
    */
-  public void addText (final String text, final float fontSize, final PDFont font) throws IOException
+  public void addText (final String sText, final float fFontSize, final PDFont aFont) throws IOException
   {
-    add (TextFlowUtil.createTextFlow (text, fontSize, font));
+    add (TextFlowUtil.createTextFlow (sText, fFontSize, aFont));
   }
 
   /**
    * Adds some markup to the text flow.
    *
-   * @param markup
+   * @param sMarkup
    *        the markup to add.
-   * @param fontSize
+   * @param fFontSize
    *        the font size to use.
-   * @param baseFont
+   * @param eBaseFont
    *        the base font describing the bundle of plain/blold/italic/bold-italic fonts.
    * @throws IOException
    *         by PDFBox
    */
-  public void addMarkup (final String markup, final float fontSize, final EBaseFont baseFont) throws IOException
+  public void addMarkup (final String sMarkup, final float fFontSize, final EBaseFont eBaseFont) throws IOException
   {
-    add (TextFlowUtil.createTextFlowFromMarkup (markup, fontSize, baseFont));
+    add (TextFlowUtil.createTextFlowFromMarkup (sMarkup, fFontSize, eBaseFont));
   }
 
   /**
    * Adds some markup to the text flow.
    *
-   * @param markup
+   * @param sMarkup
    *        the markup to add.
-   * @param fontSize
+   * @param fFontSize
    *        the font size to use.
-   * @param plainFont
+   * @param aPlainFont
    *        the plain font to use.
-   * @param boldFont
+   * @param aBoldFont
    *        the bold font to use.
-   * @param italicFont
+   * @param aItalicFont
    *        the italic font to use.
-   * @param boldItalicFont
+   * @param aBoldItalicFont
    *        the bold-italic font to use.
    * @throws IOException
    *         by PDFBox
    */
-  public void addMarkup (final String markup,
-                         final float fontSize,
-                         final PDFont plainFont,
-                         final PDFont boldFont,
-                         final PDFont italicFont,
-                         final PDFont boldItalicFont) throws IOException
+  public void addMarkup (final String sMarkup,
+                         final float fFontSize,
+                         final PDFont aPlainFont,
+                         final PDFont aBoldFont,
+                         final PDFont aItalicFont,
+                         final PDFont aBoldItalicFont) throws IOException
   {
-    add (TextFlowUtil.createTextFlowFromMarkup (markup, fontSize, plainFont, boldFont, italicFont, boldItalicFont));
+    add (TextFlowUtil.createTextFlowFromMarkup (sMarkup,
+                                                fFontSize,
+                                                aPlainFont,
+                                                aBoldFont,
+                                                aItalicFont,
+                                                aBoldItalicFont));
   }
 
   /**
    * Adds a text sequence to this flow.
    *
-   * @param sequence
+   * @param aSequence
    *        the sequence to add.
    */
-  public void add (final ITextSequence sequence)
+  public void add (final ITextSequence aSequence)
   {
-    for (final ITextFragment fragment : sequence)
+    for (final ITextFragment aFragment : aSequence)
     {
-      add (fragment);
+      add (aFragment);
     }
   }
 
   /**
    * Adds a text fragment to this flow.
    *
-   * @param fragment
+   * @param aFragment
    *        the fragment to add.
    */
-  public void add (final ITextFragment fragment)
+  public void add (final ITextFragment aFragment)
   {
-    text.add (fragment);
-    clearCache ();
+    m_aText.add (aFragment);
+    _clearCache ();
   }
 
   /**
@@ -162,10 +166,10 @@ public class TextFlow implements ITextSequence, IWidthRespecting
    */
   public ITextFragment removeLast ()
   {
-    if (text.size () > 0)
+    if (m_aText.size () > 0)
     {
-      clearCache ();
-      return text.remove (text.size () - 1);
+      _clearCache ();
+      return m_aText.remove (m_aText.size () - 1);
     }
     return null;
   }
@@ -175,10 +179,10 @@ public class TextFlow implements ITextSequence, IWidthRespecting
    */
   public ITextFragment getLast ()
   {
-    if (text.size () > 0)
+    if (m_aText.size () > 0)
     {
-      clearCache ();
-      return text.get (text.size () - 1);
+      _clearCache ();
+      return m_aText.get (m_aText.size () - 1);
     }
     return null;
   }
@@ -188,26 +192,26 @@ public class TextFlow implements ITextSequence, IWidthRespecting
    */
   public boolean isEmpty ()
   {
-    return text.isEmpty ();
+    return m_aText.isEmpty ();
   }
 
   @Override
   public Iterator <ITextFragment> iterator ()
   {
-    return text.iterator ();
+    return m_aText.iterator ();
   }
 
   @Override
   public float getMaxWidth ()
   {
-    return maxWidth;
+    return m_fMaxWidth;
   }
 
   @Override
-  public void setMaxWidth (final float maxWidth)
+  public void setMaxWidth (final float fMaxWidth)
   {
-    this.maxWidth = maxWidth;
-    clearCache ();
+    this.m_fMaxWidth = fMaxWidth;
+    _clearCache ();
   }
 
   /**
@@ -215,19 +219,19 @@ public class TextFlow implements ITextSequence, IWidthRespecting
    */
   public float getLineSpacing ()
   {
-    return lineSpacing;
+    return m_fLineSpacing;
   }
 
   /**
    * Sets the factor multiplied with the height to calculate the line spacing.
    *
-   * @param lineSpacing
+   * @param fLineSpacing
    *        the line spacing factor.
    */
-  public void setLineSpacing (final float lineSpacing)
+  public void setLineSpacing (final float fLineSpacing)
   {
-    this.lineSpacing = lineSpacing;
-    clearCache ();
+    this.m_fLineSpacing = fLineSpacing;
+    _clearCache ();
   }
 
   /**
@@ -239,66 +243,69 @@ public class TextFlow implements ITextSequence, IWidthRespecting
    */
   public boolean isApplyLineSpacingToFirstLine ()
   {
-    return applyLineSpacingToFirstLine;
+    return m_bApplyLineSpacingToFirstLine;
   }
 
   /**
    * Sets the indicator whether to apply line spacing to the first line.
    *
-   * @param applyLineSpacingToFirstLine
+   * @param bApplyLineSpacingToFirstLine
    *        <code>true</code> if the line spacing should be applied to the first line.
    * @see TextFlow#isApplyLineSpacingToFirstLine()
    */
-  public void setApplyLineSpacingToFirstLine (final boolean applyLineSpacingToFirstLine)
+  public void setApplyLineSpacingToFirstLine (final boolean bApplyLineSpacingToFirstLine)
   {
-    this.applyLineSpacingToFirstLine = applyLineSpacingToFirstLine;
+    this.m_bApplyLineSpacingToFirstLine = bApplyLineSpacingToFirstLine;
   }
 
   @Override
   public float getWidth () throws IOException
   {
-    Float width = getCachedValue (WIDTH, Float.class);
-    if (width == null)
+    Float aWidth = _getCachedValue (WIDTH, Float.class);
+    if (aWidth == null)
     {
-      width = TextSequenceUtil.getWidth (this, getMaxWidth ());
-      setCachedValue (WIDTH, width);
+      aWidth = Float.valueOf (TextSequenceUtil.getWidth (this, getMaxWidth ()));
+      _setCachedValue (WIDTH, aWidth);
     }
-    return width;
+    return aWidth.floatValue ();
   }
 
   @Override
   public float getHeight () throws IOException
   {
-    Float height = getCachedValue (HEIGHT, Float.class);
-    if (height == null)
+    Float aHeight = _getCachedValue (HEIGHT, Float.class);
+    if (aHeight == null)
     {
-      height = TextSequenceUtil.getHeight (this, getMaxWidth (), getLineSpacing (), isApplyLineSpacingToFirstLine ());
-      setCachedValue (HEIGHT, height);
+      aHeight = Float.valueOf (TextSequenceUtil.getHeight (this,
+                                                           getMaxWidth (),
+                                                           getLineSpacing (),
+                                                           isApplyLineSpacingToFirstLine ()));
+      _setCachedValue (HEIGHT, aHeight);
     }
-    return height;
+    return aHeight.floatValue ();
   }
 
   @Override
-  public void drawText (final PDPageContentStream contentStream,
-                        final Position upperLeft,
-                        final EAlignment alignment,
-                        final IDrawListener drawListener) throws IOException
+  public void drawText (final PDPageContentStream aContentStream,
+                        final Position aUpperLeft,
+                        final EAlignment eAlignment,
+                        final IDrawListener aDrawListener) throws IOException
   {
     TextSequenceUtil.drawText (this,
-                               contentStream,
-                               upperLeft,
-                               drawListener,
-                               alignment,
+                               aContentStream,
+                               aUpperLeft,
+                               aDrawListener,
+                               eAlignment,
                                getMaxWidth (),
                                getLineSpacing (),
                                isApplyLineSpacingToFirstLine ());
   }
 
-  public void drawTextRightAligned (final PDPageContentStream contentStream,
-                                    final Position endOfFirstLine,
-                                    final IDrawListener drawListener) throws IOException
+  public void drawTextRightAligned (final PDPageContentStream aContentStream,
+                                    final Position aEndOfFirstLine,
+                                    final IDrawListener aDrawListener) throws IOException
   {
-    drawText (contentStream, endOfFirstLine.add (-getWidth (), 0), EAlignment.Right, drawListener);
+    drawText (aContentStream, aEndOfFirstLine.add (-getWidth (), 0), EAlignment.Right, aDrawListener);
   }
 
   /**
@@ -308,22 +315,22 @@ public class TextFlow implements ITextSequence, IWidthRespecting
    */
   public TextFlow removeLeadingEmptyLines () throws IOException
   {
-    if (text.size () == 0 || !(text.get (0) instanceof NewLine))
+    if (m_aText.size () == 0 || !(m_aText.get (0) instanceof NewLine))
     {
       return this;
     }
-    final TextFlow result = createInstance ();
-    result.setApplyLineSpacingToFirstLine (this.isApplyLineSpacingToFirstLine ());
-    result.setLineSpacing (this.getLineSpacing ());
-    result.setMaxWidth (this.getMaxWidth ());
-    for (final ITextFragment fragment : this)
+    final TextFlow aResult = createInstance ();
+    aResult.setApplyLineSpacingToFirstLine (this.isApplyLineSpacingToFirstLine ());
+    aResult.setLineSpacing (this.getLineSpacing ());
+    aResult.setMaxWidth (this.getMaxWidth ());
+    for (final ITextFragment aFragment : this)
     {
-      if (!result.isEmpty () || !(fragment instanceof NewLine))
+      if (!aResult.isEmpty () || !(aFragment instanceof NewLine))
       {
-        result.add (fragment);
+        aResult.add (aFragment);
       }
     }
-    return result;
+    return aResult;
   }
 
   protected TextFlow createInstance ()
@@ -334,7 +341,7 @@ public class TextFlow implements ITextSequence, IWidthRespecting
   @Override
   public String toString ()
   {
-    return "TextFlow [text=" + text + "]";
+    return "TextFlow [text=" + m_aText + "]";
   }
 
 }

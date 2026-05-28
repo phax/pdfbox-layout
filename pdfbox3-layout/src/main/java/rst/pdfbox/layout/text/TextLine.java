@@ -33,49 +33,48 @@ public class TextLine implements ITextSequence
    */
   private static final String WIDTH = "width";
 
-  private final List <StyledText> styledTextList = new ArrayList <StyledText> ();
-  private NewLine newLine;
-  private Map <String, Object> cache = new HashMap <String, Object> ();
+  private final List <StyledText> m_aStyledTextList = new ArrayList <> ();
+  private NewLine m_aNewLine;
+  private final Map <String, Object> m_aCache = new HashMap <> ();
 
-  private void clearCache ()
+  private void _clearCache ()
   {
-    cache.clear ();
+    m_aCache.clear ();
   }
 
-  private void setCachedValue (final String key, Object value)
+  private void _setCachedValue (final String sKey, final Object aValue)
   {
-    cache.put (key, value);
+    m_aCache.put (sKey, aValue);
   }
 
-  @SuppressWarnings ("unchecked")
-  private <T> T getCachedValue (final String key, Class <T> type)
+  private <T> T _getCachedValue (final String sKey, final Class <T> aType)
   {
-    return (T) cache.get (key);
+    return aType.cast (m_aCache.get (sKey));
   }
 
   /**
    * Adds a styled text.
-   * 
-   * @param fragment
+   *
+   * @param aFragment
    *        the fagment to add.
    */
-  public void add (final StyledText fragment)
+  public void add (final StyledText aFragment)
   {
-    styledTextList.add (fragment);
-    clearCache ();
+    m_aStyledTextList.add (aFragment);
+    _clearCache ();
   }
 
   /**
    * Adds all styled texts of the given text line.
-   * 
-   * @param textLine
+   *
+   * @param aTextLine
    *        the text line to add.
    */
-  public void add (final TextLine textLine)
+  public void add (final TextLine aTextLine)
   {
-    for (StyledText fragment : textLine.getStyledTexts ())
+    for (final StyledText aFragment : aTextLine.getStyledTexts ())
     {
-      add (fragment);
+      add (aFragment);
     }
   }
 
@@ -84,19 +83,19 @@ public class TextLine implements ITextSequence
    */
   public NewLine getNewLine ()
   {
-    return newLine;
+    return m_aNewLine;
   }
 
   /**
    * Sets the new line.
-   * 
-   * @param newLine
+   *
+   * @param aNewLine
    *        the new line.
    */
-  public void setNewLine (NewLine newLine)
+  public void setNewLine (final NewLine aNewLine)
   {
-    this.newLine = newLine;
-    clearCache ();
+    this.m_aNewLine = aNewLine;
+    _clearCache ();
   }
 
   /**
@@ -104,13 +103,13 @@ public class TextLine implements ITextSequence
    */
   public List <StyledText> getStyledTexts ()
   {
-    return Collections.unmodifiableList (styledTextList);
+    return Collections.unmodifiableList (m_aStyledTextList);
   }
 
   @Override
   public Iterator <ITextFragment> iterator ()
   {
-    return new TextLineIterator (styledTextList.iterator (), newLine);
+    return new TextLineIterator (m_aStyledTextList.iterator (), m_aNewLine);
   }
 
   /**
@@ -118,39 +117,39 @@ public class TextLine implements ITextSequence
    */
   public boolean isEmpty ()
   {
-    return styledTextList.isEmpty () && newLine == null;
+    return m_aStyledTextList.isEmpty () && m_aNewLine == null;
   }
 
   @Override
   public float getWidth () throws IOException
   {
-    Float width = getCachedValue (WIDTH, Float.class);
-    if (width == null)
+    Float aWidth = _getCachedValue (WIDTH, Float.class);
+    if (aWidth == null)
     {
-      width = 0f;
-      for (ITextFragment fragment : this)
+      aWidth = 0f;
+      for (final ITextFragment aFragment : this)
       {
-        width += fragment.getWidth ();
+        aWidth += aFragment.getWidth ();
       }
-      setCachedValue (WIDTH, width);
+      _setCachedValue (WIDTH, aWidth);
     }
-    return width;
+    return aWidth;
   }
 
   @Override
   public float getHeight () throws IOException
   {
-    Float height = getCachedValue (HEIGHT, Float.class);
-    if (height == null)
+    Float aHeight = _getCachedValue (HEIGHT, Float.class);
+    if (aHeight == null)
     {
-      height = 0f;
-      for (ITextFragment fragment : this)
+      aHeight = 0f;
+      for (final ITextFragment aFragment : this)
       {
-        height = Math.max (height, fragment.getHeight ());
+        aHeight = Math.max (aHeight, aFragment.getHeight ());
       }
-      setCachedValue (HEIGHT, height);
+      _setCachedValue (HEIGHT, aHeight);
     }
-    return height;
+    return aHeight;
   }
 
   /**
@@ -160,109 +159,109 @@ public class TextLine implements ITextSequence
    */
   protected float getAscent () throws IOException
   {
-    Float ascent = getCachedValue (ASCENT, Float.class);
-    if (ascent == null)
+    Float aAscent = _getCachedValue (ASCENT, Float.class);
+    if (aAscent == null)
     {
-      ascent = 0f;
-      for (ITextFragment fragment : this)
+      aAscent = 0f;
+      for (final ITextFragment aFragment : this)
       {
-        float currentAscent = fragment.getFontDescriptor ().getSize () *
-                              fragment.getFontDescriptor ().getFont ().getFontDescriptor ().getAscent () /
-                              1000;
-        ascent = Math.max (ascent, currentAscent);
+        final float fCurrentAscent = aFragment.getFontDescriptor ().getSize () *
+                                     aFragment.getFontDescriptor ().getFont ().getFontDescriptor ().getAscent () /
+                                     1000;
+        aAscent = Math.max (aAscent, fCurrentAscent);
       }
-      setCachedValue (ASCENT, ascent);
+      _setCachedValue (ASCENT, aAscent);
     }
-    return ascent;
+    return aAscent;
   }
 
   @Override
-  public void drawText (PDPageContentStream contentStream,
-                        Position upperLeft,
-                        EAlignment alignment,
-                        IDrawListener drawListener) throws IOException
+  public void drawText (final PDPageContentStream aContentStream,
+                        final Position aUpperLeft,
+                        final EAlignment eAlignment,
+                        final IDrawListener aDrawListener) throws IOException
   {
-    drawAligned (contentStream, upperLeft, alignment, getWidth (), drawListener);
+    drawAligned (aContentStream, aUpperLeft, eAlignment, getWidth (), aDrawListener);
   }
 
-  public void drawAligned (PDPageContentStream contentStream,
-                           Position upperLeft,
-                           EAlignment alignment,
-                           float availableLineWidth,
-                           IDrawListener drawListener) throws IOException
+  public void drawAligned (final PDPageContentStream aContentStream,
+                           final Position aUpperLeft,
+                           final EAlignment eAlignment,
+                           final float fAvailableLineWidth,
+                           final IDrawListener aDrawListener) throws IOException
   {
-    contentStream.saveGraphicsState ();
-    contentStream.beginText ();
+    aContentStream.saveGraphicsState ();
+    aContentStream.beginText ();
 
-    float x = upperLeft.getX ();
-    float y = upperLeft.getY () - getAscent (); // the baseline
-    float offset = TextSequenceUtil.getOffset (this, availableLineWidth, alignment);
-    x += offset;
-    CompatibilityHelper.setTextTranslation (contentStream, x, y);
-    float extraWordSpacing = 0;
-    if (alignment == EAlignment.Justify && (getNewLine () instanceof WrappingNewLine))
+    float x = aUpperLeft.getX ();
+    final float y = aUpperLeft.getY () - getAscent (); // the baseline
+    final float fOffset = TextSequenceUtil.getOffset (this, fAvailableLineWidth, eAlignment);
+    x += fOffset;
+    CompatibilityHelper.setTextTranslation (aContentStream, x, y);
+    float fExtraWordSpacing = 0;
+    if (eAlignment == EAlignment.Justify && (getNewLine () instanceof WrappingNewLine))
     {
-      extraWordSpacing = (availableLineWidth - getWidth ()) / (styledTextList.size () - 1);
+      fExtraWordSpacing = (fAvailableLineWidth - getWidth ()) / (m_aStyledTextList.size () - 1);
     }
 
-    FontDescriptor lastFontDesc = null;
-    float lastBaselineOffset = 0;
-    Color lastColor = null;
-    float gap = 0;
-    for (StyledText styledText : styledTextList)
+    FontDescriptor aLastFontDesc = null;
+    float fLastBaselineOffset = 0;
+    Color aLastColor = null;
+    float fGap = 0;
+    for (final StyledText aStyledText : m_aStyledTextList)
     {
-      if (!styledText.getFontDescriptor ().equals (lastFontDesc))
+      if (!aStyledText.getFontDescriptor ().equals (aLastFontDesc))
       {
-        lastFontDesc = styledText.getFontDescriptor ();
-        contentStream.setFont (lastFontDesc.getFont (), lastFontDesc.getSize ());
+        aLastFontDesc = aStyledText.getFontDescriptor ();
+        aContentStream.setFont (aLastFontDesc.getFont (), aLastFontDesc.getSize ());
       }
-      if (!styledText.getColor ().equals (lastColor))
+      if (!aStyledText.getColor ().equals (aLastColor))
       {
-        lastColor = styledText.getColor ();
-        contentStream.setNonStrokingColor (lastColor);
+        aLastColor = aStyledText.getColor ();
+        aContentStream.setNonStrokingColor (aLastColor);
       }
-      if (styledText.getLeftMargin () > 0)
+      if (aStyledText.getLeftMargin () > 0)
       {
-        gap += styledText.getLeftMargin ();
-      }
-
-      boolean moveBaseline = styledText.getBaselineOffset () != lastBaselineOffset;
-      if (moveBaseline || gap > 0)
-      {
-        float baselineDelta = lastBaselineOffset - styledText.getBaselineOffset ();
-        lastBaselineOffset = styledText.getBaselineOffset ();
-        CompatibilityHelper.moveTextPosition (contentStream, x + gap, y - styledText.getBaselineOffset ());
-        x += gap;
-      }
-      if (styledText.getText ().length () > 0)
-      {
-        CompatibilityHelper.showText (contentStream, styledText.getText ());
+        fGap += aStyledText.getLeftMargin ();
       }
 
-      if (drawListener != null)
+      final boolean bMoveBaseline = aStyledText.getBaselineOffset () != fLastBaselineOffset;
+      if (bMoveBaseline || fGap > 0)
       {
-        float currentUpperLeft = y + styledText.getAsent ();
-        drawListener.drawn (styledText,
-                            new Position (x, currentUpperLeft),
-                            styledText.getWidthWithoutMargin (),
-                            styledText.getHeight ());
+        // final float fBaselineDelta = fLastBaselineOffset - aStyledText.getBaselineOffset ();
+        fLastBaselineOffset = aStyledText.getBaselineOffset ();
+        CompatibilityHelper.moveTextPosition (aContentStream, x + fGap, y - aStyledText.getBaselineOffset ());
+        x += fGap;
       }
-      x += styledText.getWidthWithoutMargin ();
-
-      gap = extraWordSpacing;
-      if (styledText.getRightMargin () > 0)
+      if (aStyledText.getText ().length () > 0)
       {
-        gap += styledText.getRightMargin ();
+        CompatibilityHelper.showText (aContentStream, aStyledText.getText ());
+      }
+
+      if (aDrawListener != null)
+      {
+        final float fCurrentUpperLeft = y + aStyledText.getAsent ();
+        aDrawListener.drawn (aStyledText,
+                             new Position (x, fCurrentUpperLeft),
+                             aStyledText.getWidthWithoutMargin (),
+                             aStyledText.getHeight ());
+      }
+      x += aStyledText.getWidthWithoutMargin ();
+
+      fGap = fExtraWordSpacing;
+      if (aStyledText.getRightMargin () > 0)
+      {
+        fGap += aStyledText.getRightMargin ();
       }
     }
-    contentStream.endText ();
-    contentStream.restoreGraphicsState ();
+    aContentStream.endText ();
+    aContentStream.restoreGraphicsState ();
   }
 
   @Override
   public String toString ()
   {
-    return "TextLine [styledText=" + styledTextList + ", newLine=" + newLine + "]";
+    return "TextLine [styledText=" + m_aStyledTextList + ", newLine=" + m_aNewLine + "]";
   }
 
   /**
@@ -271,45 +270,44 @@ public class TextLine implements ITextSequence
   private static class TextLineIterator implements Iterator <ITextFragment>
   {
 
-    private Iterator <StyledText> styledText;
-    private NewLine newLine;
+    private final Iterator <StyledText> m_aStyledText;
+    private NewLine m_aNewLine;
 
     /**
      * Creates an iterator of the given styled texts with an optional trailing new line.
-     * 
-     * @param styledText
+     *
+     * @param aStyledText
      *        the text fragments to iterate.
-     * @param newLine
+     * @param aNewLine
      *        the optional trailing new line.
      */
-    public TextLineIterator (Iterator <StyledText> styledText, NewLine newLine)
+    public TextLineIterator (final Iterator <StyledText> aStyledText, final NewLine aNewLine)
     {
-      super ();
-      this.styledText = styledText;
-      this.newLine = newLine;
+      this.m_aStyledText = aStyledText;
+      this.m_aNewLine = aNewLine;
     }
 
     @Override
     public boolean hasNext ()
     {
-      return styledText.hasNext () || newLine != null;
+      return m_aStyledText.hasNext () || m_aNewLine != null;
     }
 
     @Override
     public ITextFragment next ()
     {
-      ITextFragment next = null;
-      if (styledText.hasNext ())
+      ITextFragment aNext = null;
+      if (m_aStyledText.hasNext ())
       {
-        next = styledText.next ();
+        aNext = m_aStyledText.next ();
       }
       else
-        if (newLine != null)
+        if (m_aNewLine != null)
         {
-          next = newLine;
-          newLine = null;
+          aNext = m_aNewLine;
+          m_aNewLine = null;
         }
-      return next;
+      return aNext;
     }
 
     @Override

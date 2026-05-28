@@ -11,27 +11,29 @@ import rst.pdfbox.layout.text.Position;
 /**
  * Common interface for drawable objects.
  */
-public interface Drawable extends IDrawable
+public interface IDrawable3 extends IDrawable
 {
 
   /**
    * Draws the object at the given position.
    *
-   * @param pdDocument
+   * @param aPdDocument
    *        the underlying pdfbox document.
-   * @param contentStream
+   * @param aContentStream
    *        the stream to draw to.
-   * @param upperLeft
+   * @param aUpperLeft
    *        the upper left position to start drawing.
-   * @param drawListener
+   * @param aDrawListener
    *        the listener to {@link IDrawListener#drawn(Object, Position, float, float) notify} on
    *        drawn objects.
    * @throws IOException
    *         by pdfbox
    */
-  void draw (PDDocument pdDocument, PDPageContentStream contentStream, Position upperLeft, IDrawListener drawListener)
-                                                                                                                      throws IOException;
+  void draw (PDDocument aPdDocument,
+             PDPageContentStream aContentStream,
+             Position aUpperLeft,
+             IDrawListener aDrawListener) throws IOException;
 
   @Override
-  Drawable removeLeadingEmptyVerticalSpace () throws IOException;
+  IDrawable3 removeLeadingEmptyVerticalSpace () throws IOException;
 }

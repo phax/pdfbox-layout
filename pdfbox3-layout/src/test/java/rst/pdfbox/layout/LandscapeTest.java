@@ -1,5 +1,8 @@
+package rst.pdfbox.layout;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+
+import org.junit.Test;
 
 import rst.pdfbox.layout.elements.ControlElement;
 import rst.pdfbox.layout.elements.Document;
@@ -10,8 +13,6 @@ import rst.pdfbox.layout.elements.render.ColumnLayout;
 import rst.pdfbox.layout.elements.render.VerticalLayout;
 import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
 import rst.pdfbox.layout.text.EBaseFont;
-import examples.AbstractExampleTest;
-import org.junit.Test;
 
 public class LandscapeTest extends AbstractExampleTest {
 

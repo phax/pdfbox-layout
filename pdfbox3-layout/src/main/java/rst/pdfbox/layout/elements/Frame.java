@@ -1,11 +1,10 @@
 package rst.pdfbox.layout.elements;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import java.awt.Color;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -14,22 +13,22 @@ import rst.pdfbox.layout.shape.Rect;
 import rst.pdfbox.layout.shape.Shape;
 import rst.pdfbox.layout.shape.Stroke;
 import rst.pdfbox.layout.text.IDrawListener;
-import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.IWidthRespecting;
+import rst.pdfbox.layout.text.Position;
 
 /**
- * The frame is a container for a {@link Drawable}, that allows to add margin, padding, border and
+ * The frame is a container for a {@link IDrawable3}, that allows to add margin, padding, border and
  * background to the contained drawable. The size (width and height) is either given, or calculated
  * based on the dimensions of the contained item. The size available for the inner element is
  * reduced by the margin, padding and border width.
  */
-public class Frame extends AbstractFrame implements Drawable
+public class Frame extends AbstractFrame implements IDrawable3
 {
 
-  private List <Drawable> innerList = new CopyOnWriteArrayList <Drawable> ();
+  private final List <IDrawable3> m_aInnerList = new CopyOnWriteArrayList <> ();
 
-  private Shape shape = new Rect ();
-  private Stroke borderStroke = new Stroke ();
+  private Shape m_aShape = new Rect ();
+  private Stroke m_aBorderStroke = new Stroke ();
 
   /**
    * Creates an empty frame.
@@ -42,12 +41,12 @@ public class Frame extends AbstractFrame implements Drawable
   /**
    * Creates a frame containing the inner element.
    *
-   * @param inner
+   * @param aInner
    *        the item to contain.
    */
-  public Frame (final Drawable inner)
+  public Frame (final IDrawable3 aInner)
   {
-    this (inner, null, null);
+    this (aInner, null, null);
   }
 
   /**
@@ -55,46 +54,47 @@ public class Frame extends AbstractFrame implements Drawable
    * These contraints target the border-box of the frame, means: the inner element plus padding plus
    * border width, but not the margin.
    *
-   * @param inner
+   * @param aInner
    *        the item to contain.
-   * @param width
+   * @param aWidth
    *        the width to constrain the border-box of the frame to, or <code>null</code>.
-   * @param height
+   * @param aHeight
    *        the height to constrain the border-box of the frame to, or <code>null</code>.
    */
-  public Frame (final Drawable inner, final Float width, final Float height)
+  public Frame (final IDrawable3 aInner, final Float aWidth, final Float aHeight)
   {
-    this (width, height);
-    add (inner);
+    this (aWidth, aHeight);
+    add (aInner);
   }
 
   /**
    * Creates a frame constraint by the given dimensions. These contraints target the border-box of
    * the frame, means: the inner element plus padding plus border width, but not the margin.
    *
-   * @param width
+   * @param aWidth
    *        the width to constrain the border-box of the frame to, or <code>null</code>.
-   * @param height
+   * @param aHeight
    *        the height to constrain the border-box of the frame to, or <code>null</code>.
    */
-  public Frame (final Float width, final Float height)
+  public Frame (final Float aWidth, final Float aHeight)
   {
-    super (width, height);
+    super (aWidth, aHeight);
   }
 
   /**
    * Adds a drawable to the frame.
-   * 
-   * @param drawable
+   *
+   * @param aDrawable
+   *        drawable to add
    */
-  public void add (final Drawable drawable)
+  public void add (final IDrawable3 aDrawable)
   {
-    innerList.add (drawable);
+    m_aInnerList.add (aDrawable);
   }
 
-  protected void addAll (final Collection <Drawable> drawable)
+  protected void addAll (final Collection <IDrawable3> aDrawable)
   {
-    innerList.addAll (drawable);
+    m_aInnerList.addAll (aDrawable);
   }
 
   /**
@@ -102,18 +102,18 @@ public class Frame extends AbstractFrame implements Drawable
    */
   public Shape getShape ()
   {
-    return shape;
+    return m_aShape;
   }
 
   /**
    * Sets the shape to use as border and/or background.
    *
-   * @param shape
+   * @param aShape
    *        the shape to use.
    */
-  public void setShape (Shape shape)
+  public void setShape (final Shape aShape)
   {
-    this.shape = shape;
+    this.m_aShape = aShape;
   }
 
   /**
@@ -123,18 +123,18 @@ public class Frame extends AbstractFrame implements Drawable
    */
   public Stroke getBorderStroke ()
   {
-    return borderStroke;
+    return m_aBorderStroke;
   }
 
   /**
    * Sets the stroke to use to draw the border.
    *
-   * @param borderStroke
+   * @param aBorderStroke
    *        the stroke to use.
    */
-  public void setBorderStroke (Stroke borderStroke)
+  public void setBorderStroke (final Stroke aBorderStroke)
   {
-    this.borderStroke = borderStroke;
+    this.m_aBorderStroke = aBorderStroke;
   }
 
   /**
@@ -158,39 +158,39 @@ public class Frame extends AbstractFrame implements Drawable
   /**
    * Convenience method for setting both border color and stroke.
    *
-   * @param borderColor
+   * @param aBorderColor
    *        the border color.
-   * @param borderStroke
+   * @param aBorderStroke
    *        the stroke to use.
    */
-  public void setBorder (Color borderColor, Stroke borderStroke)
+  public void setBorder (final Color aBorderColor, final Stroke aBorderStroke)
   {
-    setBorderColor (borderColor);
-    setBorderStroke (borderStroke);
+    setBorderColor (aBorderColor);
+    setBorderStroke (aBorderStroke);
   }
 
   /**
    * Copies all attributes but the inner drawable and size to the given frame.
    *
-   * @param other
+   * @param aOther
    *        the frame to copy the attributes to.
    */
-  protected void copyAllButInnerAndSizeTo (final Frame other)
+  protected void copyAllButInnerAndSizeTo (final Frame aOther)
   {
-    other.setShape (this.getShape ());
-    other.setBorderStroke (this.getBorderStroke ());
-    other.setBorderColor (this.getBorderColor ());
-    other.setBackgroundColor (this.getBackgroundColor ());
+    aOther.setShape (this.getShape ());
+    aOther.setBorderStroke (this.getBorderStroke ());
+    aOther.setBorderColor (this.getBorderColor ());
+    aOther.setBackgroundColor (this.getBackgroundColor ());
 
-    other.setPaddingBottom (this.getPaddingBottom ());
-    other.setPaddingLeft (this.getPaddingLeft ());
-    other.setPaddingRight (this.getPaddingRight ());
-    other.setPaddingTop (this.getPaddingTop ());
+    aOther.setPaddingBottom (this.getPaddingBottom ());
+    aOther.setPaddingLeft (this.getPaddingLeft ());
+    aOther.setPaddingRight (this.getPaddingRight ());
+    aOther.setPaddingTop (this.getPaddingTop ());
 
-    other.setMarginBottom (this.getMarginBottom ());
-    other.setMarginLeft (this.getMarginLeft ());
-    other.setMarginRight (this.getMarginRight ());
-    other.setMarginTop (this.getMarginTop ());
+    aOther.setMarginBottom (this.getMarginBottom ());
+    aOther.setMarginLeft (this.getMarginLeft ());
+    aOther.setMarginRight (this.getMarginRight ());
+    aOther.setMarginTop (this.getMarginTop ());
   }
 
   @Override
@@ -198,22 +198,22 @@ public class Frame extends AbstractFrame implements Drawable
   {
     if (getGivenWidth () != null)
     {
-      return getGivenWidth () + getMarginLeft () + getMarginRight ();
+      return getGivenWidth ().floatValue () + getMarginLeft () + getMarginRight ();
     }
-    return getMaxWidth (innerList) + getHorizontalSpacing ();
+    return getMaxWidth (m_aInnerList) + getHorizontalSpacing ();
   }
 
-  protected float getMaxWidth (List <Drawable> drawableList) throws IOException
+  protected float getMaxWidth (final List <IDrawable3> aDrawableList) throws IOException
   {
-    float max = 0;
-    if (drawableList != null)
+    float fMax = 0;
+    if (aDrawableList != null)
     {
-      for (Drawable inner : drawableList)
+      for (final IDrawable3 aInner : aDrawableList)
       {
-        max = Math.max (max, inner.getWidth ());
+        fMax = Math.max (fMax, aInner.getWidth ());
       }
     }
-    return max;
+    return fMax;
   }
 
   @Override
@@ -221,47 +221,47 @@ public class Frame extends AbstractFrame implements Drawable
   {
     if (getGivenHeight () != null)
     {
-      return getGivenHeight () + getMarginTop () + getMarginBottom ();
+      return getGivenHeight ().floatValue () + getMarginTop () + getMarginBottom ();
     }
-    return getHeight (innerList) + getVerticalSpacing ();
+    return getHeight (m_aInnerList) + getVerticalSpacing ();
   }
 
-  protected float getHeight (List <Drawable> drawableList) throws IOException
+  protected float getHeight (final List <IDrawable3> aDrawableList) throws IOException
   {
-    float height = 0;
-    if (drawableList != null)
+    float fHeight = 0;
+    if (aDrawableList != null)
     {
-      for (Drawable inner : drawableList)
+      for (final IDrawable3 aInner : aDrawableList)
       {
-        height += inner.getHeight ();
+        fHeight += aInner.getHeight ();
       }
     }
-    return height;
+    return fHeight;
   }
 
   @Override
-  public void setMaxWidth (float maxWidth)
+  public void setMaxWidth (final float fMaxWidth)
   {
-    setMaxWidthInternal (maxWidth);
+    setMaxWidthInternal (fMaxWidth);
 
-    for (Drawable inner : innerList)
+    for (final IDrawable3 aInner : m_aInnerList)
     {
-      setMaxWidth (inner, maxWidth);
+      _setMaxWidth (aInner, fMaxWidth);
     }
   }
 
-  private void setMaxWidth (final Drawable inner, float maxWidth)
+  private void _setMaxWidth (final IDrawable3 aInner, final float fMaxWidth)
   {
-    if (inner instanceof IWidthRespecting)
+    if (aInner instanceof final IWidthRespecting aInnerWR)
     {
       if (getGivenWidth () != null)
       {
-        ((IWidthRespecting) inner).setMaxWidth (getGivenWidth () - getHorizontalShapeSpacing ());
+        aInnerWR.setMaxWidth (getGivenWidth ().floatValue () - getHorizontalShapeSpacing ());
       }
       else
-        if (maxWidth >= 0)
+        if (fMaxWidth >= 0)
         {
-          ((IWidthRespecting) inner).setMaxWidth (maxWidth - getHorizontalSpacing ());
+          aInnerWR.setMaxWidth (fMaxWidth - getHorizontalSpacing ());
         }
     }
   }
@@ -276,200 +276,205 @@ public class Frame extends AbstractFrame implements Drawable
   {
     if (getAbsolutePosition () == null && getGivenWidth () != null)
     {
-      setMaxWidth (getGivenWidth () - getHorizontalShapeSpacing ());
+      setMaxWidth (getGivenWidth ().floatValue () - getHorizontalShapeSpacing ());
     }
   }
 
   @Override
-  public void draw (PDDocument pdDocument,
-                    PDPageContentStream contentStream,
-                    Position upperLeft,
-                    IDrawListener drawListener) throws IOException
+  public void draw (final PDDocument aPdDocument,
+                    final PDPageContentStream aContentStream,
+                    final Position aUpperLeft,
+                    final IDrawListener aDrawListener) throws IOException
   {
     setInnerMaxWidthIfNecessary ();
 
-    float halfBorderWidth = 0;
+    float fHalfBorderWidth = 0;
     if (getBorderWidth () > 0)
     {
-      halfBorderWidth = getBorderWidth () / 2f;
+      fHalfBorderWidth = getBorderWidth () / 2f;
     }
-    upperLeft = upperLeft.add (getMarginLeft () + halfBorderWidth, -getMarginTop () - halfBorderWidth);
+    final Position aActualUpperLeft = aUpperLeft.add (getMarginLeft () + fHalfBorderWidth,
+                                                      -getMarginTop () - fHalfBorderWidth);
 
     if (getShape () != null)
     {
-      float shapeWidth = getWidth () - getMarginLeft () - getMarginRight () - getBorderWidth ();
-      float shapeHeight = getHeight () - getMarginTop () - getMarginBottom () - getBorderWidth ();
+      final float fShapeWidth = getWidth () - getMarginLeft () - getMarginRight () - getBorderWidth ();
+      final float fShapeHeight = getHeight () - getMarginTop () - getMarginBottom () - getBorderWidth ();
 
       if (getBackgroundColor () != null)
       {
-        getShape ().fill (pdDocument,
-                          contentStream,
-                          upperLeft,
-                          shapeWidth,
-                          shapeHeight,
+        getShape ().fill (aPdDocument,
+                          aContentStream,
+                          aActualUpperLeft,
+                          fShapeWidth,
+                          fShapeHeight,
                           getBackgroundColor (),
-                          drawListener);
+                          aDrawListener);
       }
       if (hasBorder ())
       {
-        getShape ().draw (pdDocument,
-                          contentStream,
-                          upperLeft,
-                          shapeWidth,
-                          shapeHeight,
+        getShape ().draw (aPdDocument,
+                          aContentStream,
+                          aActualUpperLeft,
+                          fShapeWidth,
+                          fShapeHeight,
                           getBorderColor (),
                           getBorderStroke (),
-                          drawListener);
+                          aDrawListener);
       }
     }
 
-    Position innerUpperLeft = upperLeft.add (getPaddingLeft () + halfBorderWidth, -getPaddingTop () - halfBorderWidth);
+    Position aInnerUpperLeft = aActualUpperLeft.add (getPaddingLeft () + fHalfBorderWidth,
+                                                     -getPaddingTop () - fHalfBorderWidth);
 
-    for (Drawable inner : innerList)
+    for (final IDrawable3 aInner : m_aInnerList)
     {
-      inner.draw (pdDocument, contentStream, innerUpperLeft, drawListener);
-      innerUpperLeft = innerUpperLeft.add (0, -inner.getHeight ());
+      aInner.draw (aPdDocument, aContentStream, aInnerUpperLeft, aDrawListener);
+      aInnerUpperLeft = aInnerUpperLeft.add (0, -aInner.getHeight ());
     }
   }
 
   @Override
-  public Drawable removeLeadingEmptyVerticalSpace () throws IOException
+  public IDrawable3 removeLeadingEmptyVerticalSpace () throws IOException
   {
-    if (innerList.size () > 0)
+    if (m_aInnerList.size () > 0)
     {
-      Drawable drawableWithoutLeadingVerticalSpace = innerList.get (0).removeLeadingEmptyVerticalSpace ();
-      innerList.set (0, drawableWithoutLeadingVerticalSpace);
+      final IDrawable3 aDrawableWithoutLeadingVerticalSpace = m_aInnerList.get (0).removeLeadingEmptyVerticalSpace ();
+      m_aInnerList.set (0, aDrawableWithoutLeadingVerticalSpace);
     }
     return this;
   }
 
   @Override
-  public Divided divide (float remainingHeight, float nextPageHeight) throws IOException
+  public Divided divide (final float fRemainingHeight, final float fNextPageHeight) throws IOException
   {
     setInnerMaxWidthIfNecessary ();
 
-    if (remainingHeight - getVerticalSpacing () <= 0)
+    if (fRemainingHeight - getVerticalSpacing () <= 0)
     {
-      return new Divided (new VerticalSpacer (remainingHeight), this);
+      return new Divided (new VerticalSpacer (fRemainingHeight), this);
     }
 
     // find first inner that does not fit on page
-    float spaceLeft = remainingHeight - getVerticalSpacing ();
+    final float fSpaceLeft = fRemainingHeight - getVerticalSpacing ();
 
-    DividedList dividedList = divideList (innerList, spaceLeft);
+    final DividedList aDividedList = _divideList (m_aInnerList, fSpaceLeft);
 
-    float spaceLeftForDivided = spaceLeft - getHeight (dividedList.getHead ());
-    Divided divided = null;
+    final float fSpaceLeftForDivided = fSpaceLeft - getHeight (aDividedList.getHead ());
+    Divided aDivided = null;
 
-    if (dividedList.getDrawableToDivide () != null)
+    if (aDividedList.getDrawableToDivide () != null)
     {
-      IDividable innerDividable = null;
-      if (dividedList.getDrawableToDivide () instanceof IDividable)
+      IDividable aInnerDividable = null;
+      if (aDividedList.getDrawableToDivide () instanceof IDividable)
       {
-        innerDividable = (IDividable) dividedList.getDrawableToDivide ();
+        aInnerDividable = (IDividable) aDividedList.getDrawableToDivide ();
       }
       else
       {
-        innerDividable = new Cutter (dividedList.getDrawableToDivide ());
+        aInnerDividable = new Cutter (aDividedList.getDrawableToDivide ());
       }
       // some space left on this page for the inner element
-      divided = innerDividable.divide (spaceLeftForDivided, nextPageHeight - getVerticalSpacing ());
+      aDivided = aInnerDividable.divide (fSpaceLeftForDivided, fNextPageHeight - getVerticalSpacing ());
     }
 
-    Float firstHeight = getGivenHeight () == null ? null : remainingHeight;
-    Float tailHeight = getGivenHeight () == null ? null : getGivenHeight () - spaceLeft;
+    final Float aFirstHeight = getGivenHeight () == null ? null : Float.valueOf (fRemainingHeight);
+    final Float aTailHeight = getGivenHeight () == null ? null : Float.valueOf (getGivenHeight ().floatValue () -
+                                                                                fSpaceLeft);
 
     // create head sub frame
-    Frame first = new Frame (getGivenWidth (), firstHeight);
-    copyAllButInnerAndSizeTo (first);
-    if (dividedList.getHead () != null)
+    final Frame aFirst = new Frame (getGivenWidth (), aFirstHeight);
+    copyAllButInnerAndSizeTo (aFirst);
+    if (aDividedList.getHead () != null)
     {
-      first.addAll (dividedList.getHead ());
+      aFirst.addAll (aDividedList.getHead ());
     }
-    if (divided != null)
+    if (aDivided != null)
     {
-      first.add ((Drawable) divided.getFirst ());
+      aFirst.add ((IDrawable3) aDivided.getFirst ());
     }
 
     // create tail sub frame
-    Frame tail = new Frame (getGivenWidth (), tailHeight);
-    copyAllButInnerAndSizeTo (tail);
-    if (divided != null)
+    final Frame aTail = new Frame (getGivenWidth (), aTailHeight);
+    copyAllButInnerAndSizeTo (aTail);
+    if (aDivided != null)
     {
-      tail.add ((Drawable) divided.getTail ());
+      aTail.add ((IDrawable3) aDivided.getTail ());
     }
-    if (dividedList.getTail () != null)
+    if (aDividedList.getTail () != null)
     {
-      tail.addAll (dividedList.getTail ());
+      aTail.addAll (aDividedList.getTail ());
     }
 
-    return new Divided (first, tail);
+    return new Divided (aFirst, aTail);
   }
 
-  private DividedList divideList (List <Drawable> items, float spaceLeft) throws IOException
+  private DividedList _divideList (final List <IDrawable3> aItems, final float fSpaceLeft) throws IOException
   {
-    List <Drawable> head = null;
-    List <Drawable> tail = null;
-    Drawable toDivide = null;
+    List <IDrawable3> aHead = null;
+    List <IDrawable3> aTail = null;
+    IDrawable3 aToDivide = null;
 
-    float tmpHeight = 0;
-    int index = 0;
-    while (tmpHeight < spaceLeft)
+    float fTmpHeight = 0;
+    int nIndex = 0;
+    while (fTmpHeight < fSpaceLeft)
     {
-      tmpHeight += items.get (index).getHeight ();
+      fTmpHeight += aItems.get (nIndex).getHeight ();
 
-      if (tmpHeight == spaceLeft)
+      if (fTmpHeight == fSpaceLeft)
       {
         // we can split between two drawables
-        head = items.subList (0, index + 1);
-        if (index + 1 < items.size ())
+        aHead = aItems.subList (0, nIndex + 1);
+        if (nIndex + 1 < aItems.size ())
         {
-          tail = items.subList (index + 1, items.size ());
+          aTail = aItems.subList (nIndex + 1, aItems.size ());
         }
       }
 
-      if (tmpHeight > spaceLeft)
+      if (fTmpHeight > fSpaceLeft)
       {
-        head = items.subList (0, index);
-        toDivide = items.get (index);
-        if (index + 1 < items.size ())
+        aHead = aItems.subList (0, nIndex);
+        aToDivide = aItems.get (nIndex);
+        if (nIndex + 1 < aItems.size ())
         {
-          tail = items.subList (index + 1, items.size ());
+          aTail = aItems.subList (nIndex + 1, aItems.size ());
         }
       }
 
-      ++index;
+      ++nIndex;
     }
 
-    return new DividedList (head, toDivide, tail);
+    return new DividedList (aHead, aToDivide, aTail);
   }
 
   public static class DividedList
   {
-    private List <Drawable> head;
-    private Drawable drawableToDivide;
-    private List <Drawable> tail;
+    private final List <IDrawable3> m_aHead;
+    private final IDrawable3 m_aDrawableToDivide;
+    private final List <IDrawable3> m_aTail;
 
-    public DividedList (List <Drawable> head, Drawable drawableToDivide, List <Drawable> tail)
+    public DividedList (final List <IDrawable3> aHead,
+                        final IDrawable3 aDrawableToDivide,
+                        final List <IDrawable3> aTail)
     {
-      this.head = head;
-      this.drawableToDivide = drawableToDivide;
-      this.tail = tail;
+      this.m_aHead = aHead;
+      this.m_aDrawableToDivide = aDrawableToDivide;
+      this.m_aTail = aTail;
     }
 
-    public List <Drawable> getHead ()
+    public List <IDrawable3> getHead ()
     {
-      return head;
+      return m_aHead;
     }
 
-    public Drawable getDrawableToDivide ()
+    public IDrawable3 getDrawableToDivide ()
     {
-      return drawableToDivide;
+      return m_aDrawableToDivide;
     }
 
-    public List <Drawable> getTail ()
+    public List <IDrawable3> getTail ()
     {
-      return tail;
+      return m_aTail;
     }
 
   }

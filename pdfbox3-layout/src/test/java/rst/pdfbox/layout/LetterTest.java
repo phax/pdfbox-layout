@@ -1,9 +1,11 @@
+package rst.pdfbox.layout;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+import org.junit.Test;
 
 import rst.pdfbox.layout.elements.Document;
 import rst.pdfbox.layout.elements.ImageElement;
@@ -13,8 +15,6 @@ import rst.pdfbox.layout.elements.render.VerticalLayoutHint;
 import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.EBaseFont;
 import rst.pdfbox.layout.text.Position;
-import examples.AbstractExampleTest;
-import org.junit.Test;
 
 public class LetterTest extends AbstractExampleTest {
 

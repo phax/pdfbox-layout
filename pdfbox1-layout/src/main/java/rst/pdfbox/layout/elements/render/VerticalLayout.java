@@ -6,15 +6,15 @@ import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 
 import rst.pdfbox.layout.elements.ControlElement;
 import rst.pdfbox.layout.elements.Cutter;
+import rst.pdfbox.layout.elements.Drawable;
 import rst.pdfbox.layout.elements.IDividable;
 import rst.pdfbox.layout.elements.IDividable.Divided;
-import rst.pdfbox.layout.elements.Drawable;
 import rst.pdfbox.layout.elements.IElement;
 import rst.pdfbox.layout.elements.PageFormat;
 import rst.pdfbox.layout.elements.VerticalSpacer;
 import rst.pdfbox.layout.text.EAlignment;
-import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.IWidthRespecting;
+import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.util.CompatibilityHelper;
 
 /**

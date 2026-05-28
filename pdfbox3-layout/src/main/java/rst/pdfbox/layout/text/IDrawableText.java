@@ -12,18 +12,20 @@ public interface IDrawableText extends IArea
   /**
    * Draws the text of the (PdfBox-) cursor position.
    *
-   * @param contentStream
+   * @param aContentStream
    *        the content stream used to render.
-   * @param upperLeft
+   * @param aUpperLeft
    *        the upper left position to draw to.
-   * @param alignment
+   * @param eAlignment
    *        the text alignment.
-   * @param drawListener
+   * @param aDrawListener
    *        the listener to {@link IDrawListener#drawn(Object, Position, float, float) notify} on
    *        drawn objects.
    * @throws IOException
    *         by pdfbox.
    */
-  void drawText (PDPageContentStream contentStream, Position upperLeft, EAlignment alignment, IDrawListener drawListener)
-                                                                                                                        throws IOException;
+  void drawText (PDPageContentStream aContentStream,
+                 Position aUpperLeft,
+                 EAlignment eAlignment,
+                 IDrawListener aDrawListener) throws IOException;
 }

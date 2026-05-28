@@ -1,23 +1,23 @@
+package rst.pdfbox.layout;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
+import org.junit.Test;
 
 import rst.pdfbox.layout.elements.Document;
 import rst.pdfbox.layout.elements.Paragraph;
 import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.EBaseFont;
-import rst.pdfbox.layout.text.Indent;
 import rst.pdfbox.layout.text.ESpaceUnit;
+import rst.pdfbox.layout.text.Indent;
 import rst.pdfbox.layout.util.CompatibilityHelper;
 import rst.pdfbox.layout.util.Enumerators.AlphabeticEnumerator;
 import rst.pdfbox.layout.util.Enumerators.ArabicEnumerator;
 import rst.pdfbox.layout.util.Enumerators.LowerCaseAlphabeticEnumerator;
 import rst.pdfbox.layout.util.Enumerators.LowerCaseRomanEnumerator;
 import rst.pdfbox.layout.util.Enumerators.RomanEnumerator;
-import examples.AbstractExampleTest;
-import org.junit.Test;
 
 public class IndentationTest extends AbstractExampleTest {
 

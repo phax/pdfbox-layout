@@ -21,13 +21,13 @@ public class Ellipse extends RoundRect
   }
 
   @Override
-  protected void addRoundRect (PDPageContentStream contentStream,
-                               Position upperLeft,
-                               float width,
-                               float height,
-                               float cornerRadiusX,
-                               float cornerRadiusY) throws IOException
+  protected void addRoundRect (final PDPageContentStream aContentStream,
+                               final Position aUpperLeft,
+                               final float fWidth,
+                               final float fHeight,
+                               final float fCornerRadiusX,
+                               final float fCornerRadiusY) throws IOException
   {
-    super.addRoundRect (contentStream, upperLeft, width, height, width / 2f, height / 2);
+    super.addRoundRect (aContentStream, aUpperLeft, fWidth, fHeight, fWidth / 2f, fHeight / 2);
   }
 }

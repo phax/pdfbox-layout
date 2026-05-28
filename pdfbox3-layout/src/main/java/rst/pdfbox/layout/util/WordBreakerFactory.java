@@ -7,7 +7,7 @@ import rst.pdfbox.layout.util.WordBreakers.DefaultWordBreaker;
 import rst.pdfbox.layout.util.WordBreakers.NonBreakingWordBreaker;
 
 /**
- * Factory for creating a {@link WordBreaker}. This may be used to define a custom strategy for
+ * Factory for creating a {@link IWordBreaker}. This may be used to define a custom strategy for
  * breaking words. By default the {@link DefaultWordBreaker} is used. Another predefined word
  * breaker is the {@link NonBreakingWordBreaker} which may be used to get the legacy behavior. To
  * switch to a different word breaker, just set the system property
@@ -32,41 +32,41 @@ public class WordBreakerFactory
    */
   public final static String LEGACY_WORD_BREAKER_CLASS_NAME = NonBreakingWordBreaker.class.getName ();
 
-  private final static WordBreaker DEFAULT_WORD_BREAKER = new DefaultWordBreaker ();
-  private final static Map <String, WordBreaker> WORD_BREAKERS = new ConcurrentHashMap <String, WordBreaker> ();
+  private final static IWordBreaker DEFAULT_WORD_BREAKER = new DefaultWordBreaker ();
+  private final static Map <String, IWordBreaker> WORD_BREAKERS = new ConcurrentHashMap <> ();
 
   /**
    * @return the word breaker instance to use.
    */
-  public static WordBreaker getWorkBreaker ()
+  public static IWordBreaker getWorkBreaker ()
   {
     return getWorkBreaker (System.getProperty (WORD_BREAKER_CLASS_PROPERTY));
   }
 
-  private static WordBreaker getWorkBreaker (String className)
+  private static IWordBreaker getWorkBreaker (final String sClassName)
   {
-    if (className == null)
+    if (sClassName == null)
     {
       return DEFAULT_WORD_BREAKER;
     }
-    WordBreaker wordBreaker = WORD_BREAKERS.get (className);
-    if (wordBreaker == null)
+    IWordBreaker aWordBreaker = WORD_BREAKERS.get (sClassName);
+    if (aWordBreaker == null)
     {
-      wordBreaker = createWordBreakerInstance (className);
-      WORD_BREAKERS.put (className, wordBreaker);
+      aWordBreaker = _createWordBreakerInstance (sClassName);
+      WORD_BREAKERS.put (sClassName, aWordBreaker);
     }
-    return wordBreaker;
+    return aWordBreaker;
   }
 
-  private static WordBreaker createWordBreakerInstance (final String className)
+  private static IWordBreaker _createWordBreakerInstance (final String sClassName)
   {
     try
     {
-      return (WordBreaker) Class.forName (className).newInstance ();
+      return (IWordBreaker) Class.forName (sClassName).getDeclaredConstructor ().newInstance ();
     }
-    catch (Exception e)
+    catch (final Exception ex)
     {
-      throw new RuntimeException ("failed to create word breaker '" + className + "'", e);
+      throw new RuntimeException ("failed to create word breaker '" + sClassName + "'", ex);
     }
   }
 

@@ -7,37 +7,37 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 import rst.pdfbox.layout.text.EAlignment;
 import rst.pdfbox.layout.text.IDrawListener;
+import rst.pdfbox.layout.text.IWidthRespecting;
 import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.TextFlow;
 import rst.pdfbox.layout.text.TextSequenceUtil;
-import rst.pdfbox.layout.text.IWidthRespecting;
 
 /**
  * A paragraph is used as a container for {@link TextFlow text} that is drawn as one element. A
  * paragraph has a {@link #setAlignment(EAlignment) (text-) alignment}, and {@link IWidthRespecting
  * respects a given width} by applying word-wrap.
  */
-public class Paragraph extends TextFlow implements Drawable, IElement, IWidthRespecting, IDividable
+public class Paragraph extends TextFlow implements IDrawable3, IElement, IDividable
 {
 
-  private Position absolutePosition;
-  private EAlignment alignment = EAlignment.Left;
+  private Position m_aAbsolutePosition;
+  private EAlignment m_eAlignment = EAlignment.Left;
 
   @Override
   public Position getAbsolutePosition ()
   {
-    return absolutePosition;
+    return m_aAbsolutePosition;
   }
 
   /**
    * Sets the absolute position to render at.
-   * 
-   * @param absolutePosition
+   *
+   * @param aAbsolutePosition
    *        the absolute position.
    */
-  public void setAbsolutePosition (Position absolutePosition)
+  public void setAbsolutePosition (final Position aAbsolutePosition)
   {
-    this.absolutePosition = absolutePosition;
+    this.m_aAbsolutePosition = aAbsolutePosition;
   }
 
   /**
@@ -45,33 +45,33 @@ public class Paragraph extends TextFlow implements Drawable, IElement, IWidthRes
    */
   public EAlignment getAlignment ()
   {
-    return alignment;
+    return m_eAlignment;
   }
 
   /**
    * Sets the alignment to apply.
-   * 
-   * @param alignment
+   *
+   * @param eAlignment
    *        the text alignment.
    */
-  public void setAlignment (EAlignment alignment)
+  public void setAlignment (final EAlignment eAlignment)
   {
-    this.alignment = alignment;
+    this.m_eAlignment = eAlignment;
   }
 
   @Override
-  public void draw (PDDocument pdDocument,
-                    PDPageContentStream contentStream,
-                    Position upperLeft,
-                    IDrawListener drawListener) throws IOException
+  public void draw (final PDDocument aPdDocument,
+                    final PDPageContentStream aContentStream,
+                    final Position aUpperLeft,
+                    final IDrawListener aDrawListener) throws IOException
   {
-    drawText (contentStream, upperLeft, getAlignment (), drawListener);
+    drawText (aContentStream, aUpperLeft, getAlignment (), aDrawListener);
   }
 
   @Override
-  public Divided divide (float remainingHeight, final float pageHeight) throws IOException
+  public Divided divide (final float fRemainingHeight, final float fPageHeight) throws IOException
   {
-    return TextSequenceUtil.divide (this, getMaxWidth (), remainingHeight);
+    return TextSequenceUtil.divide (this, getMaxWidth (), fRemainingHeight);
   }
 
   @Override
@@ -83,10 +83,10 @@ public class Paragraph extends TextFlow implements Drawable, IElement, IWidthRes
   @Override
   public Paragraph removeLeadingEmptyLines () throws IOException
   {
-    Paragraph result = (Paragraph) super.removeLeadingEmptyLines ();
-    result.setAbsolutePosition (this.getAbsolutePosition ());
-    result.setAlignment (this.getAlignment ());
-    return result;
+    final Paragraph aResult = (Paragraph) super.removeLeadingEmptyLines ();
+    aResult.setAbsolutePosition (this.getAbsolutePosition ());
+    aResult.setAlignment (this.getAlignment ());
+    return aResult;
   }
 
   @Override
